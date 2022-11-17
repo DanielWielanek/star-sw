@@ -103,5 +103,4 @@ inline StHbtManager* StHbtMaker::HbtManager(){return mHbtManager;}
 inline  int StHbtMaker::Debug() const {return mDebug;}
 inline  void StHbtMaker::SetDebug(int d){mDebug=d;}
 
-
 #endif
