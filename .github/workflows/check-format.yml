@@ -11,3 +11,4 @@ jobs:
       with:
         clang-format-version: '13'
         check-path: '.'
+        upstream: https://github.com/star-bnl/star-sw.git
