@@ -12,7 +12,7 @@ jobs:
     - name: Find common ancestor
       env:
         BASE_BRANCH: ${{ github.base_ref }}
-      run: git merge-base --fork-point origin/$BASE_BRANCH
+      run: git merge-base --fork-point origin/main
     - uses: actions/checkout@v3
     - name: Run clang-format style check for C/C++/Protobuf programs.
       uses: DanielWielanek/clang-format-action@main
