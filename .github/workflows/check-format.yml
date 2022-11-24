@@ -18,7 +18,7 @@ jobs:
     - name: List all changed files
       run: |
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-          echo "$file was changed"
+          echo "$file was changed "
         done
         
     - name: Run clang-format style check for C/C++/Protobuf programs.
