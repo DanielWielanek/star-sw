@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: files
-    - uses: jitterbit/get-changed-files@v1
+      uses: jitterbit/get-changed-files@v1
     - uses: actions/checkout@v3
     - name: Run clang-format style check for C/C++/Protobuf programs.
       uses: DanielWielanek/clang-format-action@main
