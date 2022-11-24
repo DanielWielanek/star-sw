@@ -7,11 +7,12 @@ jobs:
     steps:
     - id: files
       uses: jitterbit/get-changed-files@v1
+      run: echo "Today is ${{ steps.files.outputs.added_modified }}"
     - uses: actions/checkout@v3
     - name: Run clang-format style check for C/C++/Protobuf programs.
       uses: DanielWielanek/clang-format-action@main
       with:
         clang-format-version: '13'
         check-path: '.'
-        files-list: ${{steps.files.outputs.added_modified}}
+        files-list: ${{ steps.files.outputs.added_modified }}
         upstream-path: https://github.com/star-bnl/star-sw.git
