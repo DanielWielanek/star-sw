@@ -7,7 +7,7 @@ jobs:
     steps:
     - id: files
       uses: jitterbit/get-changed-files@v1
-      run: echo "Today is ${{ steps.files.outputs.added_modified }}"
+    - run: echo "Today is ${{ steps.files.outputs.added_modified }}"
     - uses: actions/checkout@v3
     - name: Run clang-format style check for C/C++/Protobuf programs.
       uses: DanielWielanek/clang-format-action@main
