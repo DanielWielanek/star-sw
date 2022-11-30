@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     #this is needed to get sha of central repo
-#    - name: test_Files
-#      uses: actions/checkout@v3
-#      with:
-#          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+    - name: test_Files
+      uses: actions/checkout@v3
+      with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
     - name: Run clang-format style check for C/C++ files.
       uses: DanielWielanek/clang-format-action@main
       with:
