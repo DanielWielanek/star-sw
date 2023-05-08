@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a do-nothing pair cut that simply says "true" to every pair           
+ *   a do-nothing pair cut that simply says "true" to every pair
  *
  ***************************************************************************
  *
@@ -15,7 +15,9 @@
  * Add NDedxHits cut, slight modification for Y cuts and Fabrices probability
  *
  * Revision 1.1  2001/12/14 23:11:27  fretiere
- * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle the hit information and cope with my code
+ * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function
+ *which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle
+ *the hit information and cope with my code
  *
  * Revision 1.5  2000/03/23 22:57:28  laue
  * Clone() function implemented
@@ -57,7 +59,6 @@
  *
  **************************************************************************/
 
-
 #ifndef fabricesPairCut_hh
 #define fabricesPairCut_hh
 
@@ -70,53 +71,45 @@
 
 #include "Cut/HitMergingPairCut.h"
 
-class fabricesPairCut : public HitMergingPairCut{
-public:
-  fabricesPairCut();
-  fabricesPairCut(const fabricesPairCut&);
-  //~fabricesPairCut();
+class fabricesPairCut : public HitMergingPairCut {
+  public:
+   fabricesPairCut();
+   fabricesPairCut(const fabricesPairCut&);
+   //~fabricesPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  fabricesPairCut* Clone();
-  void setPiKPairMinProbability(double aPiKPairMinProb);
-  void setPiPPairMinProbability(double aPiPPairMinProb);
-  void setElPairMaxProbability(double aElPairMaxProb);
-  void setPiPiPairMaxProbability(double aPiPiPairMaxProb);
-  void setKKPairMaxProbability(double aKKPairMaxProb);
-  std::ostringstream* finalReport() const;
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   fabricesPairCut* Clone();
+   void setPiKPairMinProbability(double aPiKPairMinProb);
+   void setPiPPairMinProbability(double aPiPPairMinProb);
+   void setElPairMaxProbability(double aElPairMaxProb);
+   void setPiPiPairMaxProbability(double aPiPiPairMaxProb);
+   void setKKPairMaxProbability(double aKKPairMaxProb);
+   std::ostringstream* finalReport() const;
 
-private:
-  double mPiKPairMinProb;
-  double mPiPPairMinProb;
-  double mElPairMaxProb;
-  double mPiPiPairMaxProb;
-  double mKKPairMaxProb;
+  private:
+   double mPiKPairMinProb;
+   double mPiPPairMinProb;
+   double mElPairMaxProb;
+   double mPiPiPairMaxProb;
+   double mKKPairMaxProb;
 #ifdef __ROOT__
-  ClassDef(fabricesPairCut, 1)
+   ClassDef(fabricesPairCut, 1)
 #endif
 };
 
 inline fabricesPairCut::fabricesPairCut(const fabricesPairCut& c) : HitMergingPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
+}
+inline fabricesPairCut* fabricesPairCut::Clone() {
+   fabricesPairCut* c = new fabricesPairCut(*this);
+   return c;
+}
 
-}
-inline fabricesPairCut* fabricesPairCut::Clone() { fabricesPairCut* c = new fabricesPairCut(*this); return c;}
-
-inline void fabricesPairCut::setPiKPairMinProbability(double aPiKPairMinProb){
-  mPiKPairMinProb = aPiKPairMinProb;
-}
-inline void fabricesPairCut::setPiPPairMinProbability(double aPiPPairMinProb){
-  mPiPPairMinProb = aPiPPairMinProb;
-}
-inline void fabricesPairCut::setElPairMaxProbability(double aElPairMaxProb){
-  mElPairMaxProb = aElPairMaxProb;
-}
-inline void fabricesPairCut::setPiPiPairMaxProbability(double aPiPiPairMaxProb){
-  mPiPiPairMaxProb = aPiPiPairMaxProb;
-}
-inline void fabricesPairCut::setKKPairMaxProbability(double aKKPairMaxProb){
-  mKKPairMaxProb = aKKPairMaxProb;
-}
+inline void fabricesPairCut::setPiKPairMinProbability(double aPiKPairMinProb) { mPiKPairMinProb = aPiKPairMinProb; }
+inline void fabricesPairCut::setPiPPairMinProbability(double aPiPPairMinProb) { mPiPPairMinProb = aPiPPairMinProb; }
+inline void fabricesPairCut::setElPairMaxProbability(double aElPairMaxProb) { mElPairMaxProb = aElPairMaxProb; }
+inline void fabricesPairCut::setPiPiPairMaxProbability(double aPiPiPairMaxProb) { mPiPiPairMaxProb = aPiPiPairMaxProb; }
+inline void fabricesPairCut::setKKPairMaxProbability(double aKKPairMaxProb) { mKKPairMaxProb = aKKPairMaxProb; }
 #endif

@@ -14,7 +14,6 @@
  *
  **************************************************************************/
 
-
 #ifndef adamsPairCut_hh
 #define adamsPairCut_hh
 
@@ -27,63 +26,53 @@
 
 #include "Cut/HitMergingPairCut.h"
 
-class adamsPairCut : public HitMergingPairCut{
-public:
-  adamsPairCut();
-  adamsPairCut(const adamsPairCut&);
-  //~adamsPairCut();
+class adamsPairCut : public HitMergingPairCut {
+  public:
+   adamsPairCut();
+   adamsPairCut(const adamsPairCut&);
+   //~adamsPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  adamsPairCut* Clone();
-  void setElSigma (double aElSigma);
-  void setPiSigma (double aPiSigma);
-  void setKSigma  (double aKSigma);
-  void setElPairPIDMax (double aElPIDMax);
-  void setPiPairPIDMax (double aPiPIDMax);
-  void setKPairPIDMax  (double aKPIDMax);
-  void SetPIDPThreshold(const float&);
-  std::ostringstream* finalReport() const;
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   adamsPairCut* Clone();
+   void setElSigma(double aElSigma);
+   void setPiSigma(double aPiSigma);
+   void setKSigma(double aKSigma);
+   void setElPairPIDMax(double aElPIDMax);
+   void setPiPairPIDMax(double aPiPIDMax);
+   void setKPairPIDMax(double aKPIDMax);
+   void SetPIDPThreshold(const float&);
+   std::ostringstream* finalReport() const;
 
-private:
-  double mElSigma;
-  double mPiSigma;
-  double mKSigma;
+  private:
+   double mElSigma;
+   double mPiSigma;
+   double mKSigma;
 
-  double mElPIDMax;
-  double mPiPIDMax;
-  double mKPIDMax;
+   double mElPIDMax;
+   double mPiPIDMax;
+   double mKPIDMax;
 
-  float             mPIDPThreshold;
+   float mPIDPThreshold;
 #ifdef __ROOT__
-  ClassDef(adamsPairCut, 1)
+   ClassDef(adamsPairCut, 1)
 #endif
 };
 
 inline adamsPairCut::adamsPairCut(const adamsPairCut& c) : HitMergingPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
+}
+inline adamsPairCut* adamsPairCut::Clone() {
+   adamsPairCut* c = new adamsPairCut(*this);
+   return c;
+}
 
-}
-inline adamsPairCut* adamsPairCut::Clone() { adamsPairCut* c = new adamsPairCut(*this); return c;}
-
-inline void adamsPairCut::setElSigma(double aElSigma){
-  mElSigma = aElSigma;
-}
-inline void adamsPairCut::setPiSigma(double aPiSigma){
-  mPiSigma = aPiSigma;
-}
-inline void adamsPairCut::setKSigma(double aKSigma){
-  mKSigma = aKSigma;
-}
-inline void adamsPairCut::setElPairPIDMax(double aElPIDMax){
-  mElPIDMax = aElPIDMax;
-}
-inline void adamsPairCut::setPiPairPIDMax(double aPiPIDMax){
-  mPiPIDMax = aPiPIDMax;
-}
-inline void adamsPairCut::setKPairPIDMax(double aKPIDMax){
-  mKPIDMax = aKPIDMax;
-}
-inline void adamsPairCut::SetPIDPThreshold(const float& pidpt){mPIDPThreshold = pidpt;}
+inline void adamsPairCut::setElSigma(double aElSigma) { mElSigma = aElSigma; }
+inline void adamsPairCut::setPiSigma(double aPiSigma) { mPiSigma = aPiSigma; }
+inline void adamsPairCut::setKSigma(double aKSigma) { mKSigma = aKSigma; }
+inline void adamsPairCut::setElPairPIDMax(double aElPIDMax) { mElPIDMax = aElPIDMax; }
+inline void adamsPairCut::setPiPairPIDMax(double aPiPIDMax) { mPiPIDMax = aPiPIDMax; }
+inline void adamsPairCut::setKPairPIDMax(double aKPIDMax) { mKPIDMax = aKPIDMax; }
+inline void adamsPairCut::SetPIDPThreshold(const float& pidpt) { mPIDPThreshold = pidpt; }
 #endif

@@ -31,79 +31,74 @@
 //#endif
 
 #ifdef __ROOT__
-  ClassImp(StHbtCheckPdgIdList)
+ClassImp(StHbtCheckPdgIdList)
 #endif
 
+    inline double min(double a, double b) {
+   return (a < b) ? a : b;
+}
+inline double max(double a, double b) { return (a < b) ? b : a; }
 
-inline double min(double a, double b) { return (a<b) ? a : b; }
-inline double max(double a, double b) { return (a<b) ? b : a; }
-
 //__________________
-StHbtCheckPdgIdList::StHbtCheckPdgIdList(){
-  mAcceptedParticles = new pdgIdList;
-  mAcceptedMothers = new pdgIdList;
-  mAcceptedDaughters = new pdgIdList;
+StHbtCheckPdgIdList::StHbtCheckPdgIdList() {
+   mAcceptedParticles = new pdgIdList;
+   mAcceptedMothers = new pdgIdList;
+   mAcceptedDaughters = new pdgIdList;
 }
 //__________________
-StHbtCheckPdgIdList::~StHbtCheckPdgIdList(){
-  delete mAcceptedParticles;
-  delete mAcceptedMothers;
-  delete mAcceptedDaughters;
+StHbtCheckPdgIdList::~StHbtCheckPdgIdList() {
+   delete mAcceptedParticles;
+   delete mAcceptedMothers;
+   delete mAcceptedDaughters;
 }
 //__________________
-StHbtString StHbtCheckPdgIdList::Report(){
-  StHbtString temp = "\n This is the StHbtCheckPdgIdList\n";  temp += "---> EventCuts in Reader: ";
-  char Ctemp[10];
-  temp += "\n  Accepted Particles (pdgId): ";
-  pdgIdListIterator iter;
-  for (iter=mAcceptedParticles->begin(); iter!=mAcceptedParticles->end(); iter++) {
-    sprintf(Ctemp," %i",*iter);
-    temp += Ctemp;
-  }
-  temp += "\n  Accepted Mothers (pdgId): ";
-  for (iter=mAcceptedMothers->begin(); iter!=mAcceptedMothers->end(); iter++) {
-    sprintf(Ctemp," %i",*iter);
-    temp += Ctemp;
-  }
-  temp += "\n  Accepted Daughters (pdgId): ";
-  for (iter=mAcceptedDaughters->begin(); iter!=mAcceptedDaughters->end(); iter++) {
-    sprintf(Ctemp," %i",*iter);
-    temp += Ctemp;
-  }
-  temp += "\n";
-  return temp;
+StHbtString StHbtCheckPdgIdList::Report() {
+   StHbtString temp = "\n This is the StHbtCheckPdgIdList\n";
+   temp += "---> EventCuts in Reader: ";
+   char Ctemp[10];
+   temp += "\n  Accepted Particles (pdgId): ";
+   pdgIdListIterator iter;
+   for (iter = mAcceptedParticles->begin(); iter != mAcceptedParticles->end(); iter++) {
+      sprintf(Ctemp, " %i", *iter);
+      temp += Ctemp;
+   }
+   temp += "\n  Accepted Mothers (pdgId): ";
+   for (iter = mAcceptedMothers->begin(); iter != mAcceptedMothers->end(); iter++) {
+      sprintf(Ctemp, " %i", *iter);
+      temp += Ctemp;
+   }
+   temp += "\n  Accepted Daughters (pdgId): ";
+   for (iter = mAcceptedDaughters->begin(); iter != mAcceptedDaughters->end(); iter++) {
+      sprintf(Ctemp, " %i", *iter);
+      temp += Ctemp;
+   }
+   temp += "\n";
+   return temp;
 }
 //__________________
-void StHbtCheckPdgIdList::AddAcceptedParticle( int pdgCode ){
-  mAcceptedParticles->push_back( pdgCode );
-    }
+void StHbtCheckPdgIdList::AddAcceptedParticle(int pdgCode) { mAcceptedParticles->push_back(pdgCode); }
 //__________________
-void StHbtCheckPdgIdList::AddAcceptedMother( int pdgCode ){
-  mAcceptedMothers->push_back( pdgCode );
+void StHbtCheckPdgIdList::AddAcceptedMother(int pdgCode) { mAcceptedMothers->push_back(pdgCode); }
+//__________________
+void StHbtCheckPdgIdList::AddAcceptedDaughter(int pdgCode) { mAcceptedDaughters->push_back(pdgCode); }
+//__________________
+int StHbtCheckPdgIdList::CheckPdgIdLists() {
+   return mAcceptedParticles->size() + mAcceptedMothers->size() + mAcceptedDaughters->size();
 }
 //__________________
-void StHbtCheckPdgIdList::AddAcceptedDaughter( int pdgCode ){
-  mAcceptedDaughters->push_back( pdgCode );
+int StHbtCheckPdgIdList::CheckPdgIdList(pdgIdList* list) {
+   if (list->size() == 0) return 1;  // if there are no specified particles at all, accept everything
+   return 0;                         // there is a list of particles, to you have to check them
 }
 //__________________
-int StHbtCheckPdgIdList::CheckPdgIdLists(){
-  return mAcceptedParticles->size()+mAcceptedMothers->size()+mAcceptedDaughters->size();
+int StHbtCheckPdgIdList::CheckPdgIdList(pdgIdList* list, int pdgCode) {
+   if (list->size() == 0) return 1;  // if there are no specified particles at all, accept everything
+   for (pdgIdListIterator iter = list->begin(); iter != list->end(); iter++)
+      if ((*iter) == pdgCode) return 1;  // particle accepted
+   return 0;                             // pdgCode refused
 }
 //__________________
-int StHbtCheckPdgIdList::CheckPdgIdList( pdgIdList* list){
-  if (list->size()==0) return 1; // if there are no specified particles at all, accept everything
-  return 0; // there is a list of particles, to you have to check them
-}
-//__________________
-int StHbtCheckPdgIdList::CheckPdgIdList( pdgIdList* list, int pdgCode ){
-  if (list->size()==0) return 1; // if there are no specified particles at all, accept everything
-  for (pdgIdListIterator iter=list->begin(); iter!=list->end(); iter++)
-    if ( (*iter)==pdgCode) return 1; // particle accepted
-  return 0; // pdgCode refused
-}
-//__________________
-int StHbtCheckPdgIdList::CheckPdgIdList( int pdgCode, int motherPdgCode, int daughterPdgCode ){
-  return CheckPdgIdList(mAcceptedParticles,pdgCode) 
-    * CheckPdgIdList(mAcceptedMothers,motherPdgCode) 
-    * CheckPdgIdList(mAcceptedDaughters,daughterPdgCode); 
+int StHbtCheckPdgIdList::CheckPdgIdList(int pdgCode, int motherPdgCode, int daughterPdgCode) {
+   return CheckPdgIdList(mAcceptedParticles, pdgCode) * CheckPdgIdList(mAcceptedMothers, motherPdgCode) *
+          CheckPdgIdList(mAcceptedDaughters, daughterPdgCode);
 }

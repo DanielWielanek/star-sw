@@ -1,13 +1,13 @@
 /***************************************************************************
  *
- * $Id: StHbtBinaryReader.h,v 1.15 2001/09/05 20:42:18 laue Exp $ 
+ * $Id: StHbtBinaryReader.h,v 1.15 2001/09/05 20:42:18 laue Exp $
  *
  * Author: Frank Laue, Ohio State, laue@mps.ohio-state.edu
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *       This is the HbtEventReader class to be used when reading/writing
- *       BINARY files. 
+ *       BINARY files.
  *
  ***************************************************************************
  *
@@ -39,12 +39,11 @@
  *
  * Revision 1.9  2000/05/25 21:04:30  laue
  * StStandarsHbtEventReader updated for the new StStrangMuDstMaker
- * 
+ *
  **************************************************************************/
 
 #ifndef StHbtBinaryReader_hh
 #define StHbtBinaryReader_hh
-
 
 class StFlowMaker;
 class StFlowEvent;
@@ -55,9 +54,9 @@ class StHbtIOBinary;
 #include "StHbtMaker/Infrastructure/StHbtIOBinary.hh"
 
 #ifdef __ROOT__
-#include "StMaker.h"
-#include "StIOMaker/StIOMaker.h"
 #include "StIOInterFace.h"
+#include "StIOMaker/StIOMaker.h"
+#include "StMaker.h"
 #endif
 
 #include <list>
@@ -65,77 +64,72 @@ class StHbtIOBinary;
 using std::list;
 #endif
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtString*, allocator<StHbtString*> >            fileCollection;
-typedef list<StHbtString*, allocator<StHbtString*> >::iterator  fileIterator;
+typedef list<StHbtString*, allocator<StHbtString*> > fileCollection;
+typedef list<StHbtString*, allocator<StHbtString*> >::iterator fileIterator;
 #else
-typedef list<StHbtString*>            fileCollection;
-typedef list<StHbtString*>::iterator  fileIterator;
+typedef list<StHbtString*> fileCollection;
+typedef list<StHbtString*>::iterator fileIterator;
 #endif
 
+class StHbtBinaryReader : public StHbtEventReader {
+  private:
+   StHbtIOBinary* binaryIO;
 
-class StHbtBinaryReader : public StHbtEventReader{
+   unsigned short mStHbtEventVersion;
+   unsigned short mStHbtTrackVersion;
+   unsigned short mStHbtV0Version;
 
-private:
-  StHbtIOBinary* binaryIO;
-  
-  unsigned short mStHbtEventVersion;
-  unsigned short mStHbtTrackVersion;
-  unsigned short mStHbtV0Version;
+   StFlowMaker* mFlowMaker;                  //!
+   StFlowAnalysisMaker* mFlowAnalysisMaker;  //!
 
-  StFlowMaker* mFlowMaker;             //!
-  StFlowAnalysisMaker* mFlowAnalysisMaker; //!
+   //  int mReaderStatus;                   //!
 
-  //  int mReaderStatus;                   //!
+   const char* mFileName;      //!
+   const char* mDirName;       //!
+   const char* mAppendix;      //!
+   fileCollection* mFileList;  //!
+   int mRetrieve;
+   StHbtString mTheMessage;
+   StHbtString mCurrentFile;
 
-  const char* mFileName;               //!
-  const char* mDirName;                //!
-  const char* mAppendix;               //!
-  fileCollection* mFileList;           //!
-  int mRetrieve;
-  StHbtString mTheMessage;
-  StHbtString mCurrentFile;
-
-  void FillFileList(char* fileList);
-  int NextFile();
+   void FillFileList(char* fileList);
+   int NextFile();
 
 #ifdef __ROOT__
-  StIOMaker* mIOMaker;                 //!
+   StIOMaker* mIOMaker;  //!
 #endif
 
-public:
-  StHbtBinaryReader(const char* dir=0, const char* file="test", const char* appendix=0);
+  public:
+   StHbtBinaryReader(const char* dir = 0, const char* file = "test", const char* appendix = 0);
 #ifdef __ROOT__
-  StHbtBinaryReader(StIOMaker* ioMaker, const char* dir="./", const char* file="test", const char* appendix=".microDst");
+   StHbtBinaryReader(StIOMaker* ioMaker, const char* dir = "./", const char* file = "test",
+                     const char* appendix = ".microDst");
 #endif
-  ~StHbtBinaryReader();
+   ~StHbtBinaryReader();
 
-  // generic StHbtEventReader methods
-  StHbtEvent* ReturnHbtEvent();
-  int WriteHbtEvent(StHbtEvent*);
-  int Init(const char* ReadWrite, StHbtString& Message);
-  void Finish();
-  StHbtString Report();
-  
-  // methods special to this Reader
-  void SetDirName(const char*);
-  void SetFileName(const char*);
-  void SetAppendix(const char*);
-  void AddFileList(const char*);
-  void SetFlowMaker(StFlowMaker* flowMaker);
-  void SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal);
+   // generic StHbtEventReader methods
+   StHbtEvent* ReturnHbtEvent();
+   int WriteHbtEvent(StHbtEvent*);
+   int Init(const char* ReadWrite, StHbtString& Message);
+   void Finish();
+   StHbtString Report();
 
- private:
-  void init(const char* dir, const char* file, const char* appendix);
+   // methods special to this Reader
+   void SetDirName(const char*);
+   void SetFileName(const char*);
+   void SetAppendix(const char*);
+   void AddFileList(const char*);
+   void SetFlowMaker(StFlowMaker* flowMaker);
+   void SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal);
+
+  private:
+   void init(const char* dir, const char* file, const char* appendix);
 
 #ifdef __ROOT__
-  ClassDef(StHbtBinaryReader, 0)
+   ClassDef(StHbtBinaryReader, 0)
 #endif
-      
-
 };
-inline void StHbtBinaryReader::SetFlowMaker(StFlowMaker* flowMaker){mFlowMaker = flowMaker;}
-inline void StHbtBinaryReader::SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal) {
-  mFlowAnalysisMaker = flowAnal;
-}
+inline void StHbtBinaryReader::SetFlowMaker(StFlowMaker* flowMaker) { mFlowMaker = flowMaker; }
+inline void StHbtBinaryReader::SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal) { mFlowAnalysisMaker = flowAnal; }
 
 #endif

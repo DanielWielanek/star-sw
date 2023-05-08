@@ -18,41 +18,41 @@
  *
  **************************************************************************/
 
-
 #ifndef QinvPairCut_hh
 #define QinvPairCut_hh
 
-
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
-class QinvPairCut : public StHbtPairCut{
-public:
-  QinvPairCut();
-  QinvPairCut(const QinvPairCut&);
-  //~QinvPairCut();
+class QinvPairCut : public StHbtPairCut {
+  public:
+   QinvPairCut();
+   QinvPairCut(const QinvPairCut&);
+   //~QinvPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  QinvPairCut* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   QinvPairCut* Clone();
 
-  void SetQinvRange(const double& Lo, const double& Hi);
+   void SetQinvRange(const double& Lo, const double& Hi);
 
-private:
-  long mNPairsPassed;
-  long mNPairsFailed;
-  double mQinvLo;
-  double mQinvHi;
+  private:
+   long mNPairsPassed;
+   long mNPairsFailed;
+   double mQinvLo;
+   double mQinvHi;
 
 #ifdef __ROOT__
-  ClassDef(QinvPairCut, 1)
+   ClassDef(QinvPairCut, 1)
 #endif
 };
 
 inline QinvPairCut::QinvPairCut(const QinvPairCut& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
 }
-inline QinvPairCut* QinvPairCut::Clone() { QinvPairCut* c = new QinvPairCut(*this); return c;}
+inline QinvPairCut* QinvPairCut::Clone() {
+   QinvPairCut* c = new QinvPairCut(*this);
+   return c;
+}
 
 #endif

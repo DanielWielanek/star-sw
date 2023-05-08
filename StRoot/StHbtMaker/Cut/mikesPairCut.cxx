@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a do-nothing pair cut that simply says "true" to every pair           
+ *   a do-nothing pair cut that simply says "true" to every pair
  *
  ***************************************************************************
  *
@@ -32,34 +32,35 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/mikesPairCut.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(mikesPairCut)
 #endif
 
-//__________________
-mikesPairCut::mikesPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    mikesPairCut::mikesPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//mikesPairCut::~mikesPairCut(){
+// mikesPairCut::~mikesPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool mikesPairCut::Pass(const StHbtPair* pair){
-  bool temp = true;
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return true;
+bool mikesPairCut::Pass(const StHbtPair* pair) {
+   bool temp = true;
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return true;
 }
 //__________________
-StHbtString mikesPairCut::Report(){
-  string Stemp = "Mikes Pair Cut - total dummy-- always returns true\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString mikesPairCut::Report() {
+   string Stemp = "Mikes Pair Cut - total dummy-- always returns true\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________

@@ -20,19 +20,20 @@
 
 #ifndef StHbtSectoredPicoEventCollection_hh
 #define StHbtSectoredPicoEventCollection_hh
-#include "StHbtMaker/Infrastructure/StHbtSectoredPicoEvent.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtSectoredPicoEvent.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtSectoredPicoEvent*, allocator<StHbtSectoredPicoEvent*> >            StHbtSectoredPicoEventCollection;
-typedef list<StHbtSectoredPicoEvent*, allocator<StHbtSectoredPicoEvent*> >::iterator  StHbtSectoredPicoEventIterator;
+typedef list<StHbtSectoredPicoEvent*, allocator<StHbtSectoredPicoEvent*> > StHbtSectoredPicoEventCollection;
+typedef list<StHbtSectoredPicoEvent*, allocator<StHbtSectoredPicoEvent*> >::iterator StHbtSectoredPicoEventIterator;
 #else
-typedef list<StHbtSectoredPicoEvent*>            StHbtSectoredPicoEventCollection;
-typedef list<StHbtSectoredPicoEvent*>::iterator  StHbtSectoredPicoEventIterator;
+typedef list<StHbtSectoredPicoEvent*> StHbtSectoredPicoEventCollection;
+typedef list<StHbtSectoredPicoEvent*>::iterator StHbtSectoredPicoEventIterator;
 #endif
 
 #endif

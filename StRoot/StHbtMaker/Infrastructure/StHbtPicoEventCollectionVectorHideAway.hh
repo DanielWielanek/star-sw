@@ -24,34 +24,37 @@
  **************************************************************************/
 #ifndef StHbtPicoEventCollectionVectorHideAway_hh
 #define StHbtPicoEventCollectionVectorHideAway_hh
-#include "StHbtMaker/Infrastructure/StHbtPicoEvent.hh"
-#include "StHbtMaker/Infrastructure/StHbtPicoEventCollection.hh"
-#include "StHbtMaker/Infrastructure/StHbtPicoEventCollectionVector.hh"
-#include <vector>
-#include <list>
 #include <float.h>
 #include <limits.h>
 
+#include <list>
+#include <vector>
+
+#include "StHbtMaker/Infrastructure/StHbtPicoEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtPicoEventCollection.hh"
+#include "StHbtMaker/Infrastructure/StHbtPicoEventCollectionVector.hh"
+
 #if !defined(ST_NO_NAMESPACES)
-using std::vector;
 using std::list;
+using std::vector;
 #endif
 
 class StHbtPicoEventCollectionVectorHideAway {
-public:
-  StHbtPicoEventCollectionVectorHideAway(int bx=1, double lx=-FLT_MAX, double ux=FLT_MAX,
-					 int by=1, double ly=-FLT_MAX, double uy=FLT_MAX,
-					 int bz=1, double lz=-FLT_MAX, double uz=FLT_MAX);
-  StHbtPicoEventCollection* PicoEventCollection(int, int, int);
-  StHbtPicoEventCollection* PicoEventCollection(double x, double y=0, double z=0);
-private:
-  int mBinsTot;
-  int mBinsx,mBinsy,mBinsz;
-  double mMinx,mMiny,mMinz;
-  double mMaxx,mMaxy,mMaxz;
-  double mStepx,mStepy,mStepz;
-  StHbtPicoEventCollection* mCollection;
-  StHbtPicoEventCollectionVector mCollectionVector;
+  public:
+   StHbtPicoEventCollectionVectorHideAway(int bx = 1, double lx = -FLT_MAX, double ux = FLT_MAX, int by = 1,
+                                          double ly = -FLT_MAX, double uy = FLT_MAX, int bz = 1, double lz = -FLT_MAX,
+                                          double uz = FLT_MAX);
+   StHbtPicoEventCollection* PicoEventCollection(int, int, int);
+   StHbtPicoEventCollection* PicoEventCollection(double x, double y = 0, double z = 0);
+
+  private:
+   int mBinsTot;
+   int mBinsx, mBinsy, mBinsz;
+   double mMinx, mMiny, mMinz;
+   double mMaxx, mMaxy, mMaxz;
+   double mStepx, mStepy, mStepz;
+   StHbtPicoEventCollection* mCollection;
+   StHbtPicoEventCollectionVector mCollectionVector;
 };
 
 #endif

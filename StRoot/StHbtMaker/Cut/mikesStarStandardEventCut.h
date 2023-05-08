@@ -35,7 +35,6 @@
 #ifndef mikesStarStandardEventCut_hh
 #define mikesStarStandardEventCut_hh
 
-
 #include "StHbtMaker/Base/StHbtEventCut.h"
 #ifdef HPUX
 #include "Stiostream.h"
@@ -44,52 +43,56 @@
 #endif
 
 class mikesStarStandardEventCut : public StHbtEventCut {
+  public:
+   mikesStarStandardEventCut();
+   mikesStarStandardEventCut(mikesStarStandardEventCut&);
+   //  ~mikesStarStandardEventCut();
 
-public:
+   void SetEventMult(const int& lo, const int& hi);
+   void SetVertZPos(const float& lo, const float& hi);
+   int NEventsPassed();
+   int NEventsFailed();
 
-  mikesStarStandardEventCut();
-  mikesStarStandardEventCut(mikesStarStandardEventCut&);
-  //  ~mikesStarStandardEventCut();
+   virtual StHbtString Report();
+   virtual bool Pass(const StHbtEvent*);
 
-  void SetEventMult(const int& lo,const int& hi);
-  void SetVertZPos(const float& lo, const float& hi);
-  int NEventsPassed();
-  int NEventsFailed();
+   mikesStarStandardEventCut* Clone();
 
-  virtual StHbtString Report();
-  virtual bool Pass(const StHbtEvent*);
+  private:              // here are the quantities I want to cut on...
+   int mEventMult[2];   // range of multiplicity
+   float mVertZPos[2];  // range of z-position of vertex
 
-  mikesStarStandardEventCut* Clone();
+   long mNEventsPassed;
+   long mNEventsFailed;
 
-private:   // here are the quantities I want to cut on...
-
-  int mEventMult[2];      // range of multiplicity
-  float mVertZPos[2];     // range of z-position of vertex
-
-  long mNEventsPassed;
-  long mNEventsFailed;
-
-  ofstream* mOutFile;  //!
+   ofstream* mOutFile;  //!
 
 #ifdef __ROOT__
-  ClassDef(mikesStarStandardEventCut, 0)
+   ClassDef(mikesStarStandardEventCut, 0)
 #endif
-
 };
 
-inline void mikesStarStandardEventCut::SetEventMult(const int& lo, const int& hi){mEventMult[0]=lo; mEventMult[1]=hi;}
-inline void mikesStarStandardEventCut::SetVertZPos(const float& lo, const float& hi){mVertZPos[0]=lo; mVertZPos[1]=hi;}
-inline int  mikesStarStandardEventCut::NEventsPassed() {return mNEventsPassed;}
-inline int  mikesStarStandardEventCut::NEventsFailed() {return mNEventsFailed;}
-inline mikesStarStandardEventCut* mikesStarStandardEventCut::Clone() { mikesStarStandardEventCut* c = new mikesStarStandardEventCut(*this); return c;}
-inline mikesStarStandardEventCut::mikesStarStandardEventCut(mikesStarStandardEventCut& c) : StHbtEventCut(c) {
-  mEventMult[0] = c.mEventMult[0];
-  mEventMult[1] = c.mEventMult[1];
-  mVertZPos[0] = c.mVertZPos[0];
-  mVertZPos[1] = c.mVertZPos[1];
-  mNEventsPassed = 0;
-  mNEventsFailed = 0;
+inline void mikesStarStandardEventCut::SetEventMult(const int& lo, const int& hi) {
+   mEventMult[0] = lo;
+   mEventMult[1] = hi;
 }
-
+inline void mikesStarStandardEventCut::SetVertZPos(const float& lo, const float& hi) {
+   mVertZPos[0] = lo;
+   mVertZPos[1] = hi;
+}
+inline int mikesStarStandardEventCut::NEventsPassed() { return mNEventsPassed; }
+inline int mikesStarStandardEventCut::NEventsFailed() { return mNEventsFailed; }
+inline mikesStarStandardEventCut* mikesStarStandardEventCut::Clone() {
+   mikesStarStandardEventCut* c = new mikesStarStandardEventCut(*this);
+   return c;
+}
+inline mikesStarStandardEventCut::mikesStarStandardEventCut(mikesStarStandardEventCut& c) : StHbtEventCut(c) {
+   mEventMult[0] = c.mEventMult[0];
+   mEventMult[1] = c.mEventMult[1];
+   mVertZPos[0] = c.mVertZPos[0];
+   mVertZPos[1] = c.mVertZPos[1];
+   mNEventsPassed = 0;
+   mNEventsFailed = 0;
+}
 
 #endif

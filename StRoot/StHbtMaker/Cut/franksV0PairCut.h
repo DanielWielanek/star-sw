@@ -16,7 +16,6 @@
  *
  **************************************************************************/
 
-
 #ifndef franksV0PairCut_hh
 #define franksV0PairCut_hh
 
@@ -27,38 +26,40 @@
 
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
-class franksV0PairCut : public StHbtPairCut{
-public:
-  franksV0PairCut();
-  franksV0PairCut(const franksV0PairCut&);
-  //~franksV0PairCut();
+class franksV0PairCut : public StHbtPairCut {
+  public:
+   franksV0PairCut();
+   franksV0PairCut(const franksV0PairCut&);
+   //~franksV0PairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  franksV0PairCut* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   franksV0PairCut* Clone();
 
-  void SetTrackIdCut(const short );
-  short TrackIdCut() const;
+   void SetTrackIdCut(const short);
+   short TrackIdCut() const;
 
-private:
-  short mTrackIdCut;
-  long mNPairsPassed;
-  long mNPairsFailed;
+  private:
+   short mTrackIdCut;
+   long mNPairsPassed;
+   long mNPairsFailed;
 
 #ifdef __ROOT__
-  ClassDef(franksV0PairCut, 1)
+   ClassDef(franksV0PairCut, 1)
 #endif
 };
 
 inline franksV0PairCut::franksV0PairCut(const franksV0PairCut& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-  mTrackIdCut = c.mTrackIdCut;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
+   mTrackIdCut = c.mTrackIdCut;
 }
-inline franksV0PairCut* franksV0PairCut::Clone() { franksV0PairCut* c = new franksV0PairCut(*this); return c;}
+inline franksV0PairCut* franksV0PairCut::Clone() {
+   franksV0PairCut* c = new franksV0PairCut(*this);
+   return c;
+}
 
-inline void  franksV0PairCut::SetTrackIdCut(const short x) { mTrackIdCut = x; }
+inline void franksV0PairCut::SetTrackIdCut(const short x) { mTrackIdCut = x; }
 inline short franksV0PairCut::TrackIdCut() const { return mTrackIdCut; }
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Mike Lisa, Ohio State, lisa@mps.ohio-state.edu
  ***************************************************************************
@@ -11,47 +11,45 @@
  *
  ***************************************************************************
  *
- *  
+ *
  **************************************************************************/
 
 #ifndef StHbtGstarTxtReader_hh
 #define StHbtGstarTxtReader_hh
 
 class StEvent;
-//VP class ifstream;
+// VP class ifstream;
 
 #ifdef __ROOT__
 #include "StMaker.h"
 #endif
-#include "StHbtMaker/Infrastructure/StHbtString.hh"
 #include "StHbtMaker/Base/StHbtEventReader.hh"
+#include "StHbtMaker/Infrastructure/StHbtString.hh"
 
-class StHbtGstarTxtReader : public StHbtEventReader{
+class StHbtGstarTxtReader : public StHbtEventReader {
+  private:
+   ifstream* mInputStream;  //!
+   const char* mFileName;   //!
 
-private:
-  ifstream* mInputStream;              //!
-  const char* mFileName;               //!
+  public:
+   StHbtGstarTxtReader();
+   StHbtGstarTxtReader(char* FileName);
+   ~StHbtGstarTxtReader();
 
-public:
-  StHbtGstarTxtReader();
-  StHbtGstarTxtReader(char* FileName);
-  ~StHbtGstarTxtReader();
+   // generic StHbtEventReader methods
+   StHbtEvent* ReturnHbtEvent();
+   StHbtString Report();
+   //  virtual int WriteHbtEvent(StHbtEvent*);
+   int Init(const char* ReadWrite, StHbtString& Message);
+   void Finish();
 
-  // generic StHbtEventReader methods
-  StHbtEvent* ReturnHbtEvent();
-  StHbtString Report();
-  //  virtual int WriteHbtEvent(StHbtEvent*);
-  int Init(const char* ReadWrite, StHbtString& Message);
-  void Finish();
-
-  // methods special to this Reader
-  void SetFileName(char* file);
+   // methods special to this Reader
+   void SetFileName(char* file);
 #ifdef __ROOT__
-ClassDef(StHbtGstarTxtReader,0)
+   ClassDef(StHbtGstarTxtReader, 0)
 #endif
 };
 
-inline void StHbtGstarTxtReader::SetFileName(char* file){mFileName=file;}
-
+inline void StHbtGstarTxtReader::SetFileName(char* file) { mFileName = file; }
 
 #endif

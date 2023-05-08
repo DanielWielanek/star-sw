@@ -24,27 +24,27 @@
 
 #include "StHbtMaker/Infrastructure/StHbtParticleCollection.hh"
 
-class StHbtSectoredPicoEvent{
-public:
-  StHbtSectoredPicoEvent(int);
-  StHbtSectoredPicoEvent(int, int, int);
-  ~StHbtSectoredPicoEvent();
+class StHbtSectoredPicoEvent {
+  public:
+   StHbtSectoredPicoEvent(int);
+   StHbtSectoredPicoEvent(int, int, int);
+   ~StHbtSectoredPicoEvent();
 
-  StHbtParticleCollection** FirstSectoredCollection();
-  StHbtParticleCollection** SecondSectoredCollection();
-  StHbtParticleCollection** ThirdSectoredCollection();
+   StHbtParticleCollection** FirstSectoredCollection();
+   StHbtParticleCollection** SecondSectoredCollection();
+   StHbtParticleCollection** ThirdSectoredCollection();
 
-private:
-
-  StHbtParticleCollection** mFirstSectoredCollection;
-  StHbtParticleCollection** mSecondSectoredCollection;
-  StHbtParticleCollection** mThirdSectoredCollection;
-  int                       mNumBins;
-
+  private:
+   StHbtParticleCollection** mFirstSectoredCollection;
+   StHbtParticleCollection** mSecondSectoredCollection;
+   StHbtParticleCollection** mThirdSectoredCollection;
+   int mNumBins;
 };
 
-inline StHbtParticleCollection** StHbtSectoredPicoEvent::FirstSectoredCollection(){return mFirstSectoredCollection;}
-inline StHbtParticleCollection** StHbtSectoredPicoEvent::SecondSectoredCollection(){return mSecondSectoredCollection;}
-inline StHbtParticleCollection** StHbtSectoredPicoEvent::ThirdSectoredCollection(){return mThirdSectoredCollection;}
+inline StHbtParticleCollection** StHbtSectoredPicoEvent::FirstSectoredCollection() { return mFirstSectoredCollection; }
+inline StHbtParticleCollection** StHbtSectoredPicoEvent::SecondSectoredCollection() {
+   return mSecondSectoredCollection;
+}
+inline StHbtParticleCollection** StHbtSectoredPicoEvent::ThirdSectoredCollection() { return mThirdSectoredCollection; }
 
 #endif

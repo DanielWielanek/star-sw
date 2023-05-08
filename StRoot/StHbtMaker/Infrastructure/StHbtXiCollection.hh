@@ -11,23 +11,22 @@
  *
  ***************************************************************************/
 
-
 #ifndef StHbtXiCollection_hh
 #define StHbtXiCollection_hh
-#include "StHbtMaker/Infrastructure/StHbtXi.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtXi.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtXi*, allocator<StHbtXi*> >            StHbtXiCollection;
-typedef list<StHbtXi*, allocator<StHbtXi*> >::iterator  StHbtXiIterator;
+typedef list<StHbtXi*, allocator<StHbtXi*> > StHbtXiCollection;
+typedef list<StHbtXi*, allocator<StHbtXi*> >::iterator StHbtXiIterator;
 #else
-typedef list<StHbtXi*>            StHbtXiCollection;
-typedef list<StHbtXi*>::iterator  StHbtXiIterator;
+typedef list<StHbtXi*> StHbtXiCollection;
+typedef list<StHbtXi*>::iterator StHbtXiIterator;
 #endif
 
 #endif
-

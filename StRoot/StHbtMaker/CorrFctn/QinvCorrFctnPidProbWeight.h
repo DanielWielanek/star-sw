@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a simple Q-invariant correlation function with probability weighting           
+ *   a simple Q-invariant correlation function with probability weighting
  *
  ***************************************************************************
  *
@@ -24,34 +24,32 @@
 //#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 
 class QinvCorrFctnPidProbWeight : public StHbtCorrFctn {
-public:
-  QinvCorrFctnPidProbWeight(char* title1, char* title2, const int& nbins, const float& QinvLo, const float& QinvHi);
-  virtual ~QinvCorrFctnPidProbWeight();
+  public:
+   QinvCorrFctnPidProbWeight(char* title1, char* title2, const int& nbins, const float& QinvLo, const float& QinvHi);
+   virtual ~QinvCorrFctnPidProbWeight();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  StHbt1DHisto* Numerator();
-  StHbt1DHisto* Denominator();
-  StHbt1DHisto* Ratio();
+   StHbt1DHisto* Numerator();
+   StHbt1DHisto* Denominator();
+   StHbt1DHisto* Ratio();
 
-private:
-  StHbt1DHisto* mNumerator;
-  StHbt1DHisto* mDenominator;
-  StHbt1DHisto* mRatio;
+  private:
+   StHbt1DHisto* mNumerator;
+   StHbt1DHisto* mDenominator;
+   StHbt1DHisto* mRatio;
 
 #ifdef __ROOT__
-  ClassDef(QinvCorrFctnPidProbWeight, 1)
+   ClassDef(QinvCorrFctnPidProbWeight, 1)
 #endif
 };
 
-inline  StHbt1DHisto* QinvCorrFctnPidProbWeight::Numerator(){return mNumerator;}
-inline  StHbt1DHisto* QinvCorrFctnPidProbWeight::Denominator(){return mDenominator;}
-inline  StHbt1DHisto* QinvCorrFctnPidProbWeight::Ratio(){return mRatio;}
-
+inline StHbt1DHisto* QinvCorrFctnPidProbWeight::Numerator() { return mNumerator; }
+inline StHbt1DHisto* QinvCorrFctnPidProbWeight::Denominator() { return mDenominator; }
+inline StHbt1DHisto* QinvCorrFctnPidProbWeight::Ratio() { return mRatio; }
 
 #endif
-

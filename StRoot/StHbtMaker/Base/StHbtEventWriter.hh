@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   base class for a StHbtEventWriter             
+ *   base class for a StHbtEventWriter
  **************************************************************************/
 
 #ifndef StHbtEventWriter_hh
@@ -14,7 +14,6 @@
 
 #include "StHbtMaker/Base/StHbtEventReader.hh"
 
-typedef StHbtEventReader StHbtEventWriter;//!  // yes, because our writer are reader-writers
+typedef StHbtEventReader StHbtEventWriter;  //!  // yes, because our writer are reader-writers
 
 #endif
-

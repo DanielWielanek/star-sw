@@ -39,64 +39,61 @@
 
 #include "StHbtMaker/Infrastructure/StHbtPair.hh"
 
-class StHbtSmearPair{
- public:
+class StHbtSmearPair {
+  public:
+   StHbtSmearPair();
+   StHbtSmearPair(const StHbtPair* unSmearedPair);
+   virtual ~StHbtSmearPair(){};
 
-  StHbtSmearPair();
-  StHbtSmearPair(const StHbtPair* unSmearedPair);
-  virtual ~StHbtSmearPair(){};
+   void SetUnsmearedPair(const StHbtPair* unSmearedPair);  // essentially same as c'tor
 
-  void SetUnsmearedPair(const StHbtPair* unSmearedPair);  // essentially same as c'tor
+   StHbtPair& SmearedPair();  // access to the smeared pair
 
-  StHbtPair& SmearedPair();  // access to the smeared pair
+   //========= resolution parameters ==========
+   // pT resolution parameterized by d(pT) = Frac*pT
+   void SetFractionalPtRes(double);
+   // phi resolution parameterized d(phi)= by a+b*P^alpha (Fabrice Retiere's way)
+   void SetPhiRes_a(double a);
+   void SetPhiRes_b(double b);
+   void SetPhiRes_alpha(double alpha);
+   // phi resolution parameterized by d(theta) = a+b*P^alpha (Fabrice Retiere's way)
+   void SetThetaRes_a(double a);
+   void SetThetaRes_b(double b);
+   void SetThetaRes_alpha(double alpha);
+   //==========================================
 
-  //========= resolution parameters ==========
-  // pT resolution parameterized by d(pT) = Frac*pT
-  void SetFractionalPtRes(double);
-  // phi resolution parameterized d(phi)= by a+b*P^alpha (Fabrice Retiere's way)
-  void SetPhiRes_a(double a);
-  void SetPhiRes_b(double b);
-  void SetPhiRes_alpha(double alpha);
-  // phi resolution parameterized by d(theta) = a+b*P^alpha (Fabrice Retiere's way)
-  void SetThetaRes_a(double a);
-  void SetThetaRes_b(double b);
-  void SetThetaRes_alpha(double alpha);
-  //==========================================
+   StHbtLorentzVector SmearedMomentum(StHbtLorentzVector input);
 
-  StHbtLorentzVector SmearedMomentum(StHbtLorentzVector input);
+  private:
+   StHbtPair mSmearedPair;
+   StHbtParticle mParticle1;
+   StHbtParticle mParticle2;
 
- private:
+   //========= resolution parameters ==========
+   double mFracPtRes;
+   double mPhi_a;
+   double mPhi_b;
+   double mPhi_alpha;
+   double mTheta_a;
+   double mTheta_b;
+   double mTheta_alpha;
+   //==========================================
 
-  StHbtPair mSmearedPair;
-  StHbtParticle mParticle1;
-  StHbtParticle mParticle2;
-
-  //========= resolution parameters ==========
-  double mFracPtRes;
-  double mPhi_a;
-  double mPhi_b;
-  double mPhi_alpha;
-  double mTheta_a;
-  double mTheta_b;
-  double mTheta_alpha;
-  //==========================================
-
-  void setup();
+   void setup();
 
 #ifdef __ROOT__
-  ClassDef(StHbtSmearPair, 0)
+   ClassDef(StHbtSmearPair, 0)
 #endif
-
 };
 
-inline void StHbtSmearPair::SetFractionalPtRes(double val){mFracPtRes = val;}
-inline void StHbtSmearPair::SetPhiRes_a(double val){mPhi_a = val;}
-inline void StHbtSmearPair::SetPhiRes_b(double val){mPhi_b = val;}
-inline void StHbtSmearPair::SetPhiRes_alpha(double val){mPhi_alpha = val;}
-inline void StHbtSmearPair::SetThetaRes_a(double val){mTheta_a = val;}
-inline void StHbtSmearPair::SetThetaRes_b(double val){mTheta_b = val;}
-inline void StHbtSmearPair::SetThetaRes_alpha(double val){mTheta_alpha = val;}
+inline void StHbtSmearPair::SetFractionalPtRes(double val) { mFracPtRes = val; }
+inline void StHbtSmearPair::SetPhiRes_a(double val) { mPhi_a = val; }
+inline void StHbtSmearPair::SetPhiRes_b(double val) { mPhi_b = val; }
+inline void StHbtSmearPair::SetPhiRes_alpha(double val) { mPhi_alpha = val; }
+inline void StHbtSmearPair::SetThetaRes_a(double val) { mTheta_a = val; }
+inline void StHbtSmearPair::SetThetaRes_b(double val) { mTheta_b = val; }
+inline void StHbtSmearPair::SetThetaRes_alpha(double val) { mTheta_alpha = val; }
 
-inline StHbtPair& StHbtSmearPair::SmearedPair(){return mSmearedPair;}
+inline StHbtPair& StHbtSmearPair::SmearedPair() { return mSmearedPair; }
 
 #endif

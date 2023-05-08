@@ -27,7 +27,6 @@
 #ifndef StHbtAnalysisCollection_hh
 #define StHbtAnalysisCollection_hh
 
-
 #include <list>
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
@@ -35,11 +34,11 @@ using std::list;
 class StHbtBaseAnalysis;
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtBaseAnalysis*, allocator<StHbtBaseAnalysis*> >            StHbtAnalysisCollection;
-typedef list<StHbtBaseAnalysis*, allocator<StHbtBaseAnalysis*> >::iterator  StHbtAnalysisIterator;
+typedef list<StHbtBaseAnalysis*, allocator<StHbtBaseAnalysis*> > StHbtAnalysisCollection;
+typedef list<StHbtBaseAnalysis*, allocator<StHbtBaseAnalysis*> >::iterator StHbtAnalysisIterator;
 #else
-typedef list<StHbtBaseAnalysis*>            StHbtAnalysisCollection;
-typedef list<StHbtBaseAnalysis*>::iterator  StHbtAnalysisIterator;
+typedef list<StHbtBaseAnalysis*> StHbtAnalysisCollection;
+typedef list<StHbtBaseAnalysis*>::iterator StHbtAnalysisIterator;
 #endif
 
 #endif

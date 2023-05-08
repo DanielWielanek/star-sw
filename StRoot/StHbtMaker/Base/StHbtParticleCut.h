@@ -11,7 +11,7 @@
  * Note:    Users DO NOT inherit from this class!
  *          The base classes StHbtTrackCut and StHbtV0Cut inherit from this,
  *          and users inherit from those
- * 
+ *
  ***************************************************************************
  *
  * $Log: StHbtParticleCut.h,v $
@@ -41,7 +41,8 @@
  * 1.) unnecessary includes of 'StMaker.h' deleted
  *
  * Revision 1.2  1999/12/03 22:24:34  lisa
- * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits mechanism
+ * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits
+ *mechanism
  *
  * Revision 1.1  1999/10/15 01:56:50  lisa
  * Important enhancement of StHbtMaker - implement Franks CutMonitors
@@ -71,53 +72,53 @@
  *
  **************************************************************************/
 
-
 #ifndef StHbtParticleCut_hh
 #define StHbtParticleCut_hh
 
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StHbtMaker/Infrastructure/StHbtCutMonitorHandler.h"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
 class StHbtBaseAnalysis;
 
 class StHbtParticleCut : public StHbtCutMonitorHandler {
+  public:
+   StHbtParticleCut(){/* no-op */};            // default constructor. - Users should write their own
+   StHbtParticleCut(const StHbtParticleCut&);  // copy constructor
+   virtual ~StHbtParticleCut(){/* no-op */};   // destructor
 
-public:
+   virtual StHbtString Report() = 0;  // user-written method to return string describing cuts
 
-  StHbtParticleCut(){/* no-op */};   // default constructor. - Users should write their own
-  StHbtParticleCut(const StHbtParticleCut&); // copy constructor
-  virtual ~StHbtParticleCut(){/* no-op */};  // destructor
+   double Mass() { return mMass; };  // mass of the particle being selected
+   virtual void SetMass(const double& mass) { mMass = mass; };
 
-  virtual StHbtString Report() =0;    // user-written method to return string describing cuts
+   virtual void EventBegin(const StHbtEvent*) { /* no-op */
+   }
+   virtual void EventEnd(const StHbtEvent*) { /* no-op */
+   }
+   virtual StHbtParticleCut* Clone() { return 0; }
 
-  double Mass(){return mMass;};       // mass of the particle being selected
-  virtual void SetMass(const double& mass) {mMass = mass;};
+   virtual StHbtParticleType Type() = 0;
 
-  virtual void EventBegin(const StHbtEvent*) { /* no-op */ }
-  virtual void EventEnd(const StHbtEvent*) { /* no-op */ }
-  virtual StHbtParticleCut* Clone() { return 0;}
+   // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
+   friend class StHbtBaseAnalysis;
+   StHbtBaseAnalysis* HbtAnalysis() { return myAnalysis; };
+   void SetAnalysis(StHbtBaseAnalysis*);
 
-  virtual StHbtParticleType Type()=0;
-
-  // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
-  friend class StHbtBaseAnalysis;
-  StHbtBaseAnalysis* HbtAnalysis(){return myAnalysis;};
-  void SetAnalysis(StHbtBaseAnalysis*);
-
-protected:
-  double mMass;
-  //  StHbtParticleType mType;            // tells whether cut is on Tracks or V0's
-  StHbtBaseAnalysis* myAnalysis;
+  protected:
+   double mMass;
+   //  StHbtParticleType mType;            // tells whether cut is on Tracks or V0's
+   StHbtBaseAnalysis* myAnalysis;
 
 #ifdef __ROOT__
-  ClassDef(StHbtParticleCut, 0)
+   ClassDef(StHbtParticleCut, 0)
 #endif
 };
 
-inline StHbtParticleCut::StHbtParticleCut(const StHbtParticleCut& c) : StHbtCutMonitorHandler() { 
-  mMass = c.mMass; myAnalysis = 0; 
+inline StHbtParticleCut::StHbtParticleCut(const StHbtParticleCut& c) : StHbtCutMonitorHandler() {
+   mMass = c.mMass;
+   myAnalysis = 0;
 #ifdef STHBTDEBUG
-  cout << " StHbtParticleCut::StHbtParticleCut(const StHbtParticleCut& c) - mMass: " << mMass << endl;
+   cout << " StHbtParticleCut::StHbtParticleCut(const StHbtParticleCut& c) - mMass: " << mMass << endl;
 #endif
 }
 inline void StHbtParticleCut::SetAnalysis(StHbtBaseAnalysis* analysis) { myAnalysis = analysis; }

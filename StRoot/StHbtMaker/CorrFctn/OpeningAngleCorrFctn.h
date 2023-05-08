@@ -18,36 +18,33 @@
 #include "StHbtMaker/Base/StHbtCorrFctn.hh"
 
 class OpeningAngleCorrFctn : public StHbtCorrFctn {
-public:
-  OpeningAngleCorrFctn(char* title, const int& nbinsQ, const float& QLo, const float& QHi,
-		       const int& nbinAng, const float& AngLo, const float& AngHi);
-  virtual ~OpeningAngleCorrFctn();
+  public:
+   OpeningAngleCorrFctn(char* title, const int& nbinsQ, const float& QLo, const float& QHi, const int& nbinAng,
+                        const float& AngLo, const float& AngHi);
+   virtual ~OpeningAngleCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  StHbt2DHisto* Numerator2D();
-  StHbt2DHisto* Denominator2D();
-  StHbt2DHisto* Ratio2D();
+   StHbt2DHisto* Numerator2D();
+   StHbt2DHisto* Denominator2D();
+   StHbt2DHisto* Ratio2D();
 
-private:
-
-  StHbt2DHisto* mNumerator2D;
-  StHbt2DHisto* mDenominator2D;
-  StHbt2DHisto* mRatio2D;
+  private:
+   StHbt2DHisto* mNumerator2D;
+   StHbt2DHisto* mDenominator2D;
+   StHbt2DHisto* mRatio2D;
 
 #ifdef __ROOT__
-  ClassDef(OpeningAngleCorrFctn, 1)
+   ClassDef(OpeningAngleCorrFctn, 1)
 #endif
 };
 
-inline  StHbt2DHisto* OpeningAngleCorrFctn::Numerator2D(){return mNumerator2D;}
-inline  StHbt2DHisto* OpeningAngleCorrFctn::Denominator2D(){return mDenominator2D;}
-inline  StHbt2DHisto* OpeningAngleCorrFctn::Ratio2D(){return mRatio2D;}
-
+inline StHbt2DHisto* OpeningAngleCorrFctn::Numerator2D() { return mNumerator2D; }
+inline StHbt2DHisto* OpeningAngleCorrFctn::Denominator2D() { return mDenominator2D; }
+inline StHbt2DHisto* OpeningAngleCorrFctn::Ratio2D() { return mRatio2D; }
 
 #endif
-

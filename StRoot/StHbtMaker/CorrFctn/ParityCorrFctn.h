@@ -15,26 +15,22 @@
 //#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 #include "StHbtMaker/Cut/ParityEventCut.h"
 
-
 class ParityCorrFctn : public StHbtCorrFctn {
-public:
-  ParityCorrFctn(ParityEventCut* PEC);
-  virtual ~ParityCorrFctn();
+  public:
+   ParityCorrFctn(ParityEventCut* PEC);
+   virtual ~ParityCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*); 
-  virtual void AddMixedPair(const StHbtPair*); 
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish(); 
+   virtual void Finish();
 
-
-private:
-  ParityEventCut* mParityEventCut;  // this is used to access the Event-wise quantity and increment it
+  private:
+   ParityEventCut* mParityEventCut;  // this is used to access the Event-wise quantity and increment it
 #ifdef __ROOT__
-  ClassDef(ParityCorrFctn, 0)
+   ClassDef(ParityCorrFctn, 0)
 #endif
 };
 
-
 #endif
-

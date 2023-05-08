@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *      a simple correlation function in the magnitude of 3-vector q        
+ *      a simple correlation function in the magnitude of 3-vector q
  *
  ***************************************************************************
  *
@@ -42,34 +42,32 @@
 //#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 
 class QvecCorrFctn : public StHbtCorrFctn {
-public:
-  QvecCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
-  virtual ~QvecCorrFctn();
+  public:
+   QvecCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
+   virtual ~QvecCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  StHbt1DHisto* Numerator();
-  StHbt1DHisto* Denominator();
-  StHbt1DHisto* Ratio();
+   StHbt1DHisto* Numerator();
+   StHbt1DHisto* Denominator();
+   StHbt1DHisto* Ratio();
 
-private:
-  StHbt1DHisto* mNumerator;
-  StHbt1DHisto* mDenominator;
-  StHbt1DHisto* mRatio;
+  private:
+   StHbt1DHisto* mNumerator;
+   StHbt1DHisto* mDenominator;
+   StHbt1DHisto* mRatio;
 
-#ifdef __ROOT__ 
-  ClassDef(QvecCorrFctn, 1)
+#ifdef __ROOT__
+   ClassDef(QvecCorrFctn, 1)
 #endif
 };
 
-inline  StHbt1DHisto* QvecCorrFctn::Numerator(){return mNumerator;}
-inline  StHbt1DHisto* QvecCorrFctn::Denominator(){return mDenominator;}
-inline  StHbt1DHisto* QvecCorrFctn::Ratio(){return mRatio;}
-
+inline StHbt1DHisto* QvecCorrFctn::Numerator() { return mNumerator; }
+inline StHbt1DHisto* QvecCorrFctn::Denominator() { return mDenominator; }
+inline StHbt1DHisto* QvecCorrFctn::Ratio() { return mRatio; }
 
 #endif
-

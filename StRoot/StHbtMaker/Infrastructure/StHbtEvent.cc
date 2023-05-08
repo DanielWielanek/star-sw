@@ -113,491 +113,505 @@
  **************************************************************************/
 
 #include "StHbtMaker/Infrastructure/StHbtEvent.hh"
-#include "StHbtMaker/Infrastructure/StHbtTrack.hh"
-#include "StHbtMaker/Infrastructure/StHbtV0.hh"
-#include "StHbtMaker/Infrastructure/StHbtXi.hh"
-#include "StHbtMaker/Infrastructure/StHbtKink.hh"
+
+#include "PhysicalConstants.h"
+#include "StHbtMaker/Base/StHbtKinkCut.h"
 #include "StHbtMaker/Base/StHbtTrackCut.h"
 #include "StHbtMaker/Base/StHbtV0Cut.h"
 #include "StHbtMaker/Base/StHbtXiCut.h"
-#include "StHbtMaker/Base/StHbtKinkCut.h"
-#include "PhysicalConstants.h"
+#include "StHbtMaker/Infrastructure/StHbtKink.hh"
+#include "StHbtMaker/Infrastructure/StHbtTrack.hh"
+#include "StHbtMaker/Infrastructure/StHbtV0.hh"
+#include "StHbtMaker/Infrastructure/StHbtXi.hh"
 #include "SystemOfUnits.h"
 
 #ifdef __ROOT__
 #include "StHbtMaker/Infrastructure/StHbtTTreeEvent.h"
+#include "StHbtMaker/Infrastructure/StHbtTTreeKink.h"
 #include "StHbtMaker/Infrastructure/StHbtTTreeTrack.h"
 #include "StHbtMaker/Infrastructure/StHbtTTreeV0.h"
 #include "StHbtMaker/Infrastructure/StHbtTTreeXi.h"
-#include "StHbtMaker/Infrastructure/StHbtTTreeKink.h"
 
 StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) {
 #ifdef STHBTDEBUG
-  cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev)" << endl;
+   cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev)" << endl;
 #endif
-  mEventNumber = ev->mEventNumber;
-  mRunNumber = ev->mRunNumber;
-  mTpcNhits = ev->mTpcNhits;
-  mNumberOfTracks = ev->mNumberOfTracks;
-  mNumberOfGoodTracks = ev->mNumberOfGoodTracks;
-  mCtbMultiplicity = (unsigned short) ev->mCtbMultiplicity;
-  mZdcAdc[0] = (unsigned short) ev->mZdcAdc[0];
-  mZdcAdc[1] = (unsigned short) ev->mZdcAdc[1];
-  mUncorrectedNumberOfPositivePrimaries = ev->mUncorrectedNumberOfPositivePrimaries;
-  mUncorrectedNumberOfNegativePrimaries = ev->mUncorrectedNumberOfNegativePrimaries;
-  mReactionPlane[0] = ev->mReactionPlane[0];
-  mReactionPlane[1] = ev->mReactionPlane[1];
-  mReactionPlanePtWgt[0] = ev->mReactionPlanePtWgt[0];
-  mReactionPlanePtWgt[1] = ev->mReactionPlanePtWgt[1];
-  mPrimVertPos = StHbtThreeVector(ev->mVertexX,ev->mVertexY,ev->mVertexZ);
-  mMagneticField = ev->mMagneticField;
-  if (mMagneticField==0) {
+   mEventNumber = ev->mEventNumber;
+   mRunNumber = ev->mRunNumber;
+   mTpcNhits = ev->mTpcNhits;
+   mNumberOfTracks = ev->mNumberOfTracks;
+   mNumberOfGoodTracks = ev->mNumberOfGoodTracks;
+   mCtbMultiplicity = (unsigned short)ev->mCtbMultiplicity;
+   mZdcAdc[0] = (unsigned short)ev->mZdcAdc[0];
+   mZdcAdc[1] = (unsigned short)ev->mZdcAdc[1];
+   mUncorrectedNumberOfPositivePrimaries = ev->mUncorrectedNumberOfPositivePrimaries;
+   mUncorrectedNumberOfNegativePrimaries = ev->mUncorrectedNumberOfNegativePrimaries;
+   mReactionPlane[0] = ev->mReactionPlane[0];
+   mReactionPlane[1] = ev->mReactionPlane[1];
+   mReactionPlanePtWgt[0] = ev->mReactionPlanePtWgt[0];
+   mReactionPlanePtWgt[1] = ev->mReactionPlanePtWgt[1];
+   mPrimVertPos = StHbtThreeVector(ev->mVertexX, ev->mVertexY, ev->mVertexZ);
+   mMagneticField = ev->mMagneticField;
+   if (mMagneticField == 0) {
 #if STHBTDEBUG
-    cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - mMagneticField=" << mMagneticField << endl;
+      cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - mMagneticField=" << mMagneticField << endl;
 #endif
-    mMagneticField = 2.5;
-    //    ev->SetMagneticField(mMagneticField);   commented-out by malisa 14nov01 - unneeded and caused compiler problems
-    cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - B=0 in TTree! WARNING!! PROBABLY SCREWED-UP!!" << endl;
-  }
-  mTriggerWord = ev->mTriggerWord;
-  mTriggerActionWord = ev->mTriggerActionWord;
-  //  for (int i=0;i<4; i++) mL3TriggerAlgorithm[i] = ev->mL3TriggerAlgorithm[i];
-  mL3TriggerAlgorithm[0] = ev->mL3TriggerAlgorithm;
+      mMagneticField = 2.5;
+      //    ev->SetMagneticField(mMagneticField);   commented-out by malisa 14nov01 - unneeded and caused compiler
+      //    problems
+      cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - B=0 in TTree! WARNING!! PROBABLY SCREWED-UP!!"
+           << endl;
+   }
+   mTriggerWord = ev->mTriggerWord;
+   mTriggerActionWord = ev->mTriggerActionWord;
+   //  for (int i=0;i<4; i++) mL3TriggerAlgorithm[i] = ev->mL3TriggerAlgorithm[i];
+   mL3TriggerAlgorithm[0] = ev->mL3TriggerAlgorithm;
 
+   // create collections
+   mV0Collection = new StHbtV0Collection();
+   mXiCollection = new StHbtXiCollection();
+   mKinkCollection = new StHbtKinkCollection();
+   mTrackCollection = new StHbtTrackCollection();
 
-  // create collections
-  mV0Collection = new StHbtV0Collection();
-  mXiCollection = new StHbtXiCollection();
-  mKinkCollection = new StHbtKinkCollection();
-  mTrackCollection = new StHbtTrackCollection();
-
-  // copy track collection  
-  for ( unsigned int i=0; i <ev->mNtracks; i++) {
-    StHbtTrack* trackCopy = new StHbtTrack(ev, (StHbtTTreeTrack*)ev->tracks()->UncheckedAt(i));
-    mTrackCollection->push_back(trackCopy);
-  }
-  // copy v0 collection  
-  for ( unsigned int i=0; i<ev->mNv0s; i++) {
-    StHbtV0* v0Copy = new StHbtV0(ev, (StHbtTTreeV0*)ev->v0s()->UncheckedAt(i));
-    mV0Collection->push_back(v0Copy);
-  }
-  // copy xi collection  
-  for ( unsigned int i=0; i<ev->mNxis; i++) {
-    StHbtXi* xiCopy = new StHbtXi(ev, (StHbtTTreeXi*)ev->xis()->UncheckedAt(i));
-    mXiCollection->push_back(xiCopy);
-  }
-  // copy kink collection  
-  for ( unsigned int i=0; i <ev->mNkinks; i++) {
-    StHbtKink* kinkCopy = new StHbtKink(ev, (StHbtTTreeKink*)ev->kinks()->UncheckedAt(i));
-    mKinkCollection->push_back(kinkCopy);
-  }
-  cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - collections:";
-  cout << " " << mTrackCollection->size();
-  cout << "/" << mV0Collection->size();
-  cout << "/" << mXiCollection->size();
-  cout << "/" << mKinkCollection->size();
-  cout << endl;
+   // copy track collection
+   for (unsigned int i = 0; i < ev->mNtracks; i++) {
+      StHbtTrack* trackCopy = new StHbtTrack(ev, (StHbtTTreeTrack*)ev->tracks()->UncheckedAt(i));
+      mTrackCollection->push_back(trackCopy);
+   }
+   // copy v0 collection
+   for (unsigned int i = 0; i < ev->mNv0s; i++) {
+      StHbtV0* v0Copy = new StHbtV0(ev, (StHbtTTreeV0*)ev->v0s()->UncheckedAt(i));
+      mV0Collection->push_back(v0Copy);
+   }
+   // copy xi collection
+   for (unsigned int i = 0; i < ev->mNxis; i++) {
+      StHbtXi* xiCopy = new StHbtXi(ev, (StHbtTTreeXi*)ev->xis()->UncheckedAt(i));
+      mXiCollection->push_back(xiCopy);
+   }
+   // copy kink collection
+   for (unsigned int i = 0; i < ev->mNkinks; i++) {
+      StHbtKink* kinkCopy = new StHbtKink(ev, (StHbtTTreeKink*)ev->kinks()->UncheckedAt(i));
+      mKinkCollection->push_back(kinkCopy);
+   }
+   cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - collections:";
+   cout << " " << mTrackCollection->size();
+   cout << "/" << mV0Collection->size();
+   cout << "/" << mXiCollection->size();
+   cout << "/" << mKinkCollection->size();
+   cout << endl;
 }
 #endif
 
-
 #ifdef __ROOT__
+#include "StMuDSTMaker/COMMON/StMuDebug.h"
 #include "StMuDSTMaker/COMMON/StMuDst.h"
 #include "StMuDSTMaker/COMMON/StMuEvent.h"
 #include "StMuDSTMaker/COMMON/StMuTrack.h"
-#include "StMuDSTMaker/COMMON/StMuDebug.h"
 #endif
 
 StHbtEvent::StHbtEvent(const StMuDst* dst, int trackType) {
-  DEBUGMESSAGE1("");
-  StMuEvent* ev = dst->event();
-  mEventNumber = ev->eventNumber();
-  mRunNumber = ev->runNumber();
-  mTpcNhits = 0;
-  mNumberOfTracks = ev->eventSummary().numberOfTracks();
-  mNumberOfGoodTracks = ev->eventSummary().numberOfGoodTracks();
-  mCtbMultiplicity = (unsigned short) ev->ctbMultiplicity();
-  mZdcAdc[0] = (unsigned short) ev->zdcAdcAttentuatedSumWest();
-  mZdcAdc[1] = (unsigned short) ev->zdcAdcAttentuatedSumEast();
-  mUncorrectedNumberOfPositivePrimaries = ev->refMultPos();
-  mUncorrectedNumberOfNegativePrimaries = ev->refMultNeg();
-  mUncorrectedNumberOfPrimaries = ev->refMult();
-  mReactionPlane[0] = 0;
-  mReactionPlane[1] = 0;
-  mReactionPlanePtWgt[0] = 0;
-  mReactionPlanePtWgt[1] = 0;
-  mPrimVertPos = ev->eventSummary().primaryVertexPosition();
-  mMagneticField = ev->magneticField();
+   DEBUGMESSAGE1("");
+   StMuEvent* ev = dst->event();
+   mEventNumber = ev->eventNumber();
+   mRunNumber = ev->runNumber();
+   mTpcNhits = 0;
+   mNumberOfTracks = ev->eventSummary().numberOfTracks();
+   mNumberOfGoodTracks = ev->eventSummary().numberOfGoodTracks();
+   mCtbMultiplicity = (unsigned short)ev->ctbMultiplicity();
+   mZdcAdc[0] = (unsigned short)ev->zdcAdcAttentuatedSumWest();
+   mZdcAdc[1] = (unsigned short)ev->zdcAdcAttentuatedSumEast();
+   mUncorrectedNumberOfPositivePrimaries = ev->refMultPos();
+   mUncorrectedNumberOfNegativePrimaries = ev->refMultNeg();
+   mUncorrectedNumberOfPrimaries = ev->refMult();
+   mReactionPlane[0] = 0;
+   mReactionPlane[1] = 0;
+   mReactionPlanePtWgt[0] = 0;
+   mReactionPlanePtWgt[1] = 0;
+   mPrimVertPos = ev->eventSummary().primaryVertexPosition();
+   mMagneticField = ev->magneticField();
 
-  mTriggerWord = ev->l0Trigger().triggerWord();
-  mTriggerActionWord = ev->l0Trigger().triggerActionWord();
+   mTriggerWord = ev->l0Trigger().triggerWord();
+   mTriggerActionWord = ev->l0Trigger().triggerActionWord();
 
+   // create collections
+   mV0Collection = new StHbtV0Collection();
+   mXiCollection = new StHbtXiCollection();
+   mKinkCollection = new StHbtKinkCollection();
+   mTrackCollection = new StHbtTrackCollection();
 
+   // copy track collection
+   TObjArray* tracks = 0;
+   switch (trackType) {
+      case 0:
+         tracks = dst->globalTracks();
+         break;
+      case 1:
+         tracks = dst->primaryTracks();
+         break;
+      default:
+         DEBUGMESSAGE("don't know how to handle this track type");
+   }
+   if (tracks) {
+      DEBUGVALUE2(trackType);
+      int nTracks = tracks->GetEntries();
+      DEBUGVALUE2(tracks->GetEntries());
+      for (int i = 0; i < nTracks; i++) {
+         StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*)tracks->UncheckedAt(i));
+         mTrackCollection->push_back(trackCopy);
+      }
+   }
 
-  // create collections
-  mV0Collection = new StHbtV0Collection();
-  mXiCollection = new StHbtXiCollection();
-  mKinkCollection = new StHbtKinkCollection();
-  mTrackCollection = new StHbtTrackCollection();
+   StStrangeEvMuDst* strangeEvent = dst->strangeEvent();
+   // copy v0 collection
+   int nV0s = dst->v0s()->GetEntries();
+   for (int i = 0; i < nV0s; i++) {
+      dst->v0s(i)->SetEvent(strangeEvent);
 
-  // copy track collection  
-  TObjArray*  tracks=0;  
-  switch (trackType) {
-  case 0: tracks = dst->globalTracks(); break;
-  case 1: tracks = dst->primaryTracks(); break;
-  default: DEBUGMESSAGE("don't know how to handle this track type");
-  }
-  if (tracks) {
-    DEBUGVALUE2(trackType);
-    int nTracks = tracks->GetEntries();
-    DEBUGVALUE2(tracks->GetEntries());
-    for ( int i=0; i<nTracks; i++) {
-      StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*) tracks->UncheckedAt(i));
-      mTrackCollection->push_back(trackCopy);
-    }
-  }
-
-  StStrangeEvMuDst* strangeEvent = dst->strangeEvent();
-  // copy v0 collection  
-  int nV0s = dst->v0s()->GetEntries();
-  for ( int i=0; i<nV0s; i++) {
-    dst->v0s(i)->SetEvent(strangeEvent);
-
-    StHbtV0* v0Copy = new StHbtV0( *dst->v0s(i) );
-    mV0Collection->push_back(v0Copy);
-  }
-  // copy xi collection  
-  int nXis = dst->xis()->GetEntries();
-  for ( int i=0; i<nXis; i++) {
-    dst->xis(i)->SetEvent(strangeEvent);
-    StHbtXi* xiCopy = new StHbtXi( *dst->xis(i) );
-    mXiCollection->push_back(xiCopy);
-  }
-//   // copy kink collection  
-//   int nKinks = dst->kinks()->GetEntries();
-//   for ( unsigned int i=0; i <nKinks; i++) {
-//     StHbtKink* kinkCopy = new StHbtKink( *dst->kinks(i) );
-//     mKinkCollection->push_back(kinkCopy);
-//   }
-  cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - collections:";
-  cout << " " << mTrackCollection->size();
-  cout << "/" << mV0Collection->size();
-  cout << "/" << mXiCollection->size();
-  cout << "/" << mKinkCollection->size();
-  cout << endl;
+      StHbtV0* v0Copy = new StHbtV0(*dst->v0s(i));
+      mV0Collection->push_back(v0Copy);
+   }
+   // copy xi collection
+   int nXis = dst->xis()->GetEntries();
+   for (int i = 0; i < nXis; i++) {
+      dst->xis(i)->SetEvent(strangeEvent);
+      StHbtXi* xiCopy = new StHbtXi(*dst->xis(i));
+      mXiCollection->push_back(xiCopy);
+   }
+   //   // copy kink collection
+   //   int nKinks = dst->kinks()->GetEntries();
+   //   for ( unsigned int i=0; i <nKinks; i++) {
+   //     StHbtKink* kinkCopy = new StHbtKink( *dst->kinks(i) );
+   //     mKinkCollection->push_back(kinkCopy);
+   //   }
+   cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - collections:";
+   cout << " " << mTrackCollection->size();
+   cout << "/" << mV0Collection->size();
+   cout << "/" << mXiCollection->size();
+   cout << "/" << mKinkCollection->size();
+   cout << endl;
 }
-
-
 
 // Gael addition 24 Sept 02
 StHbtEvent::StHbtEvent(const StMuDst* dst, int trackType, bool readV0Daughters) {
-  DEBUGMESSAGE1("");
-  StMuEvent* ev = dst->event();
-  mEventNumber = ev->eventNumber();
-  mRunNumber = ev->runNumber();
-  mTpcNhits = 0;
-  mNumberOfTracks = ev->eventSummary().numberOfTracks();
-  mNumberOfGoodTracks = ev->eventSummary().numberOfGoodTracks();
-  mCtbMultiplicity = (unsigned short) ev->ctbMultiplicity();
-  mZdcAdc[0] = (unsigned short) ev->zdcAdcAttentuatedSumWest();
-  mZdcAdc[1] = (unsigned short) ev->zdcAdcAttentuatedSumEast();
-  mUncorrectedNumberOfPositivePrimaries = ev->refMultPos();
-  mUncorrectedNumberOfNegativePrimaries = ev->refMultNeg();
-  mUncorrectedNumberOfPrimaries = ev->refMult();
-  mReactionPlane[0] = 0;
-  mReactionPlane[1] = 0;
-  mReactionPlanePtWgt[0] = 0;
-  mReactionPlanePtWgt[1] = 0;
-  mPrimVertPos = ev->eventSummary().primaryVertexPosition();
-  mMagneticField = ev->magneticField();
+   DEBUGMESSAGE1("");
+   StMuEvent* ev = dst->event();
+   mEventNumber = ev->eventNumber();
+   mRunNumber = ev->runNumber();
+   mTpcNhits = 0;
+   mNumberOfTracks = ev->eventSummary().numberOfTracks();
+   mNumberOfGoodTracks = ev->eventSummary().numberOfGoodTracks();
+   mCtbMultiplicity = (unsigned short)ev->ctbMultiplicity();
+   mZdcAdc[0] = (unsigned short)ev->zdcAdcAttentuatedSumWest();
+   mZdcAdc[1] = (unsigned short)ev->zdcAdcAttentuatedSumEast();
+   mUncorrectedNumberOfPositivePrimaries = ev->refMultPos();
+   mUncorrectedNumberOfNegativePrimaries = ev->refMultNeg();
+   mUncorrectedNumberOfPrimaries = ev->refMult();
+   mReactionPlane[0] = 0;
+   mReactionPlane[1] = 0;
+   mReactionPlanePtWgt[0] = 0;
+   mReactionPlanePtWgt[1] = 0;
+   mPrimVertPos = ev->eventSummary().primaryVertexPosition();
+   mMagneticField = ev->magneticField();
 
-  mTriggerWord = ev->l0Trigger().triggerWord();
-  mTriggerActionWord = ev->l0Trigger().triggerActionWord();
+   mTriggerWord = ev->l0Trigger().triggerWord();
+   mTriggerActionWord = ev->l0Trigger().triggerActionWord();
 
+   // create collections
+   mV0Collection = new StHbtV0Collection();
+   mXiCollection = new StHbtXiCollection();
+   mKinkCollection = new StHbtKinkCollection();
+   mTrackCollection = new StHbtTrackCollection();
 
+   // copy track collection
+   TObjArray* tracks = 0;
+   switch (trackType) {
+      case 0:
+         tracks = dst->globalTracks();
+         break;
+      case 1:
+         tracks = dst->primaryTracks();
+         break;
+      default:
+         DEBUGMESSAGE("don't know how to handle this track type");
+   }
 
-  // create collections
-  mV0Collection = new StHbtV0Collection();
-  mXiCollection = new StHbtXiCollection();
-  mKinkCollection = new StHbtKinkCollection();
-  mTrackCollection = new StHbtTrackCollection();
-
-  // copy track collection  
-  TObjArray* tracks=0;
-  switch (trackType) {
-  case 0: tracks = dst->globalTracks(); break;
-  case 1: tracks = dst->primaryTracks(); break;
-  default: DEBUGMESSAGE("don't know how to handle this track type");
-  }
-
-  if (tracks) {
-    DEBUGVALUE2(trackType);
-    int nTracks = tracks->GetEntries();
-    DEBUGVALUE2(tracks->GetEntries());
-    for ( int i=0; i<nTracks; i++) {
-      StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*) tracks->UncheckedAt(i));
-
-      mTrackCollection->push_back(trackCopy);
-    }
-  }
-
-  StStrangeEvMuDst* strangeEvent = dst->strangeEvent();
-  // copy v0 collection  
-  int nV0s = dst->v0s()->GetEntries();
-  // to read V0 daugthers
-  double *TrackToId;
-  tracks = dst->globalTracks();
-  int nTracks = tracks->GetEntries();
-  TrackToId = (double*)malloc(sizeof(double)*nTracks);
-  for ( int i=0; i<nTracks; i++) {
-	StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*) tracks->UncheckedAt(i));
-	TrackToId[i] = trackCopy->TrackId();
-	delete trackCopy;
-  }
-  for ( int i=0; i<nV0s; i++) {
-    dst->v0s(i)->SetEvent(strangeEvent);
-    StHbtV0* v0Copy = new StHbtV0( *dst->v0s(i) );
-    // Gael 23 Sept 02 --beg
-    // search for daughters....
-    if (readV0Daughters){
-      tracks = dst->globalTracks();
+   if (tracks) {
+      DEBUGVALUE2(trackType);
       int nTracks = tracks->GetEntries();
-      int V0NegOk = 1;
-      int V0PosOk = 1;
+      DEBUGVALUE2(tracks->GetEntries());
+      for (int i = 0; i < nTracks; i++) {
+         StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*)tracks->UncheckedAt(i));
 
-      for ( int j=0; j<nTracks; j++) {
-	if (TrackToId[j]==v0Copy->idNeg()) {
-	  V0NegOk = -1;
-	  StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*) tracks->UncheckedAt(j));
-	  v0Copy->SetHelixNeg(trackCopy->Helix());
-	  delete trackCopy;
-	}
-	if (TrackToId[j]==v0Copy->idPos()) {
-	  V0PosOk = -1; 
-	  StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*) tracks->UncheckedAt(j));
-	  v0Copy->SetHelixPos(trackCopy->Helix());
-	  delete trackCopy;
-	}
-
- 	if ((V0PosOk < 0) && (V0NegOk < 0)) {
- 	  break;}
+         mTrackCollection->push_back(trackCopy);
       }
-      
-      if ((V0PosOk < 0) != (V0NegOk < 0)) {
-	cout <<"!!! StHbtEvent::At least One V0 daughter is not found !!!" << endl;
-      }
-      v0Copy->SetprimaryVertex(ev->eventSummary().primaryVertexPosition());
-    }
-    mV0Collection->push_back(v0Copy); 
-  }
-  free(TrackToId); // Gael 23 Sept 02 --end 
+   }
 
-  
-  // copy xi collection  
-  int nXis = dst->xis()->GetEntries();
-  for ( int i=0; i<nXis; i++) {
-    dst->xis(i)->SetEvent(strangeEvent);
-    StHbtXi* xiCopy = new StHbtXi( *dst->xis(i) );
-    mXiCollection->push_back(xiCopy);
-  }
-//   // copy kink collection  
-//   int nKinks = dst->kinks()->GetEntries();
-//   for ( unsigned int i=0; i <nKinks; i++) {
-//     StHbtKink* kinkCopy = new StHbtKink( *dst->kinks(i) );
-//     mKinkCollection->push_back(kinkCopy);
-//   }
-  cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - collections:";
-  cout << " " << mTrackCollection->size();
-  cout << "/" << mV0Collection->size();
-  cout << "/" << mXiCollection->size();
-  cout << "/" << mKinkCollection->size();
-  cout << endl;
+   StStrangeEvMuDst* strangeEvent = dst->strangeEvent();
+   // copy v0 collection
+   int nV0s = dst->v0s()->GetEntries();
+   // to read V0 daugthers
+   double* TrackToId;
+   tracks = dst->globalTracks();
+   int nTracks = tracks->GetEntries();
+   TrackToId = (double*)malloc(sizeof(double) * nTracks);
+   for (int i = 0; i < nTracks; i++) {
+      StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*)tracks->UncheckedAt(i));
+      TrackToId[i] = trackCopy->TrackId();
+      delete trackCopy;
+   }
+   for (int i = 0; i < nV0s; i++) {
+      dst->v0s(i)->SetEvent(strangeEvent);
+      StHbtV0* v0Copy = new StHbtV0(*dst->v0s(i));
+      // Gael 23 Sept 02 --beg
+      // search for daughters....
+      if (readV0Daughters) {
+         tracks = dst->globalTracks();
+         int nTracks = tracks->GetEntries();
+         int V0NegOk = 1;
+         int V0PosOk = 1;
+
+         for (int j = 0; j < nTracks; j++) {
+            if (TrackToId[j] == v0Copy->idNeg()) {
+               V0NegOk = -1;
+               StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*)tracks->UncheckedAt(j));
+               v0Copy->SetHelixNeg(trackCopy->Helix());
+               delete trackCopy;
+            }
+            if (TrackToId[j] == v0Copy->idPos()) {
+               V0PosOk = -1;
+               StHbtTrack* trackCopy = new StHbtTrack(dst, (StMuTrack*)tracks->UncheckedAt(j));
+               v0Copy->SetHelixPos(trackCopy->Helix());
+               delete trackCopy;
+            }
+
+            if ((V0PosOk < 0) && (V0NegOk < 0)) {
+               break;
+            }
+         }
+
+         if ((V0PosOk < 0) != (V0NegOk < 0)) {
+            cout << "!!! StHbtEvent::At least One V0 daughter is not found !!!" << endl;
+         }
+         v0Copy->SetprimaryVertex(ev->eventSummary().primaryVertexPosition());
+      }
+      mV0Collection->push_back(v0Copy);
+   }
+   free(TrackToId);  // Gael 23 Sept 02 --end
+
+   // copy xi collection
+   int nXis = dst->xis()->GetEntries();
+   for (int i = 0; i < nXis; i++) {
+      dst->xis(i)->SetEvent(strangeEvent);
+      StHbtXi* xiCopy = new StHbtXi(*dst->xis(i));
+      mXiCollection->push_back(xiCopy);
+   }
+   //   // copy kink collection
+   //   int nKinks = dst->kinks()->GetEntries();
+   //   for ( unsigned int i=0; i <nKinks; i++) {
+   //     StHbtKink* kinkCopy = new StHbtKink( *dst->kinks(i) );
+   //     mKinkCollection->push_back(kinkCopy);
+   //   }
+   cout << "StHbtEvent::StHbtEvent(const StHbtTTreeEvent* ev) - collections:";
+   cout << " " << mTrackCollection->size();
+   cout << "/" << mV0Collection->size();
+   cout << "/" << mXiCollection->size();
+   cout << "/" << mKinkCollection->size();
+   cout << endl;
 }
-
-
-
 
 //___________________
 // end Gael addition 24 Sept 02
 //___________________
-StHbtEvent::StHbtEvent(){
-  mPrimVertPos[0]=-999.0;
-  mPrimVertPos[1]=-999.0;
-  mPrimVertPos[2]=-999.0;
-  mTrackCollection = new StHbtTrackCollection;
-  mV0Collection = new StHbtV0Collection;
-  mXiCollection = new StHbtXiCollection;
-  mKinkCollection = new StHbtKinkCollection;
-  mMagneticField=0.0;
+StHbtEvent::StHbtEvent() {
+   mPrimVertPos[0] = -999.0;
+   mPrimVertPos[1] = -999.0;
+   mPrimVertPos[2] = -999.0;
+   mTrackCollection = new StHbtTrackCollection;
+   mV0Collection = new StHbtV0Collection;
+   mXiCollection = new StHbtXiCollection;
+   mKinkCollection = new StHbtKinkCollection;
+   mMagneticField = 0.0;
 }
 //___________________
-StHbtEvent::StHbtEvent(const StHbtEvent& ev, StHbtTrackCut* tCut, StHbtV0Cut* vCut, StHbtXiCut* xCut, StHbtKinkCut* kCut){ // copy constructor with track and v0 cuts
-  //cout << "StHbtEvent::StHbtEvent(const StHbtEvent& ev, StHbtTrackCut* tCut, StHbtV0Cut* vCut, StHbtV0Cut* kCut)" << endl;
-  mEventNumber = ev.mEventNumber;
-  mRunNumber = ev.mRunNumber;
-  mCtbMultiplicity = ev.mCtbMultiplicity;
-  mZdcAdc[0] = ev.mZdcAdc[0];
-  mZdcAdc[1] = ev.mZdcAdc[1];
-  mTpcNhits = ev.mTpcNhits;
-  mNumberOfTracks = ev.mNumberOfTracks;
-  mNumberOfGoodTracks = ev.mNumberOfGoodTracks;
-  mUncorrectedNumberOfPositivePrimaries = ev.mUncorrectedNumberOfPositivePrimaries;
-  mUncorrectedNumberOfNegativePrimaries = ev.mUncorrectedNumberOfNegativePrimaries;
-  mUncorrectedNumberOfPrimaries = ev.mUncorrectedNumberOfPrimaries;
-  mReactionPlane[0] = ev.mReactionPlane[0];
-  mReactionPlane[1] = ev.mReactionPlane[1];
-  mReactionPlanePtWgt[0] = ev.mReactionPlanePtWgt[0];
-  mReactionPlanePtWgt[1] = ev.mReactionPlanePtWgt[1];
-  mPrimVertPos = ev.mPrimVertPos;
-  mMagneticField= ev.mMagneticField;
-  mTriggerWord = ev.mTriggerWord;
-  mTriggerActionWord = ev.mTriggerActionWord;
-  for ( int i=0; i<4; i++) mL3TriggerAlgorithm[i] = ev.mL3TriggerAlgorithm[i];
+StHbtEvent::StHbtEvent(const StHbtEvent& ev, StHbtTrackCut* tCut, StHbtV0Cut* vCut, StHbtXiCut* xCut,
+                       StHbtKinkCut* kCut) {  // copy constructor with track and v0 cuts
+   // cout << "StHbtEvent::StHbtEvent(const StHbtEvent& ev, StHbtTrackCut* tCut, StHbtV0Cut* vCut, StHbtV0Cut* kCut)" <<
+   // endl;
+   mEventNumber = ev.mEventNumber;
+   mRunNumber = ev.mRunNumber;
+   mCtbMultiplicity = ev.mCtbMultiplicity;
+   mZdcAdc[0] = ev.mZdcAdc[0];
+   mZdcAdc[1] = ev.mZdcAdc[1];
+   mTpcNhits = ev.mTpcNhits;
+   mNumberOfTracks = ev.mNumberOfTracks;
+   mNumberOfGoodTracks = ev.mNumberOfGoodTracks;
+   mUncorrectedNumberOfPositivePrimaries = ev.mUncorrectedNumberOfPositivePrimaries;
+   mUncorrectedNumberOfNegativePrimaries = ev.mUncorrectedNumberOfNegativePrimaries;
+   mUncorrectedNumberOfPrimaries = ev.mUncorrectedNumberOfPrimaries;
+   mReactionPlane[0] = ev.mReactionPlane[0];
+   mReactionPlane[1] = ev.mReactionPlane[1];
+   mReactionPlanePtWgt[0] = ev.mReactionPlanePtWgt[0];
+   mReactionPlanePtWgt[1] = ev.mReactionPlanePtWgt[1];
+   mPrimVertPos = ev.mPrimVertPos;
+   mMagneticField = ev.mMagneticField;
+   mTriggerWord = ev.mTriggerWord;
+   mTriggerActionWord = ev.mTriggerActionWord;
+   for (int i = 0; i < 4; i++) mL3TriggerAlgorithm[i] = ev.mL3TriggerAlgorithm[i];
 
-  // create collections
-  mTrackCollection = new StHbtTrackCollection;
-  mV0Collection = new StHbtV0Collection;
-  mXiCollection = new StHbtXiCollection;
-  mKinkCollection = new StHbtKinkCollection;
-  // copy track collection  
-  for ( StHbtTrackIterator tIter=ev.mTrackCollection->begin(); tIter!=ev.mTrackCollection->end(); tIter++) {
-    if ( !tCut || tCut->Pass(*tIter) ) {
-      StHbtTrack* trackCopy = new StHbtTrack(**tIter);
-      mTrackCollection->push_back(trackCopy);
-    }
-  }
-  // copy v0 collection
-  for ( StHbtV0Iterator vIter=ev.mV0Collection->begin(); vIter!=ev.mV0Collection->end(); vIter++) {
-    if ( !vCut || vCut->Pass(*vIter) ) {
-      StHbtV0* v0Copy = new StHbtV0(**vIter);
-      mV0Collection->push_back(v0Copy);
-    }
-  }
-  // copy xi collection
-  for ( StHbtXiIterator xIter=ev.mXiCollection->begin(); xIter!=ev.mXiCollection->end(); xIter++) {
-    if ( !xCut || xCut->Pass(*xIter) ) {
-      StHbtXi* xiCopy = new StHbtXi(**xIter);
-      mXiCollection->push_back(xiCopy);
-    }
-  }
-  // copy kink collection  
-  for ( StHbtKinkIterator kIter=ev.mKinkCollection->begin(); kIter!=ev.mKinkCollection->end(); kIter++) {
-    if ( !kCut || kCut->Pass(*kIter) ) {
-      //cout << " kinkCut passed " << endl;
-      StHbtKink* kinkCopy = new StHbtKink(**kIter);
-      mKinkCollection->push_back(kinkCopy);
-    }
-  }
+   // create collections
+   mTrackCollection = new StHbtTrackCollection;
+   mV0Collection = new StHbtV0Collection;
+   mXiCollection = new StHbtXiCollection;
+   mKinkCollection = new StHbtKinkCollection;
+   // copy track collection
+   for (StHbtTrackIterator tIter = ev.mTrackCollection->begin(); tIter != ev.mTrackCollection->end(); tIter++) {
+      if (!tCut || tCut->Pass(*tIter)) {
+         StHbtTrack* trackCopy = new StHbtTrack(**tIter);
+         mTrackCollection->push_back(trackCopy);
+      }
+   }
+   // copy v0 collection
+   for (StHbtV0Iterator vIter = ev.mV0Collection->begin(); vIter != ev.mV0Collection->end(); vIter++) {
+      if (!vCut || vCut->Pass(*vIter)) {
+         StHbtV0* v0Copy = new StHbtV0(**vIter);
+         mV0Collection->push_back(v0Copy);
+      }
+   }
+   // copy xi collection
+   for (StHbtXiIterator xIter = ev.mXiCollection->begin(); xIter != ev.mXiCollection->end(); xIter++) {
+      if (!xCut || xCut->Pass(*xIter)) {
+         StHbtXi* xiCopy = new StHbtXi(**xIter);
+         mXiCollection->push_back(xiCopy);
+      }
+   }
+   // copy kink collection
+   for (StHbtKinkIterator kIter = ev.mKinkCollection->begin(); kIter != ev.mKinkCollection->end(); kIter++) {
+      if (!kCut || kCut->Pass(*kIter)) {
+         // cout << " kinkCut passed " << endl;
+         StHbtKink* kinkCopy = new StHbtKink(**kIter);
+         mKinkCollection->push_back(kinkCopy);
+      }
+   }
 }
 //___________________
-StHbtEvent::~StHbtEvent(){
+StHbtEvent::~StHbtEvent() {
 #ifdef STHBTDEBUG
-  cout << " StHbtEvent::~StHbtEvent() " << endl;
+   cout << " StHbtEvent::~StHbtEvent() " << endl;
 #endif
-  for (StHbtTrackIterator iter=mTrackCollection->begin();iter!=mTrackCollection->end();iter++){
-    delete *iter;
-  }
-  mTrackCollection->clear();
-  delete mTrackCollection;
-  //must do the same for the V0 collection
-  for (StHbtV0Iterator V0iter=mV0Collection->begin();V0iter!=mV0Collection->end();V0iter++){
-    delete *V0iter;
-  }
-  //must do the same for the Xi collection
-  for (StHbtXiIterator XiIter=mXiCollection->begin();XiIter!=mXiCollection->end();XiIter++){
-    delete *XiIter;
-  }
-  mXiCollection->clear();
-  delete mXiCollection;
-  //must do the same for the Kink collection
-  for (StHbtKinkIterator kinkIter=mKinkCollection->begin();kinkIter!=mKinkCollection->end();kinkIter++){
-    delete *kinkIter;
-  }
-  mKinkCollection->clear();
-  delete mKinkCollection;
+   for (StHbtTrackIterator iter = mTrackCollection->begin(); iter != mTrackCollection->end(); iter++) {
+      delete *iter;
+   }
+   mTrackCollection->clear();
+   delete mTrackCollection;
+   // must do the same for the V0 collection
+   for (StHbtV0Iterator V0iter = mV0Collection->begin(); V0iter != mV0Collection->end(); V0iter++) {
+      delete *V0iter;
+   }
+   // must do the same for the Xi collection
+   for (StHbtXiIterator XiIter = mXiCollection->begin(); XiIter != mXiCollection->end(); XiIter++) {
+      delete *XiIter;
+   }
+   mXiCollection->clear();
+   delete mXiCollection;
+   // must do the same for the Kink collection
+   for (StHbtKinkIterator kinkIter = mKinkCollection->begin(); kinkIter != mKinkCollection->end(); kinkIter++) {
+      delete *kinkIter;
+   }
+   mKinkCollection->clear();
+   delete mKinkCollection;
 }
 //___________________
-void StHbtEvent::RotateZ(const double angle){
+void StHbtEvent::RotateZ(const double angle) {
+   StHbtTrackIterator iter;
+   StHbtV0Iterator V0iter;
 
-  StHbtTrackIterator iter;
-  StHbtV0Iterator V0iter;
+   StPhysicalHelixD helix;
+   StHbtThreeVector p;
+   StHbtThreeVector o;
+   double c;
 
-  StPhysicalHelixD helix;
-  StHbtThreeVector p;
-  StHbtThreeVector o;
-  double c;
-
-  mReactionPlane[0] += angle;
-  mReactionPlanePtWgt[0] += angle;
-  cout << " StHbtEvent::RotateZ(const double angle) - angle=" << angle << " rad    ";
-  cout << angle / degree << " deg " << endl; 
-  for (iter=mTrackCollection->begin();iter!=mTrackCollection->end();iter++){
-      p = (*iter)->P();    p.rotateZ(angle);  (*iter)->SetP(p);
-      p= (*iter)->Helix().momentum(mMagneticField*kilogauss);
-      o= (*iter)->Helix().origin();
+   mReactionPlane[0] += angle;
+   mReactionPlanePtWgt[0] += angle;
+   cout << " StHbtEvent::RotateZ(const double angle) - angle=" << angle << " rad    ";
+   cout << angle / degree << " deg " << endl;
+   for (iter = mTrackCollection->begin(); iter != mTrackCollection->end(); iter++) {
+      p = (*iter)->P();
+      p.rotateZ(angle);
+      (*iter)->SetP(p);
+      p = (*iter)->Helix().momentum(mMagneticField * kilogauss);
+      o = (*iter)->Helix().origin();
       p.rotateZ(angle);
       o.rotateZ(angle);
-      c= (*iter)->Helix().charge(mMagneticField*kilogauss);
-      helix = StPhysicalHelixD(p,o,mMagneticField*kilogauss,c);
+      c = (*iter)->Helix().charge(mMagneticField * kilogauss);
+      helix = StPhysicalHelixD(p, o, mMagneticField * kilogauss, c);
       (*iter)->SetHelix(helix);
-  }
-  for (V0iter=mV0Collection->begin();V0iter!=mV0Collection->end();V0iter++){
-    p=(*V0iter)->decayVertexV0();  p.rotateX(angle);   (*V0iter)->SetdecayVertexV0(p);
-    p=(*V0iter)->momV0();          p.rotateX(angle);   (*V0iter)->SetmomV0(p);    
-    p=(*V0iter)->momPos();         p.rotateX(angle);   (*V0iter)->SetmomPos(p);    
-    p=(*V0iter)->momNeg();         p.rotateX(angle);   (*V0iter)->SetmomNeg(p);
-  }
+   }
+   for (V0iter = mV0Collection->begin(); V0iter != mV0Collection->end(); V0iter++) {
+      p = (*V0iter)->decayVertexV0();
+      p.rotateX(angle);
+      (*V0iter)->SetdecayVertexV0(p);
+      p = (*V0iter)->momV0();
+      p.rotateX(angle);
+      (*V0iter)->SetmomV0(p);
+      p = (*V0iter)->momPos();
+      p.rotateX(angle);
+      (*V0iter)->SetmomPos(p);
+      p = (*V0iter)->momNeg();
+      p.rotateX(angle);
+      (*V0iter)->SetmomNeg(p);
+   }
 }
 
+void StHbtEvent::SetEventNumber(const unsigned short& event) { mEventNumber = event; }
+void StHbtEvent::SetRunNumber(const int& runNum) { mRunNumber = runNum; }
+void StHbtEvent::SetCtbMult(const unsigned short& mult) { mCtbMultiplicity = mult; }
+void StHbtEvent::SetZdcAdcEast(const unsigned short& adc) { mZdcAdc[0] = adc; }
+void StHbtEvent::SetZdcAdcWest(const unsigned short& adc) { mZdcAdc[1] = adc; }
+void StHbtEvent::SetNumberOfTpcHits(const int& nhits) { mTpcNhits = nhits; }
+void StHbtEvent::SetNumberOfTracks(const unsigned short& tracks) { mNumberOfTracks = tracks; }
+void StHbtEvent::SetNumberOfGoodTracks(const unsigned short& tracks) { mNumberOfGoodTracks = tracks; }
+void StHbtEvent::SetUncorrectedNumberOfPositivePrimaries(const unsigned int& tracks) {
+   mUncorrectedNumberOfPositivePrimaries = tracks;
+}
+void StHbtEvent::SetUncorrectedNumberOfNegativePrimaries(const unsigned int& tracks) {
+   mUncorrectedNumberOfNegativePrimaries = tracks;
+}
+void StHbtEvent::SetUncorrectedNumberOfPrimaries(const unsigned int& tracks) { mUncorrectedNumberOfPrimaries = tracks; }
+void StHbtEvent::SetReactionPlane(const float& rp, const int& wgt) {
+   (wgt) ? mReactionPlanePtWgt[0] = rp : mReactionPlane[0] = rp;
+}
+void StHbtEvent::SetReactionPlaneError(const float& rp, const int& wgt) { SetReactionPlaneSubEventDifference(rp, wgt); }
+void StHbtEvent::SetReactionPlaneSubEventDifference(const float& rp, const int& wgt) {
+   (wgt) ? mReactionPlanePtWgt[1] = rp : mReactionPlane[1] = rp;
+}
+void StHbtEvent::SetPrimVertPos(const StHbtThreeVector& vp) { mPrimVertPos = vp; }
+void StHbtEvent::SetMagneticField(const double& magF) { mMagneticField = magF; }
+void StHbtEvent::SetTriggerWord(const unsigned int& t) { mTriggerWord = t; }
+void StHbtEvent::SetTriggerActionWord(const unsigned int& t) { mTriggerActionWord = t; }
+void StHbtEvent::SetL3TriggerAlgorithm(const unsigned int& i, const unsigned int& t) { mL3TriggerAlgorithm[i] = t; }
 
-void StHbtEvent::SetEventNumber(const unsigned short& event){mEventNumber = event;}
-void StHbtEvent::SetRunNumber(const int& runNum){mRunNumber = runNum;}
-void StHbtEvent::SetCtbMult(const unsigned short& mult){mCtbMultiplicity = mult;}
-void StHbtEvent::SetZdcAdcEast(const unsigned short& adc){mZdcAdc[0]= adc;}
-void StHbtEvent::SetZdcAdcWest(const unsigned short& adc){mZdcAdc[1]=adc;}
-void StHbtEvent::SetNumberOfTpcHits(const int& nhits){mTpcNhits = nhits;}
-void StHbtEvent::SetNumberOfTracks(const unsigned short& tracks){mNumberOfTracks = tracks;}
-void StHbtEvent::SetNumberOfGoodTracks(const unsigned short& tracks){mNumberOfGoodTracks = tracks;}
-void StHbtEvent::SetUncorrectedNumberOfPositivePrimaries(const unsigned int& tracks){mUncorrectedNumberOfPositivePrimaries = tracks;}
-void StHbtEvent::SetUncorrectedNumberOfNegativePrimaries(const unsigned int& tracks){mUncorrectedNumberOfNegativePrimaries = tracks;}
-void StHbtEvent::SetUncorrectedNumberOfPrimaries(const unsigned int& tracks){mUncorrectedNumberOfPrimaries = tracks;}
-void StHbtEvent::SetReactionPlane(const float& rp, const int& wgt){
-  (wgt) ? mReactionPlanePtWgt[0]=rp : mReactionPlane[0]=rp;
+unsigned short StHbtEvent::EventNumber() const { return mEventNumber; }
+int StHbtEvent::RunNumber() const { return mRunNumber; }
+unsigned short StHbtEvent::CtbMult() const { return mCtbMultiplicity; }
+unsigned short StHbtEvent::ZdcAdcEast() const { return mZdcAdc[0]; }
+unsigned short StHbtEvent::ZdcAdcWest() const { return mZdcAdc[1]; }
+int StHbtEvent::NumberOfTpcHits() const { return mTpcNhits; }
+unsigned short StHbtEvent::NumberOfTracks() const { return mNumberOfTracks; }
+unsigned short StHbtEvent::NumberOfGoodTracks() const { return mNumberOfGoodTracks; }
+unsigned int StHbtEvent::UncorrectedNumberOfPositivePrimaries() const { return mUncorrectedNumberOfPositivePrimaries; }
+unsigned int StHbtEvent::UncorrectedNumberOfNegativePrimaries() const { return mUncorrectedNumberOfNegativePrimaries; }
+unsigned int StHbtEvent::UncorrectedNumberOfPrimaries() const { return mUncorrectedNumberOfPrimaries; }
+float StHbtEvent::ReactionPlane(const int& wgt) const { return (wgt) ? mReactionPlanePtWgt[0] : mReactionPlane[0]; }
+float StHbtEvent::ReactionPlaneError(const int& wgt) const { return ReactionPlaneSubEventDifference(wgt); }
+float StHbtEvent::ReactionPlaneSubEventDifference(const int& wgt) const {
+   return (wgt) ? mReactionPlanePtWgt[0] : mReactionPlane[0];
 }
-void StHbtEvent::SetReactionPlaneError(const float& rp, const int& wgt){ SetReactionPlaneSubEventDifference(rp,wgt); }
-void StHbtEvent::SetReactionPlaneSubEventDifference(const float& rp, const int& wgt){
-  (wgt) ? mReactionPlanePtWgt[1]=rp : mReactionPlane[1]=rp;
-}
-void StHbtEvent::SetPrimVertPos(const StHbtThreeVector& vp){mPrimVertPos = vp;}
-void StHbtEvent::SetMagneticField(const double& magF){mMagneticField = magF;}
-void StHbtEvent::SetTriggerWord(const unsigned int& t){mTriggerWord = t;}
-void StHbtEvent::SetTriggerActionWord(const unsigned int& t){mTriggerActionWord = t;}
-void StHbtEvent::SetL3TriggerAlgorithm(const unsigned int& i, const unsigned int& t){mL3TriggerAlgorithm[i] = t;}
-
-unsigned short StHbtEvent::EventNumber() const {return mEventNumber;}
-int            StHbtEvent::RunNumber() const {return mRunNumber;}
-unsigned short StHbtEvent::CtbMult() const {return mCtbMultiplicity;}
-unsigned short StHbtEvent::ZdcAdcEast() const {return mZdcAdc[0];}
-unsigned short StHbtEvent::ZdcAdcWest() const {return mZdcAdc[1];}
-int            StHbtEvent::NumberOfTpcHits() const {return mTpcNhits;}
-unsigned short StHbtEvent::NumberOfTracks() const {return mNumberOfTracks;}
-unsigned short StHbtEvent::NumberOfGoodTracks() const {return mNumberOfGoodTracks;}
-unsigned int StHbtEvent::UncorrectedNumberOfPositivePrimaries() const {return mUncorrectedNumberOfPositivePrimaries;}
-unsigned int StHbtEvent::UncorrectedNumberOfNegativePrimaries() const {return mUncorrectedNumberOfNegativePrimaries;}
-unsigned int StHbtEvent::UncorrectedNumberOfPrimaries() const {return mUncorrectedNumberOfPrimaries;}
-float StHbtEvent::ReactionPlane(const int& wgt) const { 
-  return (wgt) ? mReactionPlanePtWgt[0] : mReactionPlane[0];
-}
-float StHbtEvent::ReactionPlaneError(const int& wgt) const {return ReactionPlaneSubEventDifference(wgt);}
-float StHbtEvent::ReactionPlaneSubEventDifference(const int& wgt) const { 
-  return (wgt) ? mReactionPlanePtWgt[0] : mReactionPlane[0]; 
-}
-StHbtV0Collection* StHbtEvent::V0Collection() const {return mV0Collection;}
-StHbtXiCollection* StHbtEvent::XiCollection() const {return mXiCollection;}
-StHbtKinkCollection* StHbtEvent::KinkCollection() const {return mKinkCollection;}
-StHbtTrackCollection* StHbtEvent::TrackCollection() const {return mTrackCollection;}
-StHbtThreeVector StHbtEvent::PrimVertPos() const {return mPrimVertPos;}
-double StHbtEvent::MagneticField() const {return mMagneticField;}
-unsigned int StHbtEvent::TriggerWord() const {return mTriggerWord;}
-unsigned int StHbtEvent::TriggerActionWord() const {return mTriggerActionWord;}
-unsigned int StHbtEvent::L3TriggerAlgorithm(const unsigned int& i) const {return mL3TriggerAlgorithm[i];}
+StHbtV0Collection* StHbtEvent::V0Collection() const { return mV0Collection; }
+StHbtXiCollection* StHbtEvent::XiCollection() const { return mXiCollection; }
+StHbtKinkCollection* StHbtEvent::KinkCollection() const { return mKinkCollection; }
+StHbtTrackCollection* StHbtEvent::TrackCollection() const { return mTrackCollection; }
+StHbtThreeVector StHbtEvent::PrimVertPos() const { return mPrimVertPos; }
+double StHbtEvent::MagneticField() const { return mMagneticField; }
+unsigned int StHbtEvent::TriggerWord() const { return mTriggerWord; }
+unsigned int StHbtEvent::TriggerActionWord() const { return mTriggerActionWord; }
+unsigned int StHbtEvent::L3TriggerAlgorithm(const unsigned int& i) const { return mL3TriggerAlgorithm[i]; }

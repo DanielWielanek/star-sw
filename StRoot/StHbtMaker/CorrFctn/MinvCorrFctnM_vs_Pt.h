@@ -29,35 +29,33 @@
 //#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 
 class MinvCorrFctnM_vs_Pt : public StHbtCorrFctn {
-public:
-  MinvCorrFctnM_vs_Pt(char* title, 
-		     const int& nbins1, const float& MinvLo1, const float& MinvHi1,
-		     const int& nbins2, const float& MinvLo2, const float& MinvHi2);
-  virtual ~MinvCorrFctnM_vs_Pt(); 
-  
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
-  
-  virtual void Finish();
-  
-  StHbt2DHisto* Numerator();
-  StHbt2DHisto* Denominator();
-  StHbt2DHisto* Difference();
-  
- private:
-  StHbt2DHisto* mNumerator;
-  StHbt2DHisto* mDenominator;
-  StHbt2DHisto* mDifference;
-  
+  public:
+   MinvCorrFctnM_vs_Pt(char* title, const int& nbins1, const float& MinvLo1, const float& MinvHi1, const int& nbins2,
+                       const float& MinvLo2, const float& MinvHi2);
+   virtual ~MinvCorrFctnM_vs_Pt();
+
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
+
+   virtual void Finish();
+
+   StHbt2DHisto* Numerator();
+   StHbt2DHisto* Denominator();
+   StHbt2DHisto* Difference();
+
+  private:
+   StHbt2DHisto* mNumerator;
+   StHbt2DHisto* mDenominator;
+   StHbt2DHisto* mDifference;
+
 #ifdef __ROOT__
-  ClassDef(MinvCorrFctnM_vs_Pt, 1)
-#endif    
+   ClassDef(MinvCorrFctnM_vs_Pt, 1)
+#endif
 };
 
-inline  StHbt2DHisto* MinvCorrFctnM_vs_Pt::Numerator(){return mNumerator;}
-inline  StHbt2DHisto* MinvCorrFctnM_vs_Pt::Denominator(){return mDenominator;}
-inline  StHbt2DHisto* MinvCorrFctnM_vs_Pt::Difference(){return mDifference;}
+inline StHbt2DHisto* MinvCorrFctnM_vs_Pt::Numerator() { return mNumerator; }
+inline StHbt2DHisto* MinvCorrFctnM_vs_Pt::Denominator() { return mDenominator; }
+inline StHbt2DHisto* MinvCorrFctnM_vs_Pt::Difference() { return mDifference; }
 
 #endif
-

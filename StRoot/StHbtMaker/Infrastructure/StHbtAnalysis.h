@@ -17,7 +17,8 @@
  * New MakePairs() method, new StHbtPicoEventCollectionVectorHideAway data member
  *
  * Revision 1.16  2002/06/22 17:53:32  lisa
- * implemented switch to allow user to require minimum number of particles in First and Second ParticleCollections - default value is zero so if user does not Set this value then behaviour is like before
+ * implemented switch to allow user to require minimum number of particles in First and Second ParticleCollections -
+ *default value is zero so if user does not Set this value then behaviour is like before
  *
  * Revision 1.15  2001/04/05 21:57:45  laue
  * current pico-event becomes a member of the analysis (mPicoEvent) and gets
@@ -74,7 +75,8 @@
  * b) some destructors have been declared as virtual
  *
  * Revision 1.5  1999/12/03 22:24:36  lisa
- * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits mechanism
+ * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits
+ *mechanism
  *
  * Revision 1.4  1999/10/15 01:57:23  lisa
  * Important enhancement of StHbtMaker - implement Franks CutMonitors
@@ -94,7 +96,8 @@
  * ** None of these changes should affect any user **
  *
  * Revision 1.3  1999/10/04 15:38:56  lisa
- * include Franks new accessor methods StHbtAnalysis::CorrFctn and StHbtManager::Analysis as well as McEvent example macro
+ * include Franks new accessor methods StHbtAnalysis::CorrFctn and StHbtManager::Analysis as well as McEvent example
+ *macro
  *
  * Revision 1.2  1999/07/06 22:33:22  lisa
  * Adjusted all to work in pro and new - dev itself is broken
@@ -110,113 +113,121 @@
 //#include "StMaker.h"
 //#endif
 
-#include "StHbtMaker/Base/StHbtBaseAnalysis.h"        // base analysis class
-#include "StHbtMaker/Base/StHbtPairCut.h"     
-#include "StHbtMaker/Base/StHbtEventCut.h"
-#include "StHbtMaker/Base/StHbtParticleCut.h"
+#include "StHbtMaker/Base/StHbtBaseAnalysis.h"  // base analysis class
 #include "StHbtMaker/Base/StHbtCorrFctn.hh"
+#include "StHbtMaker/Base/StHbtEventCut.h"
+#include "StHbtMaker/Base/StHbtPairCut.h"
+#include "StHbtMaker/Base/StHbtParticleCut.h"
 #include "StHbtMaker/Infrastructure/StHbtCorrFctnCollection.hh"
-#include "StHbtMaker/Infrastructure/StHbtPicoEventCollection.hh"
 #include "StHbtMaker/Infrastructure/StHbtParticleCollection.hh"
 #include "StHbtMaker/Infrastructure/StHbtPicoEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtPicoEventCollection.hh"
 
 class StHbtPicoEventCollectionVectorHideAway;
 
-
 class StHbtAnalysis : public StHbtBaseAnalysis {
+  public:
+   StHbtAnalysis();
+   StHbtAnalysis(const StHbtAnalysis&);  // copy constructor
+   virtual ~StHbtAnalysis();
 
-public:
+   // Gets and Sets
 
-  StHbtAnalysis();
-  StHbtAnalysis(const StHbtAnalysis&);  // copy constructor
-  virtual ~StHbtAnalysis();
+   virtual StHbtPairCut* PairCut();
+   virtual StHbtEventCut* EventCut();
+   virtual StHbtParticleCut* FirstParticleCut();
+   virtual StHbtParticleCut* SecondParticleCut();
 
-  // Gets and Sets
+   StHbtCorrFctnCollection* CorrFctnCollection();
+   virtual StHbtCorrFctn* CorrFctn(int n);  // Access to CFs within the collection
+   void AddCorrFctn(StHbtCorrFctn*);
 
-  virtual StHbtPairCut*       PairCut();
-  virtual StHbtEventCut*      EventCut();
-  virtual StHbtParticleCut*   FirstParticleCut();
-  virtual StHbtParticleCut*   SecondParticleCut();
+   void SetPairCut(StHbtPairCut*);
+   void SetEventCut(StHbtEventCut*);
+   void SetFirstParticleCut(StHbtParticleCut*);
+   void SetSecondParticleCut(StHbtParticleCut*);
 
-  StHbtCorrFctnCollection* CorrFctnCollection();
-  virtual StHbtCorrFctn* CorrFctn(int n);     // Access to CFs within the collection
-  void AddCorrFctn(StHbtCorrFctn*);
+   void SetMinSizePartCollection(unsigned int minSize);
 
-  void SetPairCut(StHbtPairCut*);
-  void SetEventCut(StHbtEventCut*);
-  void SetFirstParticleCut(StHbtParticleCut*);
-  void SetSecondParticleCut(StHbtParticleCut*);
+   unsigned int NumEventsToMix();
+   void SetNumEventsToMix(const unsigned int&);
+   StHbtPicoEvent* CurrentPicoEvent();
+   StHbtPicoEventCollection* MixingBuffer();
+   bool MixingBufferFull();
 
-  void SetMinSizePartCollection(unsigned int minSize);
+   bool AnalyzeIdenticalParticles();
+   virtual StHbtString Report();  //! returns reports of all cuts applied and correlation functions being done
 
+   virtual void ProcessEvent(const StHbtEvent*);
+   virtual void EventBegin(const StHbtEvent*);  // startup for EbyE
+   virtual void EventEnd(const StHbtEvent*);    // cleanup for EbyE
+   int GetNeventsProcessed();
 
-  unsigned int NumEventsToMix();
-  void SetNumEventsToMix(const unsigned int&);
-  StHbtPicoEvent* CurrentPicoEvent();
-  StHbtPicoEventCollection* MixingBuffer();
-  bool MixingBufferFull();
+   virtual void Finish();
 
-  bool AnalyzeIdenticalParticles();
-  virtual StHbtString Report();       //! returns reports of all cuts applied and correlation functions being done
+   friend class StHbtLikeSignAnalysis;
 
-  virtual void ProcessEvent(const StHbtEvent*);
-  virtual void EventBegin(const StHbtEvent*); // startup for EbyE
-  virtual void EventEnd(const StHbtEvent*);   // cleanup for EbyE
-  int GetNeventsProcessed();
+  protected:
+   void AddEventProcessed();
+   void MakePairs(const char* type, StHbtParticleCollection*, StHbtParticleCollection* p2 = 0);
 
-  virtual void Finish();
+   StHbtPicoEventCollectionVectorHideAway* mPicoEventCollectionVectorHideAway;
 
-  friend class StHbtLikeSignAnalysis;
+   StHbtPairCut* mPairCut;
+   StHbtCorrFctnCollection* mCorrFctnCollection;
+   StHbtEventCut* mEventCut;
+   StHbtParticleCut* mFirstParticleCut;
+   StHbtParticleCut* mSecondParticleCut;
+   StHbtPicoEventCollection* mMixingBuffer;
+   StHbtPicoEvent* mPicoEvent;
+   unsigned int mNumEventsToMix;
+   unsigned int mNeventsProcessed;
 
-protected:
-
-  void AddEventProcessed();
-  void MakePairs(const char* type,StHbtParticleCollection*,StHbtParticleCollection* p2=0);
-
-  StHbtPicoEventCollectionVectorHideAway* mPicoEventCollectionVectorHideAway;
-
-  StHbtPairCut*             mPairCut;
-  StHbtCorrFctnCollection*  mCorrFctnCollection;
-  StHbtEventCut*            mEventCut;
-  StHbtParticleCut*         mFirstParticleCut;
-  StHbtParticleCut*         mSecondParticleCut;
-  StHbtPicoEventCollection* mMixingBuffer;
-  StHbtPicoEvent*           mPicoEvent;
-  unsigned int mNumEventsToMix;
-  unsigned int mNeventsProcessed;
-
-  unsigned int mMinSizePartCollection;  // minimum # particles in ParticleCollection
-
+   unsigned int mMinSizePartCollection;  // minimum # particles in ParticleCollection
 
 #ifdef __ROOT__
-  ClassDef(StHbtAnalysis, 0)
+   ClassDef(StHbtAnalysis, 0)
 #endif
-
 };
 
 // Get's
-inline StHbtPairCut*             StHbtAnalysis::PairCut() {return mPairCut;}
-inline StHbtEventCut*            StHbtAnalysis::EventCut() {return mEventCut;}
-inline StHbtParticleCut*         StHbtAnalysis::FirstParticleCut() {return mFirstParticleCut;}
-inline StHbtParticleCut*         StHbtAnalysis::SecondParticleCut() {return mSecondParticleCut;}
-inline StHbtCorrFctnCollection*  StHbtAnalysis::CorrFctnCollection() {return mCorrFctnCollection;}
-inline unsigned int              StHbtAnalysis::NumEventsToMix(){return mNumEventsToMix;}
-inline StHbtPicoEvent*           StHbtAnalysis::CurrentPicoEvent() {return mPicoEvent;}
+inline StHbtPairCut* StHbtAnalysis::PairCut() { return mPairCut; }
+inline StHbtEventCut* StHbtAnalysis::EventCut() { return mEventCut; }
+inline StHbtParticleCut* StHbtAnalysis::FirstParticleCut() { return mFirstParticleCut; }
+inline StHbtParticleCut* StHbtAnalysis::SecondParticleCut() { return mSecondParticleCut; }
+inline StHbtCorrFctnCollection* StHbtAnalysis::CorrFctnCollection() { return mCorrFctnCollection; }
+inline unsigned int StHbtAnalysis::NumEventsToMix() { return mNumEventsToMix; }
+inline StHbtPicoEvent* StHbtAnalysis::CurrentPicoEvent() { return mPicoEvent; }
 
-inline StHbtPicoEventCollection*  StHbtAnalysis::MixingBuffer() {return mMixingBuffer;}
+inline StHbtPicoEventCollection* StHbtAnalysis::MixingBuffer() { return mMixingBuffer; }
 
 // Set's
-inline bool StHbtAnalysis::AnalyzeIdenticalParticles(){return (mFirstParticleCut==mSecondParticleCut);}
-inline void StHbtAnalysis::SetPairCut(StHbtPairCut* x) { mPairCut = x; x->SetAnalysis((StHbtBaseAnalysis*)this);}
-inline void StHbtAnalysis::AddCorrFctn(StHbtCorrFctn* cf) {mCorrFctnCollection->push_back(cf); cf->SetAnalysis((StHbtBaseAnalysis*)this);}
-inline void StHbtAnalysis::SetEventCut(StHbtEventCut* x) {mEventCut = x; x->SetAnalysis((StHbtBaseAnalysis*)this);}
-inline void StHbtAnalysis::SetFirstParticleCut(StHbtParticleCut* x) {mFirstParticleCut = x; x->SetAnalysis((StHbtBaseAnalysis*)this);}
-inline void StHbtAnalysis::SetSecondParticleCut(StHbtParticleCut* x) {mSecondParticleCut = x; x->SetAnalysis((StHbtBaseAnalysis*)this);}
+inline bool StHbtAnalysis::AnalyzeIdenticalParticles() { return (mFirstParticleCut == mSecondParticleCut); }
+inline void StHbtAnalysis::SetPairCut(StHbtPairCut* x) {
+   mPairCut = x;
+   x->SetAnalysis((StHbtBaseAnalysis*)this);
+}
+inline void StHbtAnalysis::AddCorrFctn(StHbtCorrFctn* cf) {
+   mCorrFctnCollection->push_back(cf);
+   cf->SetAnalysis((StHbtBaseAnalysis*)this);
+}
+inline void StHbtAnalysis::SetEventCut(StHbtEventCut* x) {
+   mEventCut = x;
+   x->SetAnalysis((StHbtBaseAnalysis*)this);
+}
+inline void StHbtAnalysis::SetFirstParticleCut(StHbtParticleCut* x) {
+   mFirstParticleCut = x;
+   x->SetAnalysis((StHbtBaseAnalysis*)this);
+}
+inline void StHbtAnalysis::SetSecondParticleCut(StHbtParticleCut* x) {
+   mSecondParticleCut = x;
+   x->SetAnalysis((StHbtBaseAnalysis*)this);
+}
 
-inline void StHbtAnalysis::SetNumEventsToMix(const unsigned int& nmix){ mNumEventsToMix = nmix;}
-inline bool StHbtAnalysis::MixingBufferFull(){return (mMixingBuffer->size() >= mNumEventsToMix);}
-inline int StHbtAnalysis::GetNeventsProcessed() {return mNeventsProcessed;}
+inline void StHbtAnalysis::SetNumEventsToMix(const unsigned int& nmix) { mNumEventsToMix = nmix; }
+inline bool StHbtAnalysis::MixingBufferFull() { return (mMixingBuffer->size() >= mNumEventsToMix); }
+inline int StHbtAnalysis::GetNeventsProcessed() { return mNeventsProcessed; }
 
-inline void StHbtAnalysis::SetMinSizePartCollection(unsigned int minSize){mMinSizePartCollection = minSize;}
+inline void StHbtAnalysis::SetMinSizePartCollection(unsigned int minSize) { mMinSizePartCollection = minSize; }
 
 #endif

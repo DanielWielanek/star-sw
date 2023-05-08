@@ -37,9 +37,10 @@
  *
  **************************************************************************/
 #include "StRandyTopMapMaker.h"
+
+#include "StEvent.h"
 #include "StEventTypes.h"
 #include "StMessMgr.h"
-#include "StEvent.h"
 #include "StTrackGeometry.h"
 #include "StTrackTopologyMap.h"
 
@@ -47,100 +48,85 @@ static const char rcsid[] = "$Id: StRandyTopMapMaker.cxx,v 1.6 2007/04/28 17:56:
 
 ClassImp(StRandyTopMapMaker)
 
-StRandyTopMapMaker::StRandyTopMapMaker(const Char_t *name) : StMaker(name)
-{
-//    drawinit = kFALSE;
+    StRandyTopMapMaker::StRandyTopMapMaker(const Char_t *name)
+    : StMaker(name) {
+   //    drawinit = kFALSE;
 }
 
-StRandyTopMapMaker::~StRandyTopMapMaker() { 
-}
+StRandyTopMapMaker::~StRandyTopMapMaker() {}
 
-Int_t
-StRandyTopMapMaker::Init()
-{
-  return StMaker::Init();
-}
+Int_t StRandyTopMapMaker::Init() { return StMaker::Init(); }
 
-void
-StRandyTopMapMaker::Clear(Option_t *opt)
-{
-    StMaker::Clear();
-}
+void StRandyTopMapMaker::Clear(Option_t *opt) { StMaker::Clear(); }
 
-Int_t
-StRandyTopMapMaker::Finish()
-{
-    return kStOK;
-}
+Int_t StRandyTopMapMaker::Finish() { return kStOK; }
 
-Int_t
-StRandyTopMapMaker::Make()
-{
-    //
-    //	This method is called every event. That's the
-    //  right place to plug in your analysis to be
-    //  done every event.
-    //
-    StEvent* mEvent;
-    mEvent = (StEvent *) GetInputDS("StEvent");
-    if (! mEvent) return kStOK; // If no event, we're done
-    
-    // OK, we've got the event. Let's fix that Topology Map
-    // This only fixes TPC pad rows and the turnaround flag
-    StTrack* rTrack;
-    int mult = mEvent->trackNodes().size();
-    unsigned long mask2 = 0x80000000;
-    unsigned long temp1;
-    int pad, ipad;
-    bool  padRow[46];    
-    unsigned long map1, map2;
-    StPtrVecHit myHitVector;
-    StPtrVecHitIterator myHitIterator;
-    StTpcHit* myHit;
-    // For speed we try to remove the turnAround flag
-    //    bool turnAround;
-    for (unsigned long int icount=0; icount<(unsigned long int)mult; icount++){
+Int_t StRandyTopMapMaker::Make() {
+   //
+   //	This method is called every event. That's the
+   //  right place to plug in your analysis to be
+   //  done every event.
+   //
+   StEvent *mEvent;
+   mEvent = (StEvent *)GetInputDS("StEvent");
+   if (!mEvent) return kStOK;  // If no event, we're done
+
+   // OK, we've got the event. Let's fix that Topology Map
+   // This only fixes TPC pad rows and the turnaround flag
+   StTrack *rTrack;
+   int mult = mEvent->trackNodes().size();
+   unsigned long mask2 = 0x80000000;
+   unsigned long temp1;
+   int pad, ipad;
+   bool padRow[46];
+   unsigned long map1, map2;
+   StPtrVecHit myHitVector;
+   StPtrVecHitIterator myHitIterator;
+   StTpcHit *myHit;
+   // For speed we try to remove the turnAround flag
+   //    bool turnAround;
+   for (unsigned long int icount = 0; icount < (unsigned long int)mult; icount++) {
       rTrack = mEvent->trackNodes()[icount]->track(global);
       // Changed code
       // This checks bits that should not be set
       temp1 = rTrack->topologyMap().data(1) & mask2;
       // If FTPC track, don't do anything
-      if ( int(temp1) ) continue;
+      if (int(temp1)) continue;
       //      numHits = rTrack->detectorInfo()->hits(kTpcId).size();
       //      turnAround = false;
       // Zero pad rows
-      for (ipad=0; ipad<46; ipad++) padRow[ipad] = false;
+      for (ipad = 0; ipad < 46; ipad++) padRow[ipad] = false;
       myHitVector = rTrack->detectorInfo()->hits(kTpcId);
-      for (myHitIterator=myHitVector.begin(); myHitIterator!=myHitVector.end(); myHitIterator++) {
-	myHit = (StTpcHit *)(*myHitIterator);
-	pad = myHit->padrow();
-	padRow[pad] = true;
+      for (myHitIterator = myHitVector.begin(); myHitIterator != myHitVector.end(); myHitIterator++) {
+         myHit = (StTpcHit *)(*myHitIterator);
+         pad = myHit->padrow();
+         padRow[pad] = true;
       }
       /*
       for (ihit=0; ihit<numHits; ihit++) {
-	myHit = (StTpcHit *)(rTrack->detectorInfo()->hits(kTpcId)[ihit]);
-	pad = myHit->padrow();
-	//	if ( padRow[pad] ) turnAround = true;
-	padRow[pad] = true;
+   myHit = (StTpcHit *)(rTrack->detectorInfo()->hits(kTpcId)[ihit]);
+   pad = myHit->padrow();
+   //	if ( padRow[pad] ) turnAround = true;
+   padRow[pad] = true;
       }
       */
       map1 = map2 = 0;
       // Fill the map
-      for (ipad=1; ipad<=24; ipad++) {
-	if ( padRow[ipad] ) {
-	  map1 |= 1UL<<(ipad+7);
-	}
+      for (ipad = 1; ipad <= 24; ipad++) {
+         if (padRow[ipad]) {
+            map1 |= 1UL << (ipad + 7);
+         }
       }
-      for (ipad=25; ipad<=45; ipad++) {
-	if ( padRow[ipad] ) {
-	  map2 |= 1UL<<(ipad-25);
-	}
+      for (ipad = 25; ipad <= 45; ipad++) {
+         if (padRow[ipad]) {
+            map2 |= 1UL << (ipad - 25);
+         }
       }
       //      if ( turnAround ) map2 |= 1UL<<(30);
-      StTrackTopologyMap aNewMap( map1,map2 );
-      rTrack->setTopologyMap( aNewMap );
-    }
-    
-    myHitVector.clear();
-    return kStOK;
+      StTrackTopologyMap aNewMap(map1, map2);
+      rTrack->setTopologyMap(aNewMap);
+   }
+
+   myHitVector.clear();
+   return kStOK;
 }

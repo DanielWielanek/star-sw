@@ -1,83 +1,78 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Laurent Conin, Fabrice Retiere, Subatech, France
  ***************************************************************************
  *
  * Description : This class is used to calculate the Correlation Function
- * with several hypothesis on the size of the source. 
+ * with several hypothesis on the size of the source.
  * It inherit from StHbtCorrFctn, so it must be plugged in an analysis.
  * Several hypothesis on the size can be made with AddSize(x,y,z,t).
  *    for each size, is add a ThCFGaussSize in it SizeCollection.
  * Several ThCorrFctn can be plugged with AddCorrFctn(ThCorrFctn).
- *    for each ThCFGaussSize the ThCorrFctn is copied and the copy is pluged in 
+ *    for each ThCFGaussSize the ThCorrFctn is copied and the copy is pluged in
  * The Weight Calculator should be set by SetWeight(weight)
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
 #ifndef ST_HBT_THCF_GAUSSFIT_H
 #define ST_HBT_THCF_GAUSSFIT_H
 
-
-#include "StHbtMaker/ThCorrFctn/StHbtThPairGaussFit.h"
 #include "StHbtMaker/Base/StHbtThCorrFctn.hh"
 #include "StHbtMaker/ThCorrFctn/StHbtThCFGaussSizeCollection.hh"
-
-
+#include "StHbtMaker/ThCorrFctn/StHbtThPairGaussFit.h"
 
 class StHbtPair;
 class TRandom;
 class StHbtFsiWeight;
 
-
 class StHbtThCFGaussFit : public StHbtCorrFctn {
- public:
-  StHbtThCFGaussFit();
-  ~StHbtThCFGaussFit();
+  public:
+   StHbtThCFGaussFit();
+   ~StHbtThCFGaussFit();
 
-  void AddCorrFctn(const StHbtThCorrFctn *);
-  
-  void AddRealPair( const StHbtPair*);
-  void AddMixedPair( const StHbtPair*);
+   void AddCorrFctn(const StHbtThCorrFctn*);
 
-  void Finish();
-  StHbtString Report();
+   void AddRealPair(const StHbtPair*);
+   void AddMixedPair(const StHbtPair*);
 
-  void AddSize(const char* aName, double aXYZ, double aT);
-  void AddSize(const char* aName, double aX, double aY, double aZ, double aT);
+   void Finish();
+   StHbtString Report();
 
-  void SetWeight(StHbtFsiWeight*);
+   void AddSize(const char* aName, double aXYZ, double aT);
+   void AddSize(const char* aName, double aX, double aY, double aZ, double aT);
 
-  void UseHiddenMomentum();
-  void UseParticleMomentum();
+   void SetWeight(StHbtFsiWeight*);
 
-  void UseHiddenPid();
-  void UseFixedPid( int const tPid1, double const tMass1);  
-  void UseFixedPid( int const tPid1,double const tMass1, int const tPid2,double const tMass2 ); 
+   void UseHiddenMomentum();
+   void UseParticleMomentum();
 
-  void SetBoostRCMS(double aPlab,double aMBeam, double aMTarget);
-  
-  void SetRCMS();
-  void SetLCMS();
-  void SetPRF();
+   void UseHiddenPid();
+   void UseFixedPid(int const tPid1, double const tMass1);
+   void UseFixedPid(int const tPid1, double const tMass1, int const tPid2, double const tMass2);
 
-  StHbtThCFGaussSizeCollection *getCollection();
+   void SetBoostRCMS(double aPlab, double aMBeam, double aMTarget);
 
- private:
+   void SetRCMS();
+   void SetLCMS();
+   void SetPRF();
 
-  double mMaxX,mMaxY,mMaxZ,mMaxT;
-  StHbtThPairGaussFit mPair;//!
-  StHbtThCFGaussSizeCollection mSizeColl;//!
-  
-  TRandom mRand;
+   StHbtThCFGaussSizeCollection* getCollection();
+
+  private:
+   double mMaxX, mMaxY, mMaxZ, mMaxT;
+   StHbtThPairGaussFit mPair;               //!
+   StHbtThCFGaussSizeCollection mSizeColl;  //!
+
+   TRandom mRand;
 
 #ifdef __ROOT__
-  ClassDef(StHbtThCFGaussFit,1)
+   ClassDef(StHbtThCFGaussFit, 1)
 #endif
 };
 

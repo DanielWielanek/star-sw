@@ -18,44 +18,44 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/AverageSepPairCut.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(AverageSepPairCut)
 #endif
 
-//__________________
-AverageSepPairCut::AverageSepPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    AverageSepPairCut::AverageSepPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//AverageSepPairCut::~AverageSepPairCut(){
+// AverageSepPairCut::~AverageSepPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool AverageSepPairCut::Pass(const StHbtPair* pair){
-  double sep = pair->NominalTpcAverageSeparation();
-  bool temp = ( (sep>mAveSepLo) &&
-		(sep<mAveSepHi) );
+bool AverageSepPairCut::Pass(const StHbtPair* pair) {
+   double sep = pair->NominalTpcAverageSeparation();
+   bool temp = ((sep > mAveSepLo) && (sep < mAveSepHi));
 
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return temp;
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return temp;
 }
 //__________________
-StHbtString AverageSepPairCut::Report(){
-  string Stemp = "Average Separation Pair Cut\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Range of cut:\t%E ... \t%E\n",mAveSepLo,mAveSepHi);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString AverageSepPairCut::Report() {
+   string Stemp = "Average Separation Pair Cut\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Range of cut:\t%E ... \t%E\n", mAveSepLo, mAveSepHi);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________
 void AverageSepPairCut::SetAveSepRange(const double& Lo, const double& Hi) {
-  mAveSepLo = Lo;
-  mAveSepHi = Hi;
+   mAveSepLo = Lo;
+   mAveSepHi = Hi;
 }
 //__________________

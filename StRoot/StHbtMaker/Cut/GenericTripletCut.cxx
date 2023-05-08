@@ -23,7 +23,7 @@
  * Revision 1.3  2000/04/12 01:53:35  willson
  * Initial Installation - Comments Added
  *
- * 
+ *
  ***************************************************************************/
 
 #include "StHbtMaker/Cut/GenericTripletCut.h"
@@ -33,29 +33,30 @@
 ClassImp(GenericTripletCut)
 #endif
 
-//__________________
-GenericTripletCut::GenericTripletCut(float EntSepCut){
-  mEntSepCut = EntSepCut;
-  mNTripletsPassed = mNTripletsFailed = 0;
+    //__________________
+    GenericTripletCut::GenericTripletCut(float EntSepCut) {
+   mEntSepCut = EntSepCut;
+   mNTripletsPassed = mNTripletsFailed = 0;
 }
 //__________________
-//GenericTripletCut::~GenericTripletCut(){
+// GenericTripletCut::~GenericTripletCut(){
 //  /* no-op */
 //}
 //__________________
-bool GenericTripletCut::Pass(const StHbtTriplet* Triplet){
-  bool temp = true;
-  if (mEntSepCut) temp = (Triplet->NominalTpcEntranceSeparation()>mEntSepCut);
-  temp ? mNTripletsPassed++ : mNTripletsFailed++;
-  return temp;
+bool GenericTripletCut::Pass(const StHbtTriplet* Triplet) {
+   bool temp = true;
+   if (mEntSepCut) temp = (Triplet->NominalTpcEntranceSeparation() > mEntSepCut);
+   temp ? mNTripletsPassed++ : mNTripletsFailed++;
+   return temp;
 }
 //__________________
-StHbtString GenericTripletCut::Report(){
-  StHbtString Stemp = "Generic Triplet Cut - total dummy-- always returns true\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Number of Triplets which passed:\t%ld  Number which failed:\t%ld\n",mNTripletsPassed,mNTripletsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString GenericTripletCut::Report() {
+   StHbtString Stemp = "Generic Triplet Cut - total dummy-- always returns true\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Number of Triplets which passed:\t%ld  Number which failed:\t%ld\n", mNTripletsPassed,
+           mNTripletsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________

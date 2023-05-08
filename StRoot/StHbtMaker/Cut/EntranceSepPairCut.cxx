@@ -17,44 +17,44 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/EntranceSepPairCut.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(EntranceSepPairCut)
 #endif
 
-//__________________
-EntranceSepPairCut::EntranceSepPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    EntranceSepPairCut::EntranceSepPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//EntranceSepPairCut::~EntranceSepPairCut(){
+// EntranceSepPairCut::~EntranceSepPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool EntranceSepPairCut::Pass(const StHbtPair* pair){
-  double sep = pair->NominalTpcEntranceSeparation();
-  bool temp = ( (sep>mEntSepLo) &&
-		(sep<mEntSepHi) );
+bool EntranceSepPairCut::Pass(const StHbtPair* pair) {
+   double sep = pair->NominalTpcEntranceSeparation();
+   bool temp = ((sep > mEntSepLo) && (sep < mEntSepHi));
 
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return temp;
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return temp;
 }
 //__________________
-StHbtString EntranceSepPairCut::Report(){
-  string Stemp = "Entrance Separation Pair Cut\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Range of cut:\t%E ... \t%E\n",mEntSepLo,mEntSepHi);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString EntranceSepPairCut::Report() {
+   string Stemp = "Entrance Separation Pair Cut\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Range of cut:\t%E ... \t%E\n", mEntSepLo, mEntSepHi);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________
 void EntranceSepPairCut::SetEntranceSepRange(const double& Lo, const double& Hi) {
-  mEntSepLo = Lo;
-  mEntSepHi = Hi;
+   mEntSepLo = Lo;
+   mEntSepHi = Hi;
 }
 //__________________

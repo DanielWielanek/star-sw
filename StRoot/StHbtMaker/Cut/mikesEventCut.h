@@ -7,7 +7,7 @@
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *   A simple event-wise cut that selects on multiplicity and z-position
- *   of primary vertex           
+ *   of primary vertex
  *
  ***************************************************************************
  *
@@ -63,50 +63,54 @@
 #include "StHbtMaker/Base/StHbtEventCut.h"
 
 class mikesEventCut : public StHbtEventCut {
+  public:
+   mikesEventCut();
+   mikesEventCut(mikesEventCut&);
+   //~mikesEventCut();
 
-public:
+   void SetEventMult(const int& lo, const int& hi);
+   void SetVertZPos(const float& lo, const float& hi);
+   int NEventsPassed();
+   int NEventsFailed();
 
-  mikesEventCut();
-  mikesEventCut(mikesEventCut&);
-  //~mikesEventCut();
+   virtual StHbtString Report();
+   virtual bool Pass(const StHbtEvent*);
 
-  void SetEventMult(const int& lo,const int& hi);
-  void SetVertZPos(const float& lo, const float& hi);
-  int NEventsPassed();
-  int NEventsFailed();
+   mikesEventCut* Clone();
 
-  virtual StHbtString Report();
-  virtual bool Pass(const StHbtEvent*);
+  private:              // here are the quantities I want to cut on...
+   int mEventMult[2];   // range of multiplicity
+   float mVertZPos[2];  // range of z-position of vertex
 
-  mikesEventCut* Clone();
-
-private:   // here are the quantities I want to cut on...
-
-  int mEventMult[2];      // range of multiplicity
-  float mVertZPos[2];     // range of z-position of vertex
-
-  long mNEventsPassed;
-  long mNEventsFailed;
+   long mNEventsPassed;
+   long mNEventsFailed;
 
 #ifdef __ROOT__
-  ClassDef(mikesEventCut, 1)
+   ClassDef(mikesEventCut, 1)
 #endif
-
 };
 
-inline void mikesEventCut::SetEventMult(const int& lo, const int& hi){mEventMult[0]=lo; mEventMult[1]=hi;}
-inline void mikesEventCut::SetVertZPos(const float& lo, const float& hi){mVertZPos[0]=lo; mVertZPos[1]=hi;}
-inline int  mikesEventCut::NEventsPassed() {return mNEventsPassed;}
-inline int  mikesEventCut::NEventsFailed() {return mNEventsFailed;}
-inline mikesEventCut* mikesEventCut::Clone() { mikesEventCut* c = new mikesEventCut(*this); return c;}
-inline mikesEventCut::mikesEventCut(mikesEventCut& c) : StHbtEventCut(c) {
-  mEventMult[0] = c.mEventMult[0];
-  mEventMult[1] = c.mEventMult[1];
-  mVertZPos[0] = c.mVertZPos[0];
-  mVertZPos[1] = c.mVertZPos[1];
-  mNEventsPassed = 0;
-  mNEventsFailed = 0;
+inline void mikesEventCut::SetEventMult(const int& lo, const int& hi) {
+   mEventMult[0] = lo;
+   mEventMult[1] = hi;
 }
-
+inline void mikesEventCut::SetVertZPos(const float& lo, const float& hi) {
+   mVertZPos[0] = lo;
+   mVertZPos[1] = hi;
+}
+inline int mikesEventCut::NEventsPassed() { return mNEventsPassed; }
+inline int mikesEventCut::NEventsFailed() { return mNEventsFailed; }
+inline mikesEventCut* mikesEventCut::Clone() {
+   mikesEventCut* c = new mikesEventCut(*this);
+   return c;
+}
+inline mikesEventCut::mikesEventCut(mikesEventCut& c) : StHbtEventCut(c) {
+   mEventMult[0] = c.mEventMult[0];
+   mEventMult[1] = c.mEventMult[1];
+   mVertZPos[0] = c.mVertZPos[0];
+   mVertZPos[1] = c.mVertZPos[1];
+   mNEventsPassed = 0;
+   mNEventsFailed = 0;
+}
 
 #endif

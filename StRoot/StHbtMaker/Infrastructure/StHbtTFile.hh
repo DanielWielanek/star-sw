@@ -9,8 +9,6 @@
 typedef TFile StHbtFile;
 typedef TTree StHbtTree;
 
-
-#endif // __ROOT__
+#endif  // __ROOT__
 
 #endif
-

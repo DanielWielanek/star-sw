@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a simple Q-invariant correlation function           
+ *   a simple Q-invariant correlation function
  *
  ***************************************************************************
  *
@@ -38,34 +38,32 @@
 //#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 
 class QinvCorrFctn : public StHbtCorrFctn {
-public:
-  QinvCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
-  virtual ~QinvCorrFctn();
+  public:
+   QinvCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
+   virtual ~QinvCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  StHbt1DHisto* Numerator();
-  StHbt1DHisto* Denominator();
-  StHbt1DHisto* Ratio();
+   StHbt1DHisto* Numerator();
+   StHbt1DHisto* Denominator();
+   StHbt1DHisto* Ratio();
 
-private:
-  StHbt1DHisto* mNumerator;
-  StHbt1DHisto* mDenominator;
-  StHbt1DHisto* mRatio;
+  private:
+   StHbt1DHisto* mNumerator;
+   StHbt1DHisto* mDenominator;
+   StHbt1DHisto* mRatio;
 
 #ifdef __ROOT__
-  ClassDef(QinvCorrFctn, 1)
+   ClassDef(QinvCorrFctn, 1)
 #endif
 };
 
-inline  StHbt1DHisto* QinvCorrFctn::Numerator(){return mNumerator;}
-inline  StHbt1DHisto* QinvCorrFctn::Denominator(){return mDenominator;}
-inline  StHbt1DHisto* QinvCorrFctn::Ratio(){return mRatio;}
-
+inline StHbt1DHisto* QinvCorrFctn::Numerator() { return mNumerator; }
+inline StHbt1DHisto* QinvCorrFctn::Denominator() { return mDenominator; }
+inline StHbt1DHisto* QinvCorrFctn::Ratio() { return mRatio; }
 
 #endif
-

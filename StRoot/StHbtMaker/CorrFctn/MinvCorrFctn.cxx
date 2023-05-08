@@ -55,96 +55,91 @@
 //#ifndef __CINT__
 //#include "fortranc.h"
 //#define fortrantest F77_NAME(fortrantest,FORTRANTEST)
-//extern "C" {int type_of_call F77_NAME(fortrantest,FORTRANTEST)(int*);}
+// extern "C" {int type_of_call F77_NAME(fortrantest,FORTRANTEST)(int*);}
 //#endif
 
 #include "StHbtMaker/CorrFctn/MinvCorrFctn.h"
 
-#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
-#include "StHbtMaker/Cut/mikesEventCut.h"
-
 #include <cstdio>
 
+#include "StHbtMaker/Cut/mikesEventCut.h"
+#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
+
 #ifdef __ROOT__
-ClassImp(MinvCorrFctn) 
+ClassImp(MinvCorrFctn)
 #endif
 
+    //____________________________
+    MinvCorrFctn::MinvCorrFctn(char* title, const int& nbins, const float& MinvLo, const float& MinvHi) {
+   // mTagWriter = StHbtTagWriter::Instance();  // get the singleton
+
+   char theTitle[100];
+   // set up numerator
+   const char* TitNum = "MinvCorrFctn_Num";
+   sprintf(theTitle, "Num %s\n", title);
+   mNumerator = new StHbt1DHisto(TitNum, theTitle, nbins, MinvLo, MinvHi);
+   // set up denominator
+   const char* TitDen = "MinvCorrFctn_Den";
+   sprintf(theTitle, "Den %s\n", title);
+   mDenominator = new StHbt1DHisto(TitDen, theTitle, nbins, MinvLo, MinvHi);
+   // set up difference
+   const char* TitDif = "MinvCorrFctn_Dif";
+   sprintf(theTitle, "Dif %s\n", title);
+   mDifference = new StHbt1DHisto(TitDif, theTitle, nbins, MinvLo, MinvHi);
+   // this next bit is unfortunately needed so that we can have many histos of same "title"
+   // it is neccessary if we typedef StHbt1DHisto to TH1d (which we do)
+   mNumerator->SetDirectory(0);
+   mDenominator->SetDirectory(0);
+   mDifference->SetDirectory(0);
+
+   mNumerator->Sumw2();
+   mDenominator->Sumw2();
+   mDifference->Sumw2();
+
+   //  for (int i=0; i < 100; i++) {
+   //    int j = fortrantest( &i );
+   //  }
+}
+
 //____________________________
-MinvCorrFctn::MinvCorrFctn(char* title, const int& nbins, const float& MinvLo, const float& MinvHi){
-  //mTagWriter = StHbtTagWriter::Instance();  // get the singleton
-
-  char theTitle[100];
-  // set up numerator
-  const char *TitNum = "MinvCorrFctn_Num";
-  sprintf(theTitle,"Num %s\n",title);
-  mNumerator = new StHbt1DHisto(TitNum,theTitle,nbins,MinvLo,MinvHi);
-  // set up denominator
-  const char *TitDen= "MinvCorrFctn_Den";
-  sprintf(theTitle,"Den %s\n",title);
-  mDenominator = new StHbt1DHisto(TitDen,theTitle,nbins,MinvLo,MinvHi);
-  // set up difference
-  const char *TitDif = "MinvCorrFctn_Dif";
-  sprintf(theTitle,"Dif %s\n",title);
-  mDifference = new StHbt1DHisto(TitDif,theTitle,nbins,MinvLo,MinvHi);
-  // this next bit is unfortunately needed so that we can have many histos of same "title"
-  // it is neccessary if we typedef StHbt1DHisto to TH1d (which we do)
-  mNumerator->SetDirectory(0);
-  mDenominator->SetDirectory(0);
-  mDifference->SetDirectory(0);
-
-  mNumerator->Sumw2();
-  mDenominator->Sumw2();
-  mDifference->Sumw2();
-
-  //  for (int i=0; i < 100; i++) {
-  //    int j = fortrantest( &i );
-  //  }
-}   
- 
-//____________________________
-MinvCorrFctn::~MinvCorrFctn(){
-  delete mNumerator;
-  delete mDenominator;
-  delete mDifference;
+MinvCorrFctn::~MinvCorrFctn() {
+   delete mNumerator;
+   delete mDenominator;
+   delete mDifference;
 }
 //_________________________
-void MinvCorrFctn::Finish(){
-  long NEvents = 1;
-  if (   dynamic_cast<StHbtAnalysis*>( HbtAnalysis() )   ) {
-    if (   dynamic_cast<mikesEventCut*>( ((StHbtAnalysis*)HbtAnalysis())->EventCut() )   )
-      NEvents = ((mikesEventCut*)((StHbtAnalysis*)HbtAnalysis())->EventCut())->NEventsPassed();
-  }
+void MinvCorrFctn::Finish() {
+   long NEvents = 1;
+   if (dynamic_cast<StHbtAnalysis*>(HbtAnalysis())) {
+      if (dynamic_cast<mikesEventCut*>(((StHbtAnalysis*)HbtAnalysis())->EventCut()))
+         NEvents = ((mikesEventCut*)((StHbtAnalysis*)HbtAnalysis())->EventCut())->NEventsPassed();
+   }
 
-  mNumerator->Scale(1./NEvents);
-  mDenominator->Scale(1./NEvents);
-  mDifference->Scale(1./NEvents);
+   mNumerator->Scale(1. / NEvents);
+   mDenominator->Scale(1. / NEvents);
+   mDifference->Scale(1. / NEvents);
 
-  double NumeratorInt = mNumerator->Integral();
-  double DenominatorInt = mDenominator->Integral();
-  mDifference->Add(mNumerator,mDenominator,1.0,-1*NumeratorInt/DenominatorInt);
-
-}    
-//____________________________
-StHbtString MinvCorrFctn::Report(){
-  string stemp = "Minv Correlation Function Report:\n";
-  char ctemp[100];  
-  sprintf(ctemp,"Number of entries in numerator:\t%E\n",mNumerator->GetEntries());
-  stemp += ctemp;
-  sprintf(ctemp,"Number of entries in denominator:\t%E\n",mDenominator->GetEntries());
-  stemp += ctemp;
-  sprintf(ctemp,"Number of entries in difference:\t%E\n",mDifference->GetEntries());
-  stemp += ctemp;
-  StHbtString returnThis = stemp;
-  return returnThis;
+   double NumeratorInt = mNumerator->Integral();
+   double DenominatorInt = mDenominator->Integral();
+   mDifference->Add(mNumerator, mDenominator, 1.0, -1 * NumeratorInt / DenominatorInt);
 }
 //____________________________
-inline void MinvCorrFctn::AddRealPair(const StHbtPair* pair){
-  mNumerator->Fill(pair->mInv());
-  //mTagWriter->SetTag("positiveKaonsMeans",2, (float)pair->mInv() );  // <-- this is how to fill the tag
+StHbtString MinvCorrFctn::Report() {
+   string stemp = "Minv Correlation Function Report:\n";
+   char ctemp[100];
+   sprintf(ctemp, "Number of entries in numerator:\t%E\n", mNumerator->GetEntries());
+   stemp += ctemp;
+   sprintf(ctemp, "Number of entries in denominator:\t%E\n", mDenominator->GetEntries());
+   stemp += ctemp;
+   sprintf(ctemp, "Number of entries in difference:\t%E\n", mDifference->GetEntries());
+   stemp += ctemp;
+   StHbtString returnThis = stemp;
+   return returnThis;
 }
 //____________________________
-inline void MinvCorrFctn::AddMixedPair(const StHbtPair* pair){
-  mDenominator->Fill(pair->mInv());
+inline void MinvCorrFctn::AddRealPair(const StHbtPair* pair) {
+   mNumerator->Fill(pair->mInv());
+   // mTagWriter->SetTag("positiveKaonsMeans",2, (float)pair->mInv() );  // <-- this is how to fill the tag
 }
-
-
+//____________________________
+inline void MinvCorrFctn::AddMixedPair(const StHbtPair* pair) { mDenominator->Fill(pair->mInv()); }

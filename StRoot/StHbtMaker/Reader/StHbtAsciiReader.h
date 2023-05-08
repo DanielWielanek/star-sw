@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Mike Lisa, Ohio State, lisa@mps.ohio-state.edu
  ***************************************************************************
@@ -11,51 +11,48 @@
  *
  ***************************************************************************
  *
- *  
+ *
  **************************************************************************/
 
 #ifndef StHbtAsciiReader_hh
 #define StHbtAsciiReader_hh
 
-//VP class ifstream;
-//VP class ofstream;
+// VP class ifstream;
+// VP class ofstream;
 class StHbtEvent;
 
-#include "StHbtMaker/Infrastructure/StHbtString.hh"
 #include "StHbtMaker/Base/StHbtEventReader.hh"
+#include "StHbtMaker/Infrastructure/StHbtString.hh"
 
+class StHbtAsciiReader : public StHbtEventReader {
+  private:
+   unsigned short mStHbtEventVersion;
+   unsigned short mStHbtTrackVersion;
+   unsigned short mStHbtV0Version;
 
-class StHbtAsciiReader : public StHbtEventReader{
+   ifstream* mInputStream;   //!
+   ofstream* mOutputStream;  //!
+   const char* mFileName;    //!
 
-private:
-  unsigned short mStHbtEventVersion;
-  unsigned short mStHbtTrackVersion;
-  unsigned short mStHbtV0Version;
+  public:
+   StHbtAsciiReader();
+   StHbtAsciiReader(char* FileName);
+   ~StHbtAsciiReader();
 
-  ifstream* mInputStream;              //!
-  ofstream* mOutputStream;             //!
-  const char* mFileName;               //!
-  
-public:
-  StHbtAsciiReader();
-  StHbtAsciiReader(char* FileName);
-  ~StHbtAsciiReader();
+   // generic StHbtEventReader methods
+   // StHbtString Report();
+   StHbtEvent* ReturnHbtEvent();
+   int WriteHbtEvent(StHbtEvent*);
+   int Init(const char* ReadWrite, StHbtString& Message);
+   void Finish();
 
-  // generic StHbtEventReader methods
-  //StHbtString Report();
-  StHbtEvent* ReturnHbtEvent();
-  int WriteHbtEvent(StHbtEvent*);
-  int Init(const char* ReadWrite, StHbtString& Message);
-  void Finish();
-
-  // methods special to this Reader
-  void SetFileName(char* file);
+   // methods special to this Reader
+   void SetFileName(char* file);
 #ifdef __ROOT__
-  ClassDef(StHbtAsciiReader, 0)
+   ClassDef(StHbtAsciiReader, 0)
 #endif
 };
 
-inline void StHbtAsciiReader::SetFileName(char* file){mFileName=file;}
-
+inline void StHbtAsciiReader::SetFileName(char* file) { mFileName = file; }
 
 #endif

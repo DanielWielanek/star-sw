@@ -13,39 +13,39 @@
 #ifndef StHbtTTreeKink_h
 #define StHbtTTreeKink_h
 
-
 class StHbtKink;
 class StHbtEvent;
 
-#include "TObject.h"
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StHbtMaker/Infrastructure/StHbtTTreeTrack.h"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
+#include "TObject.h"
 
 class StHbtTTreeKink : public TObject {
-public:
-  StHbtTTreeKink(){/* no-op */}
-  StHbtTTreeKink(const StHbtEvent*, const StHbtKink*); // copy constructor
-  virtual ~StHbtTTreeKink(){/* no-op */}
+  public:
+   StHbtTTreeKink() { /* no-op */
+   }
+   StHbtTTreeKink(const StHbtEvent*, const StHbtKink*);  // copy constructor
+   virtual ~StHbtTTreeKink() {                           /* no-op */
+   }
 
-protected:
-  float mDcaParentDaughter;           // from StKinkVertex class directly 
-  float mDcaDaughterPrimaryVertex;    // from StKinkVertex class directly 
-  float mDcaParentPrimaryVertex;      // from StKinkVertex class directly 
-  float mHitDistanceParentDaughter;   // from StKinkVertex class directly 
-  float mHitDistanceParentVertex;     // from StKinkVertex class directly 
-  float mDeltaEnergy[3];              // from StKinkVertex class directly 
-  float mDecayAngle;                  // from StKinkVertex class directly 
-  float mDecayAngleCM;                // from StKinkVertex class directly 
-  StHbtTTreeTrack  mDaughter;         // from StKinkVertex class directly 
-  StHbtTTreeTrack  mParent;           // from StVertex class (which StKinkVertex inherits from)
-  float mPositionX;                   // from StMeasuredPoint class (which StVertex inherits from)
-  float mPositionY;                   // from StMeasuredPoint class (which StVertex inherits from)
-  float mPositionZ;                   // from StMeasuredPoint class (which StVertex inherits from)
+  protected:
+   float mDcaParentDaughter;          // from StKinkVertex class directly
+   float mDcaDaughterPrimaryVertex;   // from StKinkVertex class directly
+   float mDcaParentPrimaryVertex;     // from StKinkVertex class directly
+   float mHitDistanceParentDaughter;  // from StKinkVertex class directly
+   float mHitDistanceParentVertex;    // from StKinkVertex class directly
+   float mDeltaEnergy[3];             // from StKinkVertex class directly
+   float mDecayAngle;                 // from StKinkVertex class directly
+   float mDecayAngleCM;               // from StKinkVertex class directly
+   StHbtTTreeTrack mDaughter;         // from StKinkVertex class directly
+   StHbtTTreeTrack mParent;           // from StVertex class (which StKinkVertex inherits from)
+   float mPositionX;                  // from StMeasuredPoint class (which StVertex inherits from)
+   float mPositionY;                  // from StMeasuredPoint class (which StVertex inherits from)
+   float mPositionZ;                  // from StMeasuredPoint class (which StVertex inherits from)
 
+   friend class StHbtKink;
 
-  friend class StHbtKink;
-
-  ClassDef(StHbtTTreeKink,1)
+   ClassDef(StHbtTTreeKink, 1)
 };
 
 #endif
@@ -71,20 +71,3 @@ protected:
  *
  *
  ***********************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

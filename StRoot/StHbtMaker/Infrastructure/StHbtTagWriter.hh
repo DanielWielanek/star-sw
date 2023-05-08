@@ -10,31 +10,28 @@
 #ifndef StHbtTagWriter_hh
 #define StHbtTagWriter_hh
 
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "HbtTag.h"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
-class StHbtTagWriter{
-public:
-  static StHbtTagWriter* Instance();
-  void   Clear();
-  void SetTag(const char*, unsigned char, float);
-  float Tag(const char*, unsigned char);
+class StHbtTagWriter {
+  public:
+   static StHbtTagWriter* Instance();
+   void Clear();
+   void SetTag(const char*, unsigned char, float);
+   float Tag(const char*, unsigned char);
 
-  
-  friend class StHbtTagMaker;
-protected: 
-  StHbtTagWriter();
-  HbtTag_st mHbtTag; 
-private:
-  static StHbtTagWriter* _instance;
+   friend class StHbtTagMaker;
 
-  
-  
+  protected:
+   StHbtTagWriter();
+   HbtTag_st mHbtTag;
+
+  private:
+   static StHbtTagWriter* _instance;
+
 #ifdef __ROOT__
-  ClassDef(StHbtTagWriter,0)
+   ClassDef(StHbtTagWriter, 0)
 #endif
-
 };
-
 
 #endif

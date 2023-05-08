@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Laurent Conin, Fabrice Retiere, Subatech, France
  ***************************************************************************
@@ -9,20 +9,17 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
 #include "StHbtMaker/ThCorrFctn/StHbtThPairDummy.h"
 
-StHbtThPairDummy::StHbtThPairDummy() : StHbtThPair() 
-{mWeightNum=mWeightDen=1.;mWeightOk=true;};
+StHbtThPairDummy::StHbtThPairDummy() : StHbtThPair() {
+   mWeightNum = mWeightDen = 1.;
+   mWeightOk = true;
+};
 
-void StHbtThPairDummy::Set(const StHbtPair* aPair){
-  mMeasPair=aPair;
+void StHbtThPairDummy::Set(const StHbtPair* aPair) { mMeasPair = aPair; }
 
-}
-
-void StHbtThPairDummy::setVariables(const StHbtPair*){
-  
-}
+void StHbtThPairDummy::setVariables(const StHbtPair*) {}

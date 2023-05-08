@@ -14,47 +14,41 @@
  *
  ***************************************************************************/
 
-
 #ifndef StHbtLikeSignAnalysis_hh
 #define StHbtLikeSignAnalysis_hh
 //#ifndef StMaker_H
 //#include "StMaker.h"
 //#endif
 
-#include "StHbtMaker/Base/StHbtBaseAnalysis.h"        // base analysis class
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
-#include "StHbtMaker/Base/StHbtEventCut.h"             // base class 
-#include "StHbtMaker/Base/StHbtParticleCut.h"          // base class
-#include "StHbtMaker/Base/StHbtPairCut.h"              // base class
-#include "StHbtMaker/Base/StHbtLikeSignCorrFctn.hh"    // base class
+#include "StHbtMaker/Base/StHbtBaseAnalysis.h"       // base analysis class
+#include "StHbtMaker/Base/StHbtEventCut.h"           // base class
+#include "StHbtMaker/Base/StHbtLikeSignCorrFctn.hh"  // base class
+#include "StHbtMaker/Base/StHbtPairCut.h"            // base class
+#include "StHbtMaker/Base/StHbtParticleCut.h"        // base class
 #include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
 #include "StHbtMaker/Infrastructure/StHbtCorrFctnCollection.hh"
-
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
 class StHbtLikeSignAnalysis : public StHbtAnalysis {
+  public:
+   StHbtLikeSignAnalysis(unsigned int bins = 20, double min = -100., double max = 100.);
+   StHbtLikeSignAnalysis(const StHbtLikeSignAnalysis&);  // copy constructor
+   virtual ~StHbtLikeSignAnalysis();
 
-public: 
+   virtual void ProcessEvent(const StHbtEvent*);
+   virtual StHbtString Report();
+   virtual unsigned int Overflow() { return mOverFlow; }
+   virtual unsigned int Underflow() { return mUnderFlow; }
 
-  StHbtLikeSignAnalysis(unsigned int bins=20, double min=-100., double max=100.);
-  StHbtLikeSignAnalysis(const StHbtLikeSignAnalysis&);  // copy constructor
-  virtual ~StHbtLikeSignAnalysis();
-
-  virtual void ProcessEvent(const StHbtEvent*);
-  virtual StHbtString Report();
-  virtual unsigned int Overflow() { return mOverFlow;}
-  virtual unsigned int Underflow() { return mUnderFlow;}
-
-protected:
-  double mVertexZ[2];
-  unsigned int mVertexBins;
-  unsigned int mOverFlow;
-  unsigned int mUnderFlow;
+  protected:
+   double mVertexZ[2];
+   unsigned int mVertexBins;
+   unsigned int mOverFlow;
+   unsigned int mUnderFlow;
 
 #ifdef __ROOT__
-  ClassDef(StHbtLikeSignAnalysis, 0)
+   ClassDef(StHbtLikeSignAnalysis, 0)
 #endif
-
 };
-
 
 #endif

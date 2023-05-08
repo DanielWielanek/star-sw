@@ -17,41 +17,41 @@
  *
  **************************************************************************/
 
-
 #ifndef ExitSepPairCut_hh
 #define ExitSepPairCut_hh
 
-
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
-class ExitSepPairCut : public StHbtPairCut{
-public:
-  ExitSepPairCut();
-  ExitSepPairCut(const ExitSepPairCut&);
-  //~ExitSepPairCut();
+class ExitSepPairCut : public StHbtPairCut {
+  public:
+   ExitSepPairCut();
+   ExitSepPairCut(const ExitSepPairCut&);
+   //~ExitSepPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  ExitSepPairCut* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   ExitSepPairCut* Clone();
 
-  void SetExitSepRange(const double& Lo, const double& Hi);
+   void SetExitSepRange(const double& Lo, const double& Hi);
 
-private:
-  long mNPairsPassed;
-  long mNPairsFailed;
-  double mEntSepLo;
-  double mEntSepHi;
+  private:
+   long mNPairsPassed;
+   long mNPairsFailed;
+   double mEntSepLo;
+   double mEntSepHi;
 
 #ifdef __ROOT__
-  ClassDef(ExitSepPairCut, 1)
+   ClassDef(ExitSepPairCut, 1)
 #endif
 };
 
 inline ExitSepPairCut::ExitSepPairCut(const ExitSepPairCut& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
 }
-inline ExitSepPairCut* ExitSepPairCut::Clone() { ExitSepPairCut* c = new ExitSepPairCut(*this); return c;}
+inline ExitSepPairCut* ExitSepPairCut::Clone() {
+   ExitSepPairCut* c = new ExitSepPairCut(*this);
+   return c;
+}
 
 #endif

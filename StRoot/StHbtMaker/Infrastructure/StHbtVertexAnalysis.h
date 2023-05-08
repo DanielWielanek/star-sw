@@ -32,29 +32,27 @@
 #ifndef StHbtVertexAnalysis_hh
 #define StHbtVertexAnalysis_hh
 
-#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"        // base analysis class
+#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"  // base analysis class
 
 class StHbtVertexAnalysis : public StHbtAnalysis {
+  public:
+   StHbtVertexAnalysis(unsigned int = 10, double = -100., double = +100.);
+   StHbtVertexAnalysis(const StHbtVertexAnalysis&);  // copy constructor
+   virtual void ProcessEvent(const StHbtEvent*);
+   virtual ~StHbtVertexAnalysis();
+   virtual StHbtString Report();  //! returns reports of all cuts applied and correlation functions being done
+   virtual unsigned int Overflow() { return mOverFlow; }
+   virtual unsigned int Underflow() { return mUnderFlow; }
 
-public:
+  protected:
+   double mVertexZ[2];
+   unsigned int mVertexBins;
+   unsigned int mOverFlow;
+   unsigned int mUnderFlow;
 
-  StHbtVertexAnalysis(unsigned int =10, double =-100., double=+100.);
-  StHbtVertexAnalysis(const StHbtVertexAnalysis&);  // copy constructor
-  virtual void ProcessEvent(const StHbtEvent*);
-  virtual ~StHbtVertexAnalysis();
-  virtual StHbtString Report();       //! returns reports of all cuts applied and correlation functions being done
-  virtual unsigned int Overflow() { return mOverFlow;}
-  virtual unsigned int Underflow() { return mUnderFlow;}
-protected:
-  double mVertexZ[2];
-  unsigned int mVertexBins;
-  unsigned int mOverFlow;
-  unsigned int mUnderFlow;
-  
 #ifdef __ROOT__
-  ClassDef(StHbtVertexAnalysis, 0)
+   ClassDef(StHbtVertexAnalysis, 0)
 #endif
-    
 };
 
 #endif

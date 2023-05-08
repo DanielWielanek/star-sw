@@ -31,56 +31,54 @@
 #include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
 class StHbtTriplet {
-public:
-  StHbtTriplet();
-  StHbtTriplet(StHbtParticle*, StHbtParticle*, StHbtParticle*);
-  
+  public:
+   StHbtTriplet();
+   StHbtTriplet(StHbtParticle*, StHbtParticle*, StHbtParticle*);
 
-  ~StHbtTriplet();
-  //StHbtTriplet(const StHbtTriplet&);
-  //StHbtTriplet& operator=(const StHbtTriplet&);
+   ~StHbtTriplet();
+   // StHbtTriplet(const StHbtTriplet&);
+   // StHbtTriplet& operator=(const StHbtTriplet&);
 
-  // track Gets:
-  StHbtParticle* track1() const;
-  StHbtParticle* track2() const;
-  StHbtParticle* track3() const;
-  // track Sets:
-  void SetTrack1(const StHbtParticle* trkPtr);
-  void SetTrack2(const StHbtParticle* trkPtr);
-  void SetTrack3(const StHbtParticle* trkPtr);
+   // track Gets:
+   StHbtParticle* track1() const;
+   StHbtParticle* track2() const;
+   StHbtParticle* track3() const;
+   // track Sets:
+   void SetTrack1(const StHbtParticle* trkPtr);
+   void SetTrack2(const StHbtParticle* trkPtr);
+   void SetTrack3(const StHbtParticle* trkPtr);
 
-  StHbtLorentzVector fourMomentum() const;
-  double qInv() const;
-  double qInv12() const;
-  double qInv23() const;
-  double qInv31() const;
-  double kT()   const;
-  double mInv() const;
+   StHbtLorentzVector fourMomentum() const;
+   double qInv() const;
+   double qInv12() const;
+   double qInv23() const;
+   double qInv31() const;
+   double kT() const;
+   double mInv() const;
 
-  double quality() const;
-  
-  // the following two methods calculate the "nominal" separation of the tracks 
-  // at the inner field cage (EntranceSeparation) and when they exit the TPC,
-  // which may be at the outer field cage, or at the endcaps.
-  // "nominal" means that the tracks are assumed to start at (0,0,0).  Making this
-  // assumption is important for the Event Mixing-- it is not a mistake. - MALisa
-  double NominalTpcExitSeparation() const;
-  double NominalTpcEntranceSeparation() const;
-  double NominalTpcAverageSeparation() const;
+   double quality() const;
 
-private:
-  StHbtParticle* mTrack1;
-  StHbtParticle* mTrack2;
-  StHbtParticle* mTrack3;
+   // the following two methods calculate the "nominal" separation of the tracks
+   // at the inner field cage (EntranceSeparation) and when they exit the TPC,
+   // which may be at the outer field cage, or at the endcaps.
+   // "nominal" means that the tracks are assumed to start at (0,0,0).  Making this
+   // assumption is important for the Event Mixing-- it is not a mistake. - MALisa
+   double NominalTpcExitSeparation() const;
+   double NominalTpcEntranceSeparation() const;
+   double NominalTpcAverageSeparation() const;
 
+  private:
+   StHbtParticle* mTrack1;
+   StHbtParticle* mTrack2;
+   StHbtParticle* mTrack3;
 };
 
-inline void StHbtTriplet::SetTrack1(const StHbtParticle* trkPtr){mTrack1=(StHbtParticle*)trkPtr;}
-inline void StHbtTriplet::SetTrack2(const StHbtParticle* trkPtr){mTrack2=(StHbtParticle*)trkPtr;}
-inline void StHbtTriplet::SetTrack3(const StHbtParticle* trkPtr){mTrack3=(StHbtParticle*)trkPtr;}
+inline void StHbtTriplet::SetTrack1(const StHbtParticle* trkPtr) { mTrack1 = (StHbtParticle*)trkPtr; }
+inline void StHbtTriplet::SetTrack2(const StHbtParticle* trkPtr) { mTrack2 = (StHbtParticle*)trkPtr; }
+inline void StHbtTriplet::SetTrack3(const StHbtParticle* trkPtr) { mTrack3 = (StHbtParticle*)trkPtr; }
 
-inline StHbtParticle* StHbtTriplet::track1() const {return mTrack1;}
-inline StHbtParticle* StHbtTriplet::track2() const {return mTrack2;}
-inline StHbtParticle* StHbtTriplet::track3() const {return mTrack3;}
+inline StHbtParticle* StHbtTriplet::track1() const { return mTrack1; }
+inline StHbtParticle* StHbtTriplet::track2() const { return mTrack2; }
+inline StHbtParticle* StHbtTriplet::track3() const { return mTrack3; }
 
 #endif

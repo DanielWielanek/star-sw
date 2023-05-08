@@ -1,57 +1,56 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Adam Kisiel, Warsaw University of Technology, Poland
  ***************************************************************************
  *
- * Description : Calculate correlation weight using R.Lednicky's code 
+ * Description : Calculate correlation weight using R.Lednicky's code
  *               with the possibility to specify particle purity
  *  Use the fortran files : FsiLednickyWeight.F and FsiTools.F
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
 #ifndef StHbtFsiLednickyPurity_hh
 #define StHbtFsiLednickyPurity_hh
 
-#include "TRandom.h"
 #include "StHbtMaker/Base/StHbtFsiWeight.hh"
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StHbtMaker/Base/StHbtThPair.hh"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StHbtMaker/ThCorrFctn/StHbtFsiLednicky.h"
+#include "TRandom.h"
 
 class StHbtFsiLednickyPurity : public StHbtFsiLednicky {
- public: 
-// --- Constructor
-  StHbtFsiLednickyPurity(); // call SetDefaultCalcPar
-// --- Destructor : nothing to explicitly delete
-  ~StHbtFsiLednickyPurity();
+  public:
+   // --- Constructor
+   StHbtFsiLednickyPurity();  // call SetDefaultCalcPar
+                              // --- Destructor : nothing to explicitly delete
+   ~StHbtFsiLednickyPurity();
 
-// --- Function to be called in the correlation function
-  // see StThCorrFctn for details
-  virtual double GetWeight(const StHbtThPair* aThPair);
+   // --- Function to be called in the correlation function
+   // see StThCorrFctn for details
+   virtual double GetWeight(const StHbtThPair* aThPair);
 
-// --- Setting
+   // --- Setting
 
-// >>> Calculation mode
-  void SetPurity(const double aPurity);
-  void SetPurity(const double aPurity1, const double aPurity2);
+   // >>> Calculation mode
+   void SetPurity(const double aPurity);
+   void SetPurity(const double aPurity1, const double aPurity2);
 
-  virtual StHbtString Report();
+   virtual StHbtString Report();
 
-protected:
+  protected:
+   // Particle purity
+   double mPurity1, mPurity2;
 
-  // Particle purity
-  double mPurity1, mPurity2;
-
-  TRandom mRandom;
+   TRandom mRandom;
 
 #ifdef __ROOT__
-  ClassDef(StHbtFsiLednickyPurity,1)
+   ClassDef(StHbtFsiLednickyPurity, 1)
 #endif
 };
 

@@ -1,15 +1,15 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Laurent Conin, Fabrice Retiere, Subatech, France
  ***************************************************************************
  *
- * Description : Calculate the theoretical QInv correlation function 
+ * Description : Calculate the theoretical QInv correlation function
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
@@ -21,27 +21,26 @@
 
 class StHbtThPair;
 
-class ThQinvCorrFctn :  public virtual StHbtThCorrFctn ,public virtual StHbtRoot1DCF  {
- public:
-  ThQinvCorrFctn(char* aTitle, int aNBins, 
-		 double aHLo, double aHHi);
-  ThQinvCorrFctn(const ThQinvCorrFctn& ThCf);
-  
-  virtual ~ThQinvCorrFctn();
+class ThQinvCorrFctn : public virtual StHbtThCorrFctn, public virtual StHbtRoot1DCF {
+  public:
+   ThQinvCorrFctn(char* aTitle, int aNBins, double aHLo, double aHHi);
+   ThQinvCorrFctn(const ThQinvCorrFctn& ThCf);
 
-  void AddNum(StHbtThPair*);
-  void AddDen(StHbtThPair*);
-  
-  StHbtThCorrFctn* ThClone() const ;
+   virtual ~ThQinvCorrFctn();
 
-  virtual StHbt1DHisto* Numerator() const ;
-  virtual StHbt1DHisto* Denominator() const ;
-  virtual StHbt1DHisto* Ratio() const ;
-  virtual void Write() ;
-  virtual void Finish();
+   void AddNum(StHbtThPair*);
+   void AddDen(StHbtThPair*);
+
+   StHbtThCorrFctn* ThClone() const;
+
+   virtual StHbt1DHisto* Numerator() const;
+   virtual StHbt1DHisto* Denominator() const;
+   virtual StHbt1DHisto* Ratio() const;
+   virtual void Write();
+   virtual void Finish();
 
 #ifdef __ROOT__
-ClassDef(ThQinvCorrFctn, 1)
+   ClassDef(ThQinvCorrFctn, 1)
 #endif
 };
 

@@ -24,7 +24,6 @@
 #ifndef StHbtCorrFctnCollection_hh
 #define StHbtCorrFctnCollection_hh
 
-
 #include <list>
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
@@ -32,11 +31,11 @@ using std::list;
 class StHbtCorrFctn;
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtCorrFctn*, allocator<StHbtCorrFctn*> >            StHbtCorrFctnCollection;
-typedef list<StHbtCorrFctn*, allocator<StHbtCorrFctn*> >::iterator  StHbtCorrFctnIterator;
+typedef list<StHbtCorrFctn*, allocator<StHbtCorrFctn*> > StHbtCorrFctnCollection;
+typedef list<StHbtCorrFctn*, allocator<StHbtCorrFctn*> >::iterator StHbtCorrFctnIterator;
 #else
-typedef list<StHbtCorrFctn*>            StHbtCorrFctnCollection;
-typedef list<StHbtCorrFctn*>::iterator  StHbtCorrFctnIterator;
+typedef list<StHbtCorrFctn*> StHbtCorrFctnCollection;
+typedef list<StHbtCorrFctn*>::iterator StHbtCorrFctnIterator;
 #endif
 
 #endif

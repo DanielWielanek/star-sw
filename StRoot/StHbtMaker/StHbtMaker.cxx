@@ -74,79 +74,72 @@
 ClassImp(StHbtMaker)
 #endif
 
-//_____________________________________________________________________________
+    //_____________________________________________________________________________
 
-    
-StHbtMaker::StHbtMaker(const char*name, const char * title) : 
+    StHbtMaker::StHbtMaker(const char* name, const char* title)
+    :
 #ifdef __ROOT__
-  StMaker(name,title) ,
+      StMaker(name, title),
 #endif
-mDebug(0) 
-{
-  // StHbtMaker - constructor
-  mHbtManager = new StHbtManager;
-  cout << string::npos << endl;
+      mDebug(0) {
+   // StHbtMaker - constructor
+   mHbtManager = new StHbtManager;
+   cout << string::npos << endl;
 }
 //_____________________________________________________________________________
-StHbtMaker::~StHbtMaker()
-{
-  // StHbtMaker - destructor
-    cout << "Inside ReaderMaker Destructor" << endl;
+StHbtMaker::~StHbtMaker() {
+   // StHbtMaker - destructor
+   cout << "Inside ReaderMaker Destructor" << endl;
 #ifdef __ROOT__
-    SafeDelete(mHbtManager);  //
+   SafeDelete(mHbtManager);  //
 #else
-  delete mHbtManager;
+   delete mHbtManager;
 #endif
 }
 //_____________________________________________________________________________
-void StHbtMaker::Clear(const char*)
-{
-  /* no-op - do not delete manager! */
+void StHbtMaker::Clear(const char*) {
+   /* no-op - do not delete manager! */
 #ifdef __ROOT__
-  StMaker::Clear();
+   StMaker::Clear();
 #endif
 }
 //_____________________________________________________________________________
 //_____________________________________________________________________________
-Int_t StHbtMaker::Init()
-{
-  if (mHbtManager->Init()){
-    cout << "StHbtMaker::Init() - Manager init failed " << endl;
-    return (2);
-  }
-  cout << "StHbtMaker::Init() - requesting a Report " << endl;
-  StHbtString tempString = mHbtManager->Report();
-  cout << "Got the report, now let me try to put it to screen" << endl;
-  cout << tempString.c_str() << endl; //!
+Int_t StHbtMaker::Init() {
+   if (mHbtManager->Init()) {
+      cout << "StHbtMaker::Init() - Manager init failed " << endl;
+      return (2);
+   }
+   cout << "StHbtMaker::Init() - requesting a Report " << endl;
+   StHbtString tempString = mHbtManager->Report();
+   cout << "Got the report, now let me try to put it to screen" << endl;
+   cout << tempString.c_str() << endl;  //!
 #ifdef __ROOT__
-  return StMaker::Init();
+   return StMaker::Init();
 #else
-  return 0;
+   return 0;
 #endif
 }
 //_____________________________________________________________________________
-Int_t StHbtMaker::Finish()
-{
-  cout << mHbtManager->Report().c_str() << endl; //!
-  mHbtManager->Finish();
+Int_t StHbtMaker::Finish() {
+   cout << mHbtManager->Report().c_str() << endl;  //!
+   mHbtManager->Finish();
 #ifdef __ROOT__
-  return StMaker::Finish();
+   return StMaker::Finish();
 #else
-  return 0;
+   return 0;
 #endif
 }
 //_____________________________________________________________________________
-Int_t StHbtMaker::Make()
-{
-  if (mDebug>1) cout << "\nStHbtMaker::Make -- processing event" << endl;
+Int_t StHbtMaker::Make() {
+   if (mDebug > 1) cout << "\nStHbtMaker::Make -- processing event" << endl;
 #ifdef __ROOT__
-  if (mHbtManager->ProcessEvent()){
-    return kStEOF;    // non-zero value returned --> end of file action
-  }
-  else{
-    return kStOK;
-  }
+   if (mHbtManager->ProcessEvent()) {
+      return kStEOF;  // non-zero value returned --> end of file action
+   } else {
+      return kStOK;
+   }
 #else
-  return  mHbtManager->ProcessEvent();
+   return mHbtManager->ProcessEvent();
 #endif
 }

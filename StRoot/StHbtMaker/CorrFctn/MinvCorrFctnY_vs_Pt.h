@@ -28,47 +28,45 @@
 #ifndef MinvCorrFctnY_vs_Pt_hh
 #define MinvCorrFctnY_vs_Pt_hh
 
-#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
 #include "StHbtMaker/Base/StHbtCorrFctn.hh"
 #include "StHbtMaker/Cut/mikesEventCut.h"
+#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
 
 class MinvCorrFctnY_vs_Pt : public StHbtCorrFctn {
-public:
-  MinvCorrFctnY_vs_Pt(char* title, 
-		      const int& nbins1, const float& MinvLo1, const float& MinvHi1,
-		      const int& nbins2, const float& MinvLo2, const float& MinvHi2);
-  MinvCorrFctnY_vs_Pt(const MinvCorrFctnY_vs_Pt&);
-  virtual ~MinvCorrFctnY_vs_Pt();
+  public:
+   MinvCorrFctnY_vs_Pt(char* title, const int& nbins1, const float& MinvLo1, const float& MinvHi1, const int& nbins2,
+                       const float& MinvLo2, const float& MinvHi2);
+   MinvCorrFctnY_vs_Pt(const MinvCorrFctnY_vs_Pt&);
+   virtual ~MinvCorrFctnY_vs_Pt();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  StHbt2DHisto* Numerator();
-  StHbt2DHisto* Denominator();
-  StHbt2DHisto* Difference();
+   StHbt2DHisto* Numerator();
+   StHbt2DHisto* Denominator();
+   StHbt2DHisto* Difference();
 
-private:
-  double mRealPairs,mMixedPairs;
-  StHbt2DHisto* mNumerator;
-  StHbt2DHisto* mDenominator;
-  StHbt2DHisto* mDifference;
+  private:
+   double mRealPairs, mMixedPairs;
+   StHbt2DHisto* mNumerator;
+   StHbt2DHisto* mDenominator;
+   StHbt2DHisto* mDifference;
 
 #ifdef __ROOT__
-  ClassDef(MinvCorrFctnY_vs_Pt, 1)
+   ClassDef(MinvCorrFctnY_vs_Pt, 1)
 #endif
 };
- 
-inline  StHbt2DHisto* MinvCorrFctnY_vs_Pt::Numerator(){return mNumerator;}
-inline  StHbt2DHisto* MinvCorrFctnY_vs_Pt::Denominator(){return mDenominator;}
-inline  StHbt2DHisto* MinvCorrFctnY_vs_Pt::Difference(){return mDifference;}
-inline MinvCorrFctnY_vs_Pt::MinvCorrFctnY_vs_Pt(const MinvCorrFctnY_vs_Pt& fctn) :StHbtCorrFctn() {
-  mNumerator =  new StHbt2DHisto(*(fctn.mNumerator));
-  mDenominator= new StHbt2DHisto(*(fctn.mDenominator));
-  mDifference = new StHbt2DHisto(*(fctn.mDifference));
+
+inline StHbt2DHisto* MinvCorrFctnY_vs_Pt::Numerator() { return mNumerator; }
+inline StHbt2DHisto* MinvCorrFctnY_vs_Pt::Denominator() { return mDenominator; }
+inline StHbt2DHisto* MinvCorrFctnY_vs_Pt::Difference() { return mDifference; }
+inline MinvCorrFctnY_vs_Pt::MinvCorrFctnY_vs_Pt(const MinvCorrFctnY_vs_Pt& fctn) : StHbtCorrFctn() {
+   mNumerator = new StHbt2DHisto(*(fctn.mNumerator));
+   mDenominator = new StHbt2DHisto(*(fctn.mDenominator));
+   mDifference = new StHbt2DHisto(*(fctn.mDifference));
 }
 
 #endif
-

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Adam Kisiel, Warsaw University of Technology, Poland
  ***************************************************************************
@@ -10,7 +10,7 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
@@ -19,47 +19,40 @@
 
 #include "StHbtMaker/Base/StHbtHiddenInfo.hh"
 #include "StHbtMaker/Infrastructure/StHbtTypes.hh"
-#include "TRandom.h"
 #include "StHbtMaker/ThCorrFctn/StHbtMomRes.hh"
+#include "TRandom.h"
 
-class StHbtSmearedHiddenInfo : public StHbtHiddenInfo{
+class StHbtSmearedHiddenInfo : public StHbtHiddenInfo {
+  public:
+   // --- Constructors
+   StHbtSmearedHiddenInfo();
+   StHbtSmearedHiddenInfo(const StHbtLorentzVector& aInitialMom, const StHbtLorentzVector& aFreezeOut, const int& aPid,
+                          TRandom* aRand, const StHbtMomRes* aMomRes);
+   StHbtSmearedHiddenInfo(const StHbtSmearedHiddenInfo& aHiddenInfo);
+   StHbtSmearedHiddenInfo(const StHbtLorentzVector& aSmearedMom, const StHbtLorentzVector& aFreezeOut, const int& aPid);
+   // --- Destructor
+   virtual ~StHbtSmearedHiddenInfo();
 
-public:
+   // --- Return hidden info content
+   const StHbtLorentzVector& getSmearedMom() const;
+   StHbtLorentzVector& getMomentum();
+   StHbtLorentzVector& getFreezeOut() const;
+   int getPid() const;
 
-// --- Constructors
-  StHbtSmearedHiddenInfo();
-  StHbtSmearedHiddenInfo(const StHbtLorentzVector& aInitialMom, 
-			 const StHbtLorentzVector& aFreezeOut,
-			 const int& aPid,
-			 TRandom* aRand,
-			 const StHbtMomRes* aMomRes);
-  StHbtSmearedHiddenInfo(const StHbtSmearedHiddenInfo& aHiddenInfo);
-  StHbtSmearedHiddenInfo(const StHbtLorentzVector& aSmearedMom,
-			 const StHbtLorentzVector& aFreezeOut,
-			 const int& aPid);
-// --- Destructor
-  virtual ~StHbtSmearedHiddenInfo();
+   // ---Change hidden info content
+   void setInitialMom(const StHbtLorentzVector*, TRandom*, const StHbtMomRes*);
+   void setFreezeOut(const StHbtLorentzVector*);
+   void setPid(int);
 
-// --- Return hidden info content
-  const StHbtLorentzVector& getSmearedMom() const;
-  StHbtLorentzVector& getMomentum();
-  StHbtLorentzVector& getFreezeOut() const;
-  int getPid() const;
+   // !!! MANDATORY !!!
+   // --- Copy the hidden info from StHbtTrack to StHbtParticle
+   virtual StHbtHiddenInfo* getParticleHiddenInfo() const;
 
-// ---Change hidden info content
-  void setInitialMom(const StHbtLorentzVector*, TRandom*, const StHbtMomRes*);
-  void setFreezeOut(const StHbtLorentzVector*);
-  void setPid(int);
+   StHbtLorentzVector mSmearedMom;
+   StHbtLorentzVector* mFreezeOut;
 
-// !!! MANDATORY !!!
-// --- Copy the hidden info from StHbtTrack to StHbtParticle
-  virtual StHbtHiddenInfo* getParticleHiddenInfo() const;
-
-  StHbtLorentzVector mSmearedMom;
-  StHbtLorentzVector *mFreezeOut;
-
- private:
-  int mPid;
+  private:
+   int mPid;
 };
 
 #endif

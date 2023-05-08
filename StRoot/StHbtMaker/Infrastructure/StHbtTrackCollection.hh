@@ -23,19 +23,20 @@
 
 #ifndef StHbtTrackCollection_hh
 #define StHbtTrackCollection_hh
-#include "StHbtMaker/Infrastructure/StHbtTrack.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtTrack.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtTrack*, allocator<StHbtTrack*> >            StHbtTrackCollection;
-typedef list<StHbtTrack*, allocator<StHbtTrack*> >::iterator  StHbtTrackIterator;
+typedef list<StHbtTrack*, allocator<StHbtTrack*> > StHbtTrackCollection;
+typedef list<StHbtTrack*, allocator<StHbtTrack*> >::iterator StHbtTrackIterator;
 #else
-typedef list<StHbtTrack*>            StHbtTrackCollection;
-typedef list<StHbtTrack*>::iterator  StHbtTrackIterator;
+typedef list<StHbtTrack*> StHbtTrackCollection;
+typedef list<StHbtTrack*>::iterator StHbtTrackIterator;
 #endif
 
 #endif

@@ -32,39 +32,33 @@
 #ifndef StHbtStrangeMuDstEventReader_hh
 #define StHbtStrangeMuDstEventReader_hh
 
-
-
 class StStrangeMuDstMaker;
 class StEvent;
 
-#include "StMaker.h"
 #include "StChain.h"
-#include "St_DataSetIter.h"
 #include "StHbtMaker/Base/StHbtEventReader.hh"
+#include "StMaker.h"
+#include "St_DataSetIter.h"
 
-class StHbtStrangeMuDstEventReader : public StMaker, public StHbtEventReader{
+class StHbtStrangeMuDstEventReader : public StMaker, public StHbtEventReader {
+   // private:
+   StStrangeMuDstMaker* mStrangeMuDstMaker;  //! this is the chain where the StStrangeMuDstMaker is
+  protected:
+  public:
+   StHbtStrangeMuDstEventReader();
+   StHbtStrangeMuDstEventReader(StStrangeMuDstMaker*);
+   ~StHbtStrangeMuDstEventReader();
 
-  // private:
-  StStrangeMuDstMaker* mStrangeMuDstMaker; //! this is the chain where the StStrangeMuDstMaker is
- protected:
+   StHbtEvent* ReturnHbtEvent();
+   StHbtString Report();
 
-public:
-  StHbtStrangeMuDstEventReader();
-  StHbtStrangeMuDstEventReader(StStrangeMuDstMaker*);
-  ~StHbtStrangeMuDstEventReader();
-
-  StHbtEvent* ReturnHbtEvent();
-  StHbtString Report();
-
-  //  void SetStStrangeMuDstMaker(StStrangeMuDstMaker*);
-  void SetStrangeMuDstMaker(StStrangeMuDstMaker* maker) { mStrangeMuDstMaker=maker;};
-  StStrangeMuDstMaker* StrangeMuDstMaker() {return mStrangeMuDstMaker;};
+   //  void SetStStrangeMuDstMaker(StStrangeMuDstMaker*);
+   void SetStrangeMuDstMaker(StStrangeMuDstMaker* maker) { mStrangeMuDstMaker = maker; };
+   StStrangeMuDstMaker* StrangeMuDstMaker() { return mStrangeMuDstMaker; };
 
 #ifdef __ROOT__
-  ClassDef(StHbtStrangeMuDstEventReader, 1)
+   ClassDef(StHbtStrangeMuDstEventReader, 1)
 #endif
 };
 
-
 #endif
-

@@ -1,64 +1,63 @@
- /***************************************************************************
- *
- *  
- *
- * Author: Frank Laue, Ohio State, laue@mps.ohio-state.edu
- ***************************************************************************
- *
- * Description: part of STAR HBT Framework: StHbtMaker package
- * a particle cut that uses NSigma cut below certain P threshhold
- # and a PID probability above it
- *
- ***************************************************************************
- *
- * 
- *
- **************************************************************************/
+/***************************************************************************
+*
+*
+*
+* Author: Frank Laue, Ohio State, laue@mps.ohio-state.edu
+***************************************************************************
+*
+* Description: part of STAR HBT Framework: StHbtMaker package
+* a particle cut that uses NSigma cut below certain P threshhold
+# and a PID probability above it
+*
+***************************************************************************
+*
+*
+*
+**************************************************************************/
 
 #ifndef adamsTrackCut_hh
 #define adamsTrackCut_hh
-
 
 //#ifndef StMaker_H
 //#include "StMaker.h"
 //#endif
 
-#include "Stsstream.h"
 #include "StHbtMaker/Base/StHbtTrackCut.h"
 #include "StHbtMaker/Cut/franksTrackCut.h"
+#include "Stsstream.h"
 
-class adamsTrackCut : public franksTrackCut
-{
+class adamsTrackCut : public franksTrackCut {
+  public:
+   adamsTrackCut();
+   adamsTrackCut(adamsTrackCut&);
+   ~adamsTrackCut();
 
- public:
+   virtual bool Pass(const StHbtTrack*);
 
-  adamsTrackCut();
-  adamsTrackCut(adamsTrackCut& );
-  ~adamsTrackCut();
-  
-  virtual bool Pass(const StHbtTrack*);
+   virtual StHbtString Report();
 
-  virtual StHbtString Report();
+   void SetPIDPThreshold(const float&);
 
-  void SetPIDPThreshold(const float&);
+   adamsTrackCut* Clone();
 
-  adamsTrackCut* Clone();
+   std::ostringstream* finalReport() const;
 
-  std::ostringstream* finalReport() const;
+  private:  // here are the quantities I want to cut on...
+   float mPIDPThreshold;
 
- private:   // here are the quantities I want to cut on...
-  float             mPIDPThreshold;
-
- protected:
-  long              mNTracksPassed;
-  long              mNTracksFailed;
+  protected:
+   long mNTracksPassed;
+   long mNTracksFailed;
 
 #ifdef __ROOT__
-  ClassDef(adamsTrackCut, 1)
+   ClassDef(adamsTrackCut, 1)
 #endif
 };
 
-inline void adamsTrackCut::SetPIDPThreshold(const float& pidpt){mPIDPThreshold = pidpt;}
-inline adamsTrackCut* adamsTrackCut::Clone() { adamsTrackCut* c = new adamsTrackCut(*this); return c;}
+inline void adamsTrackCut::SetPIDPThreshold(const float& pidpt) { mPIDPThreshold = pidpt; }
+inline adamsTrackCut* adamsTrackCut::Clone() {
+   adamsTrackCut* c = new adamsTrackCut(*this);
+   return c;
+}
 
 #endif

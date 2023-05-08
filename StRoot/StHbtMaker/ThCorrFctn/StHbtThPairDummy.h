@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Laurent Conin, Fabrice Retiere, Subatech, France
  ***************************************************************************
@@ -10,24 +10,23 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
 #ifndef StHbtThPairDummy_hh
 #define StHbtThPairDummy_hh
 
-
-#include "StHbtMaker/Infrastructure/StHbtPair.hh"
 #include "StHbtMaker/Base/StHbtThPair.hh"
+#include "StHbtMaker/Infrastructure/StHbtPair.hh"
 
-class StHbtThPairDummy : public StHbtThPair{
-public:
-  StHbtThPairDummy();
-  virtual void Set(const StHbtPair* aPair);
-  
-  void UpdateWeight();
-  virtual void setVariables(const StHbtPair*);
+class StHbtThPairDummy : public StHbtThPair {
+  public:
+   StHbtThPairDummy();
+   virtual void Set(const StHbtPair* aPair);
+
+   void UpdateWeight();
+   virtual void setVariables(const StHbtPair*);
 };
 
 #endif

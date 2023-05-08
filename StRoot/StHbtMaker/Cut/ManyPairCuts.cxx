@@ -22,48 +22,49 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/ManyPairCuts.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(ManyPairCuts)
 #endif
 
-//__________________
-ManyPairCuts::ManyPairCuts(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    ManyPairCuts::ManyPairCuts() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//ManyPairCuts::~ManyPairCuts(){
+// ManyPairCuts::~ManyPairCuts(){
 //  /* no-op */
 //}
 //__________________
-bool ManyPairCuts::Pass(const StHbtPair* pair){
-  // loop over all PairCuts in the collection... at the first failure, return "false"
+bool ManyPairCuts::Pass(const StHbtPair* pair) {
+   // loop over all PairCuts in the collection... at the first failure, return "false"
 
-  for (StHbtPairCutIterator iter=mPairCutCollection.begin();iter!=mPairCutCollection.end();iter++){
-    if (!((*iter)->Pass(pair))){
-      mNPairsFailed++;
-      return false;
-    }
-  }
-  // if you make it out of that loop, then you passed all cuts...
-  mNPairsPassed++;
-  return true;
+   for (StHbtPairCutIterator iter = mPairCutCollection.begin(); iter != mPairCutCollection.end(); iter++) {
+      if (!((*iter)->Pass(pair))) {
+         mNPairsFailed++;
+         return false;
+      }
+   }
+   // if you make it out of that loop, then you passed all cuts...
+   mNPairsPassed++;
+   return true;
 }
 //__________________
-StHbtString ManyPairCuts::Report(){
-  string Stemp = "ManyPairCuts Report\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Number of pairs which passed:\t%li  Number which failed:\t%li\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"Here are the reports from the\t%i PairCuts in the collection\n",mPairCutCollection.size());
-  Stemp += Ctemp;
+StHbtString ManyPairCuts::Report() {
+   string Stemp = "ManyPairCuts Report\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Number of pairs which passed:\t%li  Number which failed:\t%li\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "Here are the reports from the\t%i PairCuts in the collection\n", mPairCutCollection.size());
+   Stemp += Ctemp;
 
-  for (StHbtPairCutIterator iter=mPairCutCollection.begin();iter!=mPairCutCollection.end();iter++){
-    Stemp += (*iter)->Report();
-  }
-  StHbtString returnThis = Stemp;
-  return returnThis;
+   for (StHbtPairCutIterator iter = mPairCutCollection.begin(); iter != mPairCutCollection.end(); iter++) {
+      Stemp += (*iter)->Report();
+   }
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________

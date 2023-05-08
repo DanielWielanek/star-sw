@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a simple Q-invariant correlation function           
+ *   a simple Q-invariant correlation function
  *
  ***************************************************************************
  *
@@ -41,36 +41,34 @@
 #include "StHbtMaker/Infrastructure/StHbtCoulomb.h"
 
 class QinvCorrFctnC : public StHbtCorrFctn {
-public:
-  QinvCorrFctnC(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
-  virtual ~QinvCorrFctnC();
+  public:
+   QinvCorrFctnC(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
+   virtual ~QinvCorrFctnC();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
-  void AddCorrection(const StHbtCoulomb*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
+   void AddCorrection(const StHbtCoulomb*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  StHbt1DHisto* Numerator();
-  StHbt1DHisto* Denominator();
-  StHbt1DHisto* Ratio();
+   StHbt1DHisto* Numerator();
+   StHbt1DHisto* Denominator();
+   StHbt1DHisto* Ratio();
 
-private:
-  StHbt1DHisto* mNumerator;
-  StHbt1DHisto* mDenominator;
-  StHbt1DHisto* mRatio;
-  StHbtCoulomb mCorrection;    // Didn't like a pointer?????
+  private:
+   StHbt1DHisto* mNumerator;
+   StHbt1DHisto* mDenominator;
+   StHbt1DHisto* mRatio;
+   StHbtCoulomb mCorrection;  // Didn't like a pointer?????
 
-#ifdef __ROOT__ 
-  ClassDef(QinvCorrFctnC, 1)
+#ifdef __ROOT__
+   ClassDef(QinvCorrFctnC, 1)
 #endif
 };
 
-inline  StHbt1DHisto* QinvCorrFctnC::Numerator(){return mNumerator;}
-inline  StHbt1DHisto* QinvCorrFctnC::Denominator(){return mDenominator;}
-inline  StHbt1DHisto* QinvCorrFctnC::Ratio(){return mRatio;}
-
+inline StHbt1DHisto* QinvCorrFctnC::Numerator() { return mNumerator; }
+inline StHbt1DHisto* QinvCorrFctnC::Denominator() { return mDenominator; }
+inline StHbt1DHisto* QinvCorrFctnC::Ratio() { return mRatio; }
 
 #endif
-

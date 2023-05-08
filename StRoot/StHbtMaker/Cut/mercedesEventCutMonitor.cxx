@@ -6,12 +6,12 @@
  *
  ***************************************************************************
  *
- * Event Cut Monitor that plots just the tracks that passed 
+ * Event Cut Monitor that plots just the tracks that passed
  * mercedesStarStandardEventCut in the multiplicity plot
  * Plots: EventMultiplicity (just # of tracks that passed the event cut),
- * ZVertexPosition, and 2D plot: EventMultiplicity vs Tracks (# of tracks that 
- * passed the cuts vs # of tracks in the event) 
- * 
+ * ZVertexPosition, and 2D plot: EventMultiplicity vs Tracks (# of tracks that
+ * passed the cuts vs # of tracks in the event)
+ *
  ***************************************************************************
  *
  * $Log: mercedesEventCutMonitor.cxx,v $
@@ -27,54 +27,55 @@
  *
  **************************************************************************/
 
-#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StHbtMaker/Cut/mercedesEventCutMonitor.h"
+
 #include <cstdio>
 
-#ifdef __ROOT__ 
+#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
+
+#ifdef __ROOT__
 ClassImp(mercedesEventCutMonitor)
 #endif
 
-mercedesEventCutMonitor::mercedesEventCutMonitor(){
-  mEventMultHisto = new StHbt1DHisto("EventMultHisto","Event Multiplicity",1000,0.,1000.);
-  mEventMultHisto->SetDirectory(0);
-  mZVertexPosHisto = new StHbt1DHisto("ZVertexPos","zVertex Position",1000,-50.0,50.0);
-  mZVertexPosHisto->SetDirectory(0);
-  mEventMultvsTracks = new StHbt2DHisto("EventMultvsTracks ","Event Multiplicity vs Total Tracks",1000, 0., 1000., 1000,0.,10000.0);
-  mEventMultvsTracks->SetDirectory(0);
+    mercedesEventCutMonitor::mercedesEventCutMonitor() {
+   mEventMultHisto = new StHbt1DHisto("EventMultHisto", "Event Multiplicity", 1000, 0., 1000.);
+   mEventMultHisto->SetDirectory(0);
+   mZVertexPosHisto = new StHbt1DHisto("ZVertexPos", "zVertex Position", 1000, -50.0, 50.0);
+   mZVertexPosHisto->SetDirectory(0);
+   mEventMultvsTracks =
+       new StHbt2DHisto("EventMultvsTracks ", "Event Multiplicity vs Total Tracks", 1000, 0., 1000., 1000, 0., 10000.0);
+   mEventMultvsTracks->SetDirectory(0);
 }
 //------------------------------
-mercedesEventCutMonitor::~mercedesEventCutMonitor(){
-  delete mEventMultHisto;
-  delete mZVertexPosHisto;
-  delete mEventMultvsTracks;
-}
-
-//------------------------------
-void mercedesEventCutMonitor::Fill(const StHbtEvent* event){
-
-  double VertexZPos = event->PrimVertPos().z();
-  int mult = event->UncorrectedNumberOfPrimaries();
-
-  mEventMultHisto->Fill(mult,1.);
-  mZVertexPosHisto->Fill (VertexZPos,1.);
-  mEventMultvsTracks->Fill(mult,event->NumberOfTracks(),1.);
+mercedesEventCutMonitor::~mercedesEventCutMonitor() {
+   delete mEventMultHisto;
+   delete mZVertexPosHisto;
+   delete mEventMultvsTracks;
 }
 
 //------------------------------
-void mercedesEventCutMonitor::Finish(){
-  cout << " entries in Multiplicity  histogram : " << mEventMultHisto->Integral() << endl;
-  cout << " entries in Vertex Pos.  histogram : " << mZVertexPosHisto->Integral() << endl;
+void mercedesEventCutMonitor::Fill(const StHbtEvent* event) {
+   double VertexZPos = event->PrimVertPos().z();
+   int mult = event->UncorrectedNumberOfPrimaries();
+
+   mEventMultHisto->Fill(mult, 1.);
+   mZVertexPosHisto->Fill(VertexZPos, 1.);
+   mEventMultvsTracks->Fill(mult, event->NumberOfTracks(), 1.);
 }
 
 //------------------------------
-StHbtString mercedesEventCutMonitor::Report(){
-  string Stemp;
-  char Ctemp[100];
-  sprintf(Ctemp," mercedesEventCutMonitor");
-  Stemp=Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+void mercedesEventCutMonitor::Finish() {
+   cout << " entries in Multiplicity  histogram : " << mEventMultHisto->Integral() << endl;
+   cout << " entries in Vertex Pos.  histogram : " << mZVertexPosHisto->Integral() << endl;
 }
 
+//------------------------------
+StHbtString mercedesEventCutMonitor::Report() {
+   string Stemp;
+   char Ctemp[100];
+   sprintf(Ctemp, " mercedesEventCutMonitor");
+   Stemp = Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
+}

@@ -18,23 +18,22 @@
  *
  ***************************************************************************/
 
-
 #ifndef StHbtKinkCollection_hh
 #define StHbtKinkCollection_hh
-#include "StHbtMaker/Infrastructure/StHbtKink.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtKink.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtKink*, allocator<StHbtKink*> >            StHbtKinkCollection;
-typedef list<StHbtKink*, allocator<StHbtKink*> >::iterator  StHbtKinkIterator;
+typedef list<StHbtKink*, allocator<StHbtKink*> > StHbtKinkCollection;
+typedef list<StHbtKink*, allocator<StHbtKink*> >::iterator StHbtKinkIterator;
 #else
-typedef list<StHbtKink*>            StHbtKinkCollection;
-typedef list<StHbtKink*>::iterator  StHbtKinkIterator;
+typedef list<StHbtKink*> StHbtKinkCollection;
+typedef list<StHbtKink*>::iterator StHbtKinkIterator;
 #endif
 
 #endif
-

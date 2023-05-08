@@ -1,11 +1,11 @@
- /***************************************************************************
+/***************************************************************************
  *
  *  12 July 2000
  *
  * Author: Dominik Flierl, flierl@bnl.gov
  ***************************************************************************
  *
- * Description: 
+ * Description:
  *    fill event information into an ntuple in order to determine the cuts
  *
  ***************************************************************************/
@@ -13,43 +13,42 @@
 #define ntupleEvent_hh
 
 #ifdef __ROOT__
-#include "StHbtMaker/Infrastructure/StHbtTFile.hh"
 #include "StHbtMaker/Base/StHbtEventCut.h"
+#include "StHbtMaker/Infrastructure/StHbtTFile.hh"
 
 class ntupleEvent : public StHbtEventCut {
-     // define ntuple content in a nested struct
-     struct mEvent_t 
-     {
-	 int ctbMult;
-	 int numOfTpcHits;
-	 int numOfTracks;
-	 int numOfGoodTracks;
-	 float vertexZ;
-	 float vertexX;
-	 float vertexY;
-     };
+   // define ntuple content in a nested struct
+   struct mEvent_t {
+      int ctbMult;
+      int numOfTpcHits;
+      int numOfTracks;
+      int numOfGoodTracks;
+      float vertexZ;
+      float vertexX;
+      float vertexY;
+   };
 
-public:
-     ntupleEvent() ;
-     ~ntupleEvent() ;
-     
-     // this one has to be provided
-     StHbtString Report() ;
+  public:
+   ntupleEvent();
+   ~ntupleEvent();
 
-     // called for every event, returns in this case always true
-     bool Pass(const StHbtEvent*);
+   // this one has to be provided
+   StHbtString Report();
 
-     // access the tree from 
-     StHbtTree* getNtupleEvent() { return mTree; } ;
+   // called for every event, returns in this case always true
+   bool Pass(const StHbtEvent*);
 
-private:
-     // my tree
-     StHbtTree* mTree ;
-     // my tree consists of mEvents
-     mEvent_t mEvent ;
-   
-     ClassDef(ntupleEvent, 0)
-} ;
+   // access the tree from
+   StHbtTree* getNtupleEvent() { return mTree; };
 
-#endif //_ROOT_
-#endif // ntupleEvent_hh
+  private:
+   // my tree
+   StHbtTree* mTree;
+   // my tree consists of mEvents
+   mEvent_t mEvent;
+
+   ClassDef(ntupleEvent, 0)
+};
+
+#endif  //_ROOT_
+#endif  // ntupleEvent_hh

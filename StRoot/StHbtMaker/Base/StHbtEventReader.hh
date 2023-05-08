@@ -6,11 +6,11 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   base class for a StHbtEventReader             
+ *   base class for a StHbtEventReader
  *   All HbtEventReaders should inherit from this.
  *   Objects of these classes are required
  *   to obtain the data and convert it somehow to the STAR StEvent object
- * 
+ *
  * A major change is that on 3sep99, the StHbtReader classes _MUST_ implement
  *   a Report() method, like the Cuts and CorrFctns.
  * Also, a StHbtReader MAY implement a WriteHbtEvent(StHbtEvent*) method.
@@ -71,65 +71,73 @@ class StHbtV0Cut;
 class StHbtXiCut;
 class StHbtKinkCut;
 
-#include "StMaker.h"
 #include "StHbtMaker/Infrastructure/StHbtString.hh"
+#include "StMaker.h"
 
 class StHbtEventReader {
+  protected:
+   StHbtEventCut* mEventCut;  //!
+   StHbtTrackCut* mTrackCut;  //!
+   StHbtV0Cut* mV0Cut;        //!
+   StHbtXiCut* mXiCut;        //!
+   StHbtKinkCut* mKinkCut;    //!
+   int mReaderStatus;         // 0="good"
+   int mDebug;
 
-protected:
-  StHbtEventCut* mEventCut;     //!
-  StHbtTrackCut* mTrackCut; //!
-  StHbtV0Cut* mV0Cut; //!
-  StHbtXiCut* mXiCut; //!
-  StHbtKinkCut* mKinkCut; //!
-  int mReaderStatus;     // 0="good"
-  int mDebug;
-public:
-  // even tho it's only a base class and never constructed, if you don't have an implementation,
-  // you get "StHbtEventReader type_info node" upon dynamical loading
-  StHbtEventReader() : mEventCut(0), mTrackCut(0), mV0Cut(0), mXiCut(0), mKinkCut(0), mDebug(1) { /* no-op */ }
-  virtual ~StHbtEventReader(){/* no-op */}
+  public:
+   // even tho it's only a base class and never constructed, if you don't have an implementation,
+   // you get "StHbtEventReader type_info node" upon dynamical loading
+   StHbtEventReader() : mEventCut(0), mTrackCut(0), mV0Cut(0), mXiCut(0), mKinkCut(0), mDebug(1) { /* no-op */
+   }
+   virtual ~StHbtEventReader() { /* no-op */
+   }
 
-  virtual StHbtEvent* ReturnHbtEvent() =0;
+   virtual StHbtEvent* ReturnHbtEvent() = 0;
 
-  virtual StHbtString Report();    // user-written method to return string describing reader
-                                      // Including whatever "early" cuts are being done
+   virtual StHbtString Report();  // user-written method to return string describing reader
+                                  // Including whatever "early" cuts are being done
 
-  // this next method does NOT need to be implemented, in which case the 
-  // "default" method below is executed
-  virtual int WriteHbtEvent(StHbtEvent*){cout << "No WriteHbtEvent implemented\n"; return (0);}
+   // this next method does NOT need to be implemented, in which case the
+   // "default" method below is executed
+   virtual int WriteHbtEvent(StHbtEvent*) {
+      cout << "No WriteHbtEvent implemented\n";
+      return (0);
+   }
 
-  // these next two are optional but would make sense for, e.g., opening and closing a file
-  virtual int Init(const char* ReadWrite, StHbtString& Message){cout << "do-nothing StHbtEventReader::Init()\n"; return(0);}
-  virtual void Finish(){/*no-op*/};
+   // these next two are optional but would make sense for, e.g., opening and closing a file
+   virtual int Init(const char* ReadWrite, StHbtString& Message) {
+      cout << "do-nothing StHbtEventReader::Init()\n";
+      return (0);
+   }
+   virtual void Finish(){/*no-op*/};
 
-  int Status(){return mReaderStatus;} // StHbtManager looks at this for guidance if it gets null pointer from ReturnHbtEvent
+   int Status() {
+      return mReaderStatus;
+   }  // StHbtManager looks at this for guidance if it gets null pointer from ReturnHbtEvent
 
-  virtual void SetEventCut(StHbtEventCut* ecut);
-  virtual void SetTrackCut(StHbtTrackCut* pcut);
-  virtual void SetV0Cut(StHbtV0Cut* pcut);
-  virtual void SetXiCut(StHbtXiCut* pcut);
-  virtual void SetKinkCut(StHbtKinkCut* pcut);
-  virtual StHbtEventCut* EventCut();
-  virtual StHbtTrackCut* TrackCut();
-  virtual StHbtV0Cut*    V0Cut();
-  virtual StHbtXiCut*    XiCut();
-  virtual StHbtKinkCut*    KinkCut();
+   virtual void SetEventCut(StHbtEventCut* ecut);
+   virtual void SetTrackCut(StHbtTrackCut* pcut);
+   virtual void SetV0Cut(StHbtV0Cut* pcut);
+   virtual void SetXiCut(StHbtXiCut* pcut);
+   virtual void SetKinkCut(StHbtKinkCut* pcut);
+   virtual StHbtEventCut* EventCut();
+   virtual StHbtTrackCut* TrackCut();
+   virtual StHbtV0Cut* V0Cut();
+   virtual StHbtXiCut* XiCut();
+   virtual StHbtKinkCut* KinkCut();
 
-  /* control of debug informations print out, my rule is: */
-  /* 0: no output at all                                  */
-  /* 1: once (e.g. in constructor, finsh                  */
-  /* 2: once per event                                    */
-  /* 3: once per track                                    */
-  /* 4: once per pair                                     */
-  int Debug(){return mDebug;} 
-  void SetDebug(int d){mDebug=d;}
+   /* control of debug informations print out, my rule is: */
+   /* 0: no output at all                                  */
+   /* 1: once (e.g. in constructor, finsh                  */
+   /* 2: once per event                                    */
+   /* 3: once per track                                    */
+   /* 4: once per pair                                     */
+   int Debug() { return mDebug; }
+   void SetDebug(int d) { mDebug = d; }
 
 #ifdef __ROOT__
-  ClassDef(StHbtEventReader,0)
+   ClassDef(StHbtEventReader, 0)
 #endif
 };
 
-
 #endif
-

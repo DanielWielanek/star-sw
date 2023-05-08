@@ -11,14 +11,14 @@
 using std::string;
 #endif
 
-typedef string StHbtString; //!
+typedef string StHbtString;  //!
 #endif
 
 #else
 
 #ifndef StHbtString_yesCint
 #define StHbtString_yesCint
-class StHbtString; //!
+class StHbtString;  //!
 #endif
 
 #endif

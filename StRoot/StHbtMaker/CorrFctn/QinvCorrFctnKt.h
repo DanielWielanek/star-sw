@@ -6,8 +6,8 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   QinvCFs for a given number of CFs (nCFs) between ktLo and ktHi 
- *   where kt is the four-momentum of the pair 
+ *   QinvCFs for a given number of CFs (nCFs) between ktLo and ktHi
+ *   where kt is the four-momentum of the pair
  *
  ***************************************************************************
  *
@@ -26,41 +26,40 @@
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
 class QinvCorrFctnKt : public StHbtCorrFctn {
-public:
-  QinvCorrFctnKt(char* title, const int& nbins, const float& QinvLo, const float& QinvHi,
-		 const int& nCFs=20, const float& KtLo=0.0, const float& KtHi=1.0);
-  virtual ~QinvCorrFctnKt();
-  
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
-  
-  virtual void Finish();
-  
-  StHbt1DHisto* Numerator(int j);
-  StHbt1DHisto* Denominator(int j);
-  StHbt1DHisto* Ratio(int j);
-  
- private:
-  StHbt1DHisto* mNumerator;
-  StHbt1DHisto* mDenominator;
-  StHbt1DHisto* mRatio;
+  public:
+   QinvCorrFctnKt(char* title, const int& nbins, const float& QinvLo, const float& QinvHi, const int& nCFs = 20,
+                  const float& KtLo = 0.0, const float& KtHi = 1.0);
+   virtual ~QinvCorrFctnKt();
 
-  int mNumberCFs;
-  float mKtMin;
-  float mKtMax;
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  int* mIndex;
-  float mDeltaKt;
-  
+   virtual void Finish();
+
+   StHbt1DHisto* Numerator(int j);
+   StHbt1DHisto* Denominator(int j);
+   StHbt1DHisto* Ratio(int j);
+
+  private:
+   StHbt1DHisto* mNumerator;
+   StHbt1DHisto* mDenominator;
+   StHbt1DHisto* mRatio;
+
+   int mNumberCFs;
+   float mKtMin;
+   float mKtMax;
+
+   int* mIndex;
+   float mDeltaKt;
+
 #ifdef __ROOT__
-  ClassDef(QinvCorrFctnKt, 1)
+   ClassDef(QinvCorrFctnKt, 1)
 #endif
-    };
-    
-inline  StHbt1DHisto* QinvCorrFctnKt::Numerator(int j){return &mNumerator[j];}
-inline  StHbt1DHisto* QinvCorrFctnKt::Denominator(int j){return &mDenominator[j];}
-inline  StHbt1DHisto* QinvCorrFctnKt::Ratio(int j){return &mRatio[j];}
+};
+
+inline StHbt1DHisto* QinvCorrFctnKt::Numerator(int j) { return &mNumerator[j]; }
+inline StHbt1DHisto* QinvCorrFctnKt::Denominator(int j) { return &mDenominator[j]; }
+inline StHbt1DHisto* QinvCorrFctnKt::Ratio(int j) { return &mRatio[j]; }
 
 #endif
-

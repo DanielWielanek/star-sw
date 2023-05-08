@@ -38,7 +38,8 @@
  * b) some destructors have been declared as virtual
  *
  * Revision 1.7  1999/10/04 15:38:58  lisa
- * include Franks new accessor methods StHbtAnalysis::CorrFctn and StHbtManager::Analysis as well as McEvent example macro
+ * include Franks new accessor methods StHbtAnalysis::CorrFctn and StHbtManager::Analysis as well as McEvent example
+ *macro
  *
  * Revision 1.6  1999/09/24 01:23:12  fisyak
  * Reduced Include Path
@@ -63,60 +64,55 @@
 #ifndef StHbtManager_hh
 #define StHbtManager_hh
 
-
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
-#include "StHbtMaker/Infrastructure/StHbtAnalysisCollection.hh"
-#include "StHbtMaker/Infrastructure/StHbtEventWriterCollection.hh"
-#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
 #include "StHbtMaker/Base/StHbtBaseAnalysis.h"
 #include "StHbtMaker/Base/StHbtEventReader.hh"
 #include "StHbtMaker/Base/StHbtEventWriter.hh"
+#include "StHbtMaker/Infrastructure/StHbtAnalysisCollection.hh"
+#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtEventWriterCollection.hh"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
-class StHbtManager{
+class StHbtManager {
+  private:
+   StHbtAnalysisCollection* mAnalysisCollection;
+   StHbtEventReader* mEventReader;
+   StHbtEventWriterCollection* mEventWriterCollection;
 
-private:
-  StHbtAnalysisCollection* mAnalysisCollection;
-  StHbtEventReader*        mEventReader;
-  StHbtEventWriterCollection* mEventWriterCollection;
+  public:
+   StHbtManager();
+   virtual ~StHbtManager();
 
-public:
-  StHbtManager();
-  virtual ~StHbtManager();
+   // Gets and Sets...
+   StHbtAnalysisCollection* AnalysisCollection();
+   StHbtBaseAnalysis* Analysis(int n);  // Access to Analysis within Collection
+   void AddAnalysis(StHbtBaseAnalysis*);
 
-  // Gets and Sets...
-  StHbtAnalysisCollection* AnalysisCollection();
-  StHbtBaseAnalysis* Analysis(int n);  // Access to Analysis within Collection
-  void AddAnalysis(StHbtBaseAnalysis*);
+   StHbtEventWriterCollection* EventWriterCollection();
+   StHbtEventWriter* EventWriter(int n);    // Access to EventWriter within Collection
+   void SetEventWriter(StHbtEventWriter*);  // just for historic reasons
+   void AddEventWriter(StHbtEventWriter*);
 
-  StHbtEventWriterCollection* EventWriterCollection();
-  StHbtEventWriter* EventWriter(int n);// Access to EventWriter within Collection
-  void SetEventWriter(StHbtEventWriter*);  // just for historic reasons
-  void AddEventWriter(StHbtEventWriter*);
+   StHbtEventReader* EventReader();
+   void SetEventReader(StHbtEventReader*);
 
-  StHbtEventReader* EventReader();
-  void SetEventReader(StHbtEventReader*);
+   int Init();
+   int ProcessEvent();  // a "0" return value means success - otherwise quit
+   void Finish();
 
-
-  int Init();
-  int ProcessEvent();   // a "0" return value means success - otherwise quit
-  void Finish();
-
-  StHbtString Report(); //!
+   StHbtString Report();  //!
 #ifdef __ROOT__
-  ClassDef(StHbtManager, 0)
+   ClassDef(StHbtManager, 0)
 #endif
 };
 
-inline StHbtAnalysisCollection* StHbtManager::AnalysisCollection(){return mAnalysisCollection;}
-inline void StHbtManager::AddAnalysis(StHbtBaseAnalysis* anal){mAnalysisCollection->push_back(anal);}
+inline StHbtAnalysisCollection* StHbtManager::AnalysisCollection() { return mAnalysisCollection; }
+inline void StHbtManager::AddAnalysis(StHbtBaseAnalysis* anal) { mAnalysisCollection->push_back(anal); }
 
-inline StHbtEventWriterCollection* StHbtManager::EventWriterCollection(){return mEventWriterCollection;}
-inline void StHbtManager::AddEventWriter(StHbtEventWriter* writer){mEventWriterCollection->push_back(writer);}
-inline void StHbtManager::SetEventWriter(StHbtEventWriter* writer){mEventWriterCollection->push_back(writer);}
+inline StHbtEventWriterCollection* StHbtManager::EventWriterCollection() { return mEventWriterCollection; }
+inline void StHbtManager::AddEventWriter(StHbtEventWriter* writer) { mEventWriterCollection->push_back(writer); }
+inline void StHbtManager::SetEventWriter(StHbtEventWriter* writer) { mEventWriterCollection->push_back(writer); }
 
-inline StHbtEventReader* StHbtManager::EventReader(){return mEventReader;}
-inline void StHbtManager::SetEventReader(StHbtEventReader* reader){mEventReader = reader;}
-
+inline StHbtEventReader* StHbtManager::EventReader() { return mEventReader; }
+inline void StHbtManager::SetEventReader(StHbtEventReader* reader) { mEventReader = reader; }
 
 #endif
-

@@ -28,41 +28,39 @@
 #ifndef StHbtReactionPlaneAnalysis_hh
 #define StHbtReactionPlaneAnalysis_hh
 
-#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"        // base analysis class
+#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"  // base analysis class
 class StHbtPicoEventCollectionVectorHideAway;
 
 class StHbtReactionPlaneAnalysis : public StHbtAnalysis {
+  public:
+   StHbtReactionPlaneAnalysis(int pTSwitch = 1, unsigned int nBinPhi = 1, double phiLo = -100., double phiHi = +100.,
+                              unsigned int nBinsMult = 1, double multLo = 0, double multHi = 999999,
+                              unsigned int nBinsVert = 1, double vertLo = -1000, double vertHi = 1000);
+   StHbtReactionPlaneAnalysis(const StHbtReactionPlaneAnalysis&);  // copy constructor
+   virtual void ProcessEvent(const StHbtEvent*);
+   virtual ~StHbtReactionPlaneAnalysis();
+   virtual StHbtString Report();  //! returns reports of all cuts applied and correlation functions being done
+   virtual unsigned int Overflow() { return mOverFlow; }
+   virtual unsigned int Underflow() { return mUnderFlow; }
+   double ReactionPlane();
+   double VertexZ();
+   int PtWeighting();
 
-public:
+  protected:
+   int mPtWgt;
+   double mVertexZ;
+   double mReactionPlaneAngle;
+   double mReactionPlane[2];
+   unsigned int mReactionPlaneBins;
+   unsigned int mOverFlow;
+   unsigned int mUnderFlow;
 
-  StHbtReactionPlaneAnalysis(int pTSwitch=1, unsigned int nBinPhi=1, double phiLo=-100., double phiHi=+100.,
-			     unsigned int nBinsMult=1, double multLo=0, double multHi=999999,
-           unsigned int nBinsVert=1, double vertLo=-1000, double vertHi=1000);
-  StHbtReactionPlaneAnalysis(const StHbtReactionPlaneAnalysis&);  // copy constructor
-  virtual void ProcessEvent(const StHbtEvent*);
-  virtual ~StHbtReactionPlaneAnalysis();
-  virtual StHbtString Report();       //! returns reports of all cuts applied and correlation functions being done
-  virtual unsigned int Overflow() { return mOverFlow;}
-  virtual unsigned int Underflow() { return mUnderFlow;}
-  double ReactionPlane();
-  double VertexZ();
-  int PtWeighting();
-protected:
-  int mPtWgt;
-  double mVertexZ;
-  double mReactionPlaneAngle;
-  double mReactionPlane[2];
-  unsigned int mReactionPlaneBins;
-  unsigned int mOverFlow;
-  unsigned int mUnderFlow;
-  
 #ifdef __ROOT__
-  ClassDef(StHbtReactionPlaneAnalysis, 0)
+   ClassDef(StHbtReactionPlaneAnalysis, 0)
 #endif
-    
 };
 
-inline double StHbtReactionPlaneAnalysis::ReactionPlane(){return mReactionPlaneAngle;}
-inline double StHbtReactionPlaneAnalysis::VertexZ(){return mVertexZ;}
+inline double StHbtReactionPlaneAnalysis::ReactionPlane() { return mReactionPlaneAngle; }
+inline double StHbtReactionPlaneAnalysis::VertexZ() { return mVertexZ; }
 
 #endif

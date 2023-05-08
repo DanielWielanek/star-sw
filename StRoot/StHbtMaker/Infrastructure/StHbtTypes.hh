@@ -25,15 +25,13 @@
  *
  ***************************************************************************/
 
-// 
-// I split this up into different files, so that I do not have to 
+//
+// I split this up into different files, so that I do not have to
 // load/recompile everything all over again.
 //
 
+#include "StHbtMaker/Infrastructure/StHbtEnumeration.hh"
+#include "StHbtMaker/Infrastructure/StHbtHelix.hh"
 #include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 #include "StHbtMaker/Infrastructure/StHbtString.hh"
 #include "StHbtMaker/Infrastructure/StHbtVector.hh"
-#include "StHbtMaker/Infrastructure/StHbtHelix.hh"
-#include "StHbtMaker/Infrastructure/StHbtEnumeration.hh"
-
-

@@ -7,7 +7,7 @@
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *   A simple event-wise cut that selects on multiplicity and z-position
- *   of primary vertex           
+ *   of primary vertex
  *
  ***************************************************************************
  *
@@ -58,8 +58,9 @@
 #ifndef helensEventCut_hh
 #define helensEventCut_hh
 
-#include "StHbtMaker/Base/StHbtEventCut.h"
 #include <list>
+
+#include "StHbtMaker/Base/StHbtEventCut.h"
 
 class StHbtTrkV0Match;
 
@@ -67,95 +68,97 @@ class StHbtTrkV0Match;
 using std::list;
 #endif
 
-
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtTrkV0Match*, allocator<StHbtTrkV0Match*> >            StHbtTrkV0MatchCollection;
-typedef list<StHbtTrkV0Match*, allocator<StHbTrkV0Match*> >::iterator  StHbtTrkV0Iterator;
+typedef list<StHbtTrkV0Match*, allocator<StHbtTrkV0Match*> > StHbtTrkV0MatchCollection;
+typedef list<StHbtTrkV0Match*, allocator<StHbTrkV0Match*> >::iterator StHbtTrkV0Iterator;
 #else
-typedef list<StHbtTrkV0Match*>            StHbtTrkV0MatchCollection;
-typedef list<StHbtTrkV0Match*>::iterator  StHbtTrkV0Iterator;
+typedef list<StHbtTrkV0Match*> StHbtTrkV0MatchCollection;
+typedef list<StHbtTrkV0Match*>::iterator StHbtTrkV0Iterator;
 #endif
 
+class StHbtTrkV0Match {
+  public:
+   StHbtTrkV0Match(){/* no-op*/};
+   StHbtTrkV0Match(const StHbtTrkV0Match&);  // Copy Constructor
+   ~StHbtTrkV0Match(){/* no-op */};
 
-class StHbtTrkV0Match{
+   int TrkId() { return mTrkId; };
+   int V0Id() { return mV0Id; }
+   float dEdx() { return mdEdx; };
+   int Used() { return mUsed; };
 
- public:
-  StHbtTrkV0Match(){ /* no-op*/};
-  StHbtTrkV0Match( const StHbtTrkV0Match&); //Copy Constructor		
-  ~StHbtTrkV0Match(){/* no-op */};
-  
-  int TrkId() {return mTrkId;};
-  int V0Id()  {return mV0Id;}
-  float dEdx(){return mdEdx;} ;
-  int Used()  {return mUsed;};
+   void SetTrkId(int i) { mTrkId = i; };
+   void SetV0Id(int i) { mV0Id = i; };
+   void SetdEdx(float x) { mdEdx = x; };
+   void SetUsed(int i) { mUsed = i; };
 
-  void SetTrkId( int i) {mTrkId=i;};
-  void SetV0Id( int i)  {mV0Id=i;};
-  void SetdEdx( float x) {mdEdx=x;};
-  void SetUsed( int i) {mUsed=i;};
-
- protected:
-
-  int mTrkId;
-  int mV0Id;
-  float mdEdx;
-  int mUsed;
+  protected:
+   int mTrkId;
+   int mV0Id;
+   float mdEdx;
+   int mUsed;
 };
-
 
 class helensEventCut : public StHbtEventCut {
+  public:
+   helensEventCut();
+   helensEventCut(helensEventCut&);
 
-public:
+   void SetEventMult(const int& lo, const int& hi);
+   void SetVertZPos(const float& lo, const float& hi);
+   void SetV0Mult(const int& lo, const int& hi);
+   int NEventsPassed();
+   int NEventsFailed();
+   StHbtTrkV0MatchCollection* TrkV0MatchCollection();
 
-  helensEventCut();
-  helensEventCut(helensEventCut&);
+   virtual StHbtString Report();
+   virtual bool Pass(const StHbtEvent*);
 
-  void SetEventMult(const int& lo,const int& hi);
-  void SetVertZPos(const float& lo, const float& hi);
-  void SetV0Mult(const int& lo,const int& hi);
-  int NEventsPassed();
-  int NEventsFailed();
-  StHbtTrkV0MatchCollection* TrkV0MatchCollection();
+   helensEventCut* Clone();
 
-  virtual StHbtString Report();
-  virtual bool Pass(const StHbtEvent*);
+  private:              // here are the quantities I want to cut on...
+   int mEventMult[2];   // range of multiplicity
+   float mVertZPos[2];  // range of z-position of vertex
+   int mV0Mult[2];      // range of v0 multiplicity
 
-  helensEventCut* Clone();
+   long mNEventsPassed;
+   long mNEventsFailed;
 
-private:   // here are the quantities I want to cut on...
-
-  int mEventMult[2];      // range of multiplicity
-  float mVertZPos[2];     // range of z-position of vertex
-  int mV0Mult[2];         // range of v0 multiplicity
-
-  long mNEventsPassed;
-  long mNEventsFailed;
-
-  StHbtTrkV0MatchCollection* mTrkV0MatchCollection; //!
+   StHbtTrkV0MatchCollection* mTrkV0MatchCollection;  //!
 
 #ifdef __ROOT__
-  ClassDef(helensEventCut, 1)
+   ClassDef(helensEventCut, 1)
 #endif
-
 };
 
-inline void helensEventCut::SetEventMult(const int& lo, const int& hi){mEventMult[0]=lo; mEventMult[1]=hi;}
-inline void helensEventCut::SetV0Mult(const int& lo, const int& hi){mV0Mult[0]=lo; mV0Mult[1]=hi;}
-inline void helensEventCut::SetVertZPos(const float& lo, const float& hi){mVertZPos[0]=lo; mVertZPos[1]=hi;}
-inline int  helensEventCut::NEventsPassed() {return mNEventsPassed;}
-inline int  helensEventCut::NEventsFailed() {return mNEventsFailed;}
-inline helensEventCut* helensEventCut::Clone() { helensEventCut* c = new helensEventCut(*this); return c;}
-inline StHbtTrkV0MatchCollection* helensEventCut::TrkV0MatchCollection(){return mTrkV0MatchCollection;}
-inline helensEventCut::helensEventCut(helensEventCut& c) : StHbtEventCut(c) {
-  mEventMult[0] = c.mEventMult[0];
-  mEventMult[1] = c.mEventMult[1];
-  mVertZPos[0] = c.mVertZPos[0];
-  mVertZPos[1] = c.mVertZPos[1];
-  mV0Mult[0] = c.mV0Mult[0];
-  mV0Mult[1] = c.mV0Mult[1];
-  mNEventsPassed = 0;
-  mNEventsFailed = 0;
+inline void helensEventCut::SetEventMult(const int& lo, const int& hi) {
+   mEventMult[0] = lo;
+   mEventMult[1] = hi;
 }
-
+inline void helensEventCut::SetV0Mult(const int& lo, const int& hi) {
+   mV0Mult[0] = lo;
+   mV0Mult[1] = hi;
+}
+inline void helensEventCut::SetVertZPos(const float& lo, const float& hi) {
+   mVertZPos[0] = lo;
+   mVertZPos[1] = hi;
+}
+inline int helensEventCut::NEventsPassed() { return mNEventsPassed; }
+inline int helensEventCut::NEventsFailed() { return mNEventsFailed; }
+inline helensEventCut* helensEventCut::Clone() {
+   helensEventCut* c = new helensEventCut(*this);
+   return c;
+}
+inline StHbtTrkV0MatchCollection* helensEventCut::TrkV0MatchCollection() { return mTrkV0MatchCollection; }
+inline helensEventCut::helensEventCut(helensEventCut& c) : StHbtEventCut(c) {
+   mEventMult[0] = c.mEventMult[0];
+   mEventMult[1] = c.mEventMult[1];
+   mVertZPos[0] = c.mVertZPos[0];
+   mVertZPos[1] = c.mVertZPos[1];
+   mV0Mult[0] = c.mV0Mult[0];
+   mV0Mult[1] = c.mV0Mult[1];
+   mNEventsPassed = 0;
+   mNEventsFailed = 0;
+}
 
 #endif

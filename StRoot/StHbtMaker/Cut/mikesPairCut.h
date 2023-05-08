@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a do-nothing pair cut that simply says "true" to every pair           
+ *   a do-nothing pair cut that simply says "true" to every pair
  *
  ***************************************************************************
  *
@@ -51,7 +51,6 @@
  *
  **************************************************************************/
 
-
 #ifndef mikesPairCut_hh
 #define mikesPairCut_hh
 
@@ -62,31 +61,32 @@
 
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
-class mikesPairCut : public StHbtPairCut{
-public:
-  mikesPairCut();
-  mikesPairCut(const mikesPairCut&);
-  //~mikesPairCut();
+class mikesPairCut : public StHbtPairCut {
+  public:
+   mikesPairCut();
+   mikesPairCut(const mikesPairCut&);
+   //~mikesPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  mikesPairCut* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   mikesPairCut* Clone();
 
-
-private:
-  long mNPairsPassed;
-  long mNPairsFailed;
+  private:
+   long mNPairsPassed;
+   long mNPairsFailed;
 
 #ifdef __ROOT__
-  ClassDef(mikesPairCut, 1)
+   ClassDef(mikesPairCut, 1)
 #endif
 };
 
 inline mikesPairCut::mikesPairCut(const mikesPairCut& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
 }
-inline mikesPairCut* mikesPairCut::Clone() { mikesPairCut* c = new mikesPairCut(*this); return c;}
+inline mikesPairCut* mikesPairCut::Clone() {
+   mikesPairCut* c = new mikesPairCut(*this);
+   return c;
+}
 
 #endif

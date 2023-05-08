@@ -18,44 +18,43 @@
  *
  **************************************************************************/
 
-
 #ifndef ManyPairCuts_hh
 #define ManyPairCuts_hh
 
-#include "StHbtMaker/Infrastructure/StHbtPairCutCollection.hh"
 #include "StHbtMaker/Base/StHbtPairCut.h"
+#include "StHbtMaker/Infrastructure/StHbtPairCutCollection.hh"
 
-class ManyPairCuts : public StHbtPairCut{
-public:
-  ManyPairCuts();
-  ManyPairCuts(const ManyPairCuts&);
-  //~ManyPairCuts();
+class ManyPairCuts : public StHbtPairCut {
+  public:
+   ManyPairCuts();
+   ManyPairCuts(const ManyPairCuts&);
+   //~ManyPairCuts();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  ManyPairCuts* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   ManyPairCuts* Clone();
 
-  void AddPairCut(StHbtPairCut*);
+   void AddPairCut(StHbtPairCut*);
 
-
-private:
-  long mNPairsPassed;
-  long mNPairsFailed;
-  StHbtPairCutCollection mPairCutCollection;
-
+  private:
+   long mNPairsPassed;
+   long mNPairsFailed;
+   StHbtPairCutCollection mPairCutCollection;
 
 #ifdef __ROOT__
-  ClassDef(ManyPairCuts, 0)
+   ClassDef(ManyPairCuts, 0)
 #endif
 };
 
 inline ManyPairCuts::ManyPairCuts(const ManyPairCuts& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
 }
-inline ManyPairCuts* ManyPairCuts::Clone() { ManyPairCuts* c = new ManyPairCuts(*this); return c;}
+inline ManyPairCuts* ManyPairCuts::Clone() {
+   ManyPairCuts* c = new ManyPairCuts(*this);
+   return c;
+}
 
-inline void ManyPairCuts::AddPairCut(StHbtPairCut* pc){mPairCutCollection.push_back(pc);}
+inline void ManyPairCuts::AddPairCut(StHbtPairCut* pc) { mPairCutCollection.push_back(pc); }
 
 #endif

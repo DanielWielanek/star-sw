@@ -27,36 +27,36 @@
 #ifndef StHbtVertexMultAnalysis_hh
 #define StHbtVertexMultAnalysis_hh
 
-#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"        // base analysis class
 #include <limits.h>
 
+#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"  // base analysis class
+
 class StHbtVertexMultAnalysis : public StHbtAnalysis {
+  public:
+   StHbtVertexMultAnalysis(unsigned int = 10, double = -100., double = +100., unsigned int b = 10, double = -1.e9,
+                           double = +1.e9);
+   StHbtVertexMultAnalysis(const StHbtVertexMultAnalysis&);  // copy constructor
+   virtual void ProcessEvent(const StHbtEvent*);
+   virtual ~StHbtVertexMultAnalysis();
+   virtual StHbtString Report();  //! returns reports of all cuts applied and correlation functions being done
+   virtual unsigned int OverflowVertexZ() { return mOverFlowVertexZ; }
+   virtual unsigned int UnderflowVertexZ() { return mUnderFlowVertexZ; }
+   virtual unsigned int OverflowMult() { return mOverFlowMult; }
+   virtual unsigned int UnderflowMult() { return mUnderFlowMult; }
 
-public:
+  protected:
+   double mVertexZ[2];
+   unsigned int mVertexZBins;
+   unsigned int mOverFlowVertexZ;
+   unsigned int mUnderFlowVertexZ;
+   double mMult[2];
+   unsigned int mMultBins;
+   unsigned int mOverFlowMult;
+   unsigned int mUnderFlowMult;
 
-  StHbtVertexMultAnalysis(unsigned int=10, double=-100., double=+100., unsigned int b=10, double=-1.e9, double=+1.e9);
-  StHbtVertexMultAnalysis(const StHbtVertexMultAnalysis&);  // copy constructor
-  virtual void ProcessEvent(const StHbtEvent*);
-  virtual ~StHbtVertexMultAnalysis();
-  virtual StHbtString Report();       //! returns reports of all cuts applied and correlation functions being done
-  virtual unsigned int OverflowVertexZ() { return mOverFlowVertexZ;}
-  virtual unsigned int UnderflowVertexZ() { return mUnderFlowVertexZ;}
-  virtual unsigned int OverflowMult() { return mOverFlowMult;}
-  virtual unsigned int UnderflowMult() { return mUnderFlowMult;}
-protected:
-  double mVertexZ[2];
-  unsigned int mVertexZBins;
-  unsigned int mOverFlowVertexZ;
-  unsigned int mUnderFlowVertexZ;
-  double mMult[2];
-  unsigned int mMultBins;
-  unsigned int mOverFlowMult;
-  unsigned int mUnderFlowMult;
-  
 #ifdef __ROOT__
-  ClassDef(StHbtVertexMultAnalysis, 0)
+   ClassDef(StHbtVertexMultAnalysis, 0)
 #endif
-    
 };
 
 #endif

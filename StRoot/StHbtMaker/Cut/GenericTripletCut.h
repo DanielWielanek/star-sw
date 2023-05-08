@@ -28,25 +28,23 @@
 
 #include "StHbtMaker/Base/StHbtTripletCut.h"
 
-class GenericTripletCut : public StHbtTripletCut{
-public:
-  GenericTripletCut(float EntSepCut = 0.0);
-  //~GenericTripletCut();
+class GenericTripletCut : public StHbtTripletCut {
+  public:
+   GenericTripletCut(float EntSepCut = 0.0);
+   //~GenericTripletCut();
 
-  virtual bool Pass(const StHbtTriplet*);
+   virtual bool Pass(const StHbtTriplet*);
 
-  virtual StHbtString Report();
+   virtual StHbtString Report();
 
-
-private:
-  long mNTripletsPassed;
-  long mNTripletsFailed;
-  float mEntSepCut;
+  private:
+   long mNTripletsPassed;
+   long mNTripletsFailed;
+   float mEntSepCut;
 
 #ifdef __ROOT__
-  ClassDef(GenericTripletCut, 1)
+   ClassDef(GenericTripletCut, 1)
 #endif
-
 };
 
 #endif

@@ -25,51 +25,52 @@
  **************************************************************************/
 
 #include "StHbtMaker/Infrastructure/StHbtHistoCollector.h"
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
 #ifdef __ROOT__
 ClassImp(StHbtHistoCollector)
 #endif
 
-StHbtHistoCollector* StHbtHistoCollector::_instance=0;
+    StHbtHistoCollector* StHbtHistoCollector::_instance = 0;
 
 StHbtHistoCollector* StHbtHistoCollector::Instance() {
-    if (_instance == 0 ) _instance = new StHbtHistoCollector();
-    return _instance;
+   if (_instance == 0) _instance = new StHbtHistoCollector();
+   return _instance;
 }
 
-StHbtHistoCollector::StHbtHistoCollector() { 
-  cout << " StHbtHistoCollector::StHbtHistoCollector() " << endl; 
-}
-
+StHbtHistoCollector::StHbtHistoCollector() { cout << " StHbtHistoCollector::StHbtHistoCollector() " << endl; }
 
 void StHbtHistoCollector::Add(CTH1D* h) { m1DList.push_back(h); }
 void StHbtHistoCollector::Add(CTH2D* h) { m2DList.push_back(h); }
 void StHbtHistoCollector::Add(CTH3D* h) { m3DList.push_back(h); }
 
-
-void StHbtHistoCollector::Clear() { 
-  m1DList.clear();
-  m2DList.clear();
-  m3DList.clear();
+void StHbtHistoCollector::Clear() {
+   m1DList.clear();
+   m2DList.clear();
+   m3DList.clear();
 }
 
-void StHbtHistoCollector::Write() { 
-  {for (CTH1DIterator iter=m1DList.begin(); iter!=m1DList.end(); iter++) {
-    TH1D temp( (TH1D&)(**iter) );
-      temp.SetDirectory(0);
-      temp.Write();
-  }}
-  {for (CTH2DIterator iter=m2DList.begin(); iter!=m2DList.end(); iter++) {
-    TH2D temp( (TH2D&)(**iter) );
-      temp.SetDirectory(0);
-      temp.Write();
-  }}
-  {for (CTH3DIterator iter=m3DList.begin(); iter!=m3DList.end(); iter++) {
-    TH3D temp( (TH3D&)(**iter) );
-      temp.SetDirectory(0);
-      temp.Write();
-  }}
+void StHbtHistoCollector::Write() {
+   {
+      for (CTH1DIterator iter = m1DList.begin(); iter != m1DList.end(); iter++) {
+         TH1D temp((TH1D&)(**iter));
+         temp.SetDirectory(0);
+         temp.Write();
+      }
+   }
+   {
+      for (CTH2DIterator iter = m2DList.begin(); iter != m2DList.end(); iter++) {
+         TH2D temp((TH2D&)(**iter));
+         temp.SetDirectory(0);
+         temp.Write();
+      }
+   }
+   {
+      for (CTH3DIterator iter = m3DList.begin(); iter != m3DList.end(); iter++) {
+         TH3D temp((TH3D&)(**iter));
+         temp.SetDirectory(0);
+         temp.Write();
+      }
+   }
 }
-

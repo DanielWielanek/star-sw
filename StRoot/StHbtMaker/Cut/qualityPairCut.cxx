@@ -38,44 +38,44 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/qualityPairCut.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(qualityPairCut)
 #endif
 
-//__________________
-qualityPairCut::qualityPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    qualityPairCut::qualityPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//qualityPairCut::~qualityPairCut(){
+// qualityPairCut::~qualityPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool qualityPairCut::Pass(const StHbtPair* pair){
-  double qual = pair->quality();
-  bool temp = ( (qual>mQualCutLo) &&
-		(qual<mQualCutHi) );
+bool qualityPairCut::Pass(const StHbtPair* pair) {
+   double qual = pair->quality();
+   bool temp = ((qual > mQualCutLo) && (qual < mQualCutHi));
 
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return temp;
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return temp;
 }
 //__________________
-StHbtString qualityPairCut::Report(){
-  string Stemp = "Quality Pair Cut\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Range of cut:\t%E ... \t%E\n",mQualCutLo,mQualCutHi);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString qualityPairCut::Report() {
+   string Stemp = "Quality Pair Cut\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Range of cut:\t%E ... \t%E\n", mQualCutLo, mQualCutHi);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________
 void qualityPairCut::SetQualityCut(const double& QualCutLo, const double& QualCutHi) {
-  mQualCutLo = QualCutLo;
-  mQualCutHi = QualCutHi;
+   mQualCutLo = QualCutLo;
+   mQualCutHi = QualCutHi;
 }
 //__________________

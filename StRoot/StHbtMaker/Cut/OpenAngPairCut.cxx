@@ -18,44 +18,44 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/OpenAngPairCut.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(OpenAngPairCut)
 #endif
 
-//__________________
-OpenAngPairCut::OpenAngPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    OpenAngPairCut::OpenAngPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//OpenAngPairCut::~OpenAngPairCut(){
+// OpenAngPairCut::~OpenAngPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool OpenAngPairCut::Pass(const StHbtPair* pair){
-  double openAng = pair->OpeningAngle();
-  bool temp = ( (openAng>mLo) &&
-		(openAng<mHi) );
+bool OpenAngPairCut::Pass(const StHbtPair* pair) {
+   double openAng = pair->OpeningAngle();
+   bool temp = ((openAng > mLo) && (openAng < mHi));
 
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return temp;
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return temp;
 }
 //__________________
-StHbtString OpenAngPairCut::Report(){
-  string Stemp = "Opening Angle Pair Cut\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Range of cut:\t%E ... \t%E\n",mLo,mHi);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString OpenAngPairCut::Report() {
+   string Stemp = "Opening Angle Pair Cut\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Range of cut:\t%E ... \t%E\n", mLo, mHi);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________
 void OpenAngPairCut::SetOpenAngRange(const double& Lo, const double& Hi) {
-  mLo = Lo;
-  mHi = Hi;
+   mLo = Lo;
+   mHi = Hi;
 }
 //__________________

@@ -34,65 +34,63 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/mikesStarStandardEventCut.h"
+
 #include <cstdio>
-
-
 
 #ifdef __ROOT__
 ClassImp(mikesStarStandardEventCut)
 #endif
 
-mikesStarStandardEventCut::mikesStarStandardEventCut(){
-  mNEventsPassed =  mNEventsFailed = 0;
-  //  mOutFile = new ofstream("Mult_vs_mult.dat");
-} 
+    mikesStarStandardEventCut::mikesStarStandardEventCut() {
+   mNEventsPassed = mNEventsFailed = 0;
+   //  mOutFile = new ofstream("Mult_vs_mult.dat");
+}
 //------------------------------
-//mikesStarStandardEventCut::~mikesStarStandardEventCut(){
+// mikesStarStandardEventCut::~mikesStarStandardEventCut(){
 //  mOutFile->close();
 //  delete mOutFile;
 //  /* noop */
 //}
 //------------------------------
-bool mikesStarStandardEventCut::Pass(const StHbtEvent* event){
-
-
-  double VertexZPos = event->PrimVertPos().z();
-  cout << "mikesStarStandardEventCut:: VertexZPos: " << mVertZPos[0] << " < " << VertexZPos << " < " << mVertZPos[1] << endl;
-  bool goodEvent =
-    ((VertexZPos > mVertZPos[0]) &&
-     (VertexZPos < mVertZPos[1]));
-  if (goodEvent){
-    //  int mult =  event->NumberOfTracks();
-    int mult = 0;
-    StHbtTrack* track;
-    for (StHbtTrackIterator pIter=event->TrackCollection()->begin();pIter!=event->TrackCollection()->end();pIter++){
-      track = *pIter;
-      if ((track->Charge()<0)&&(track->NHits()>=10)&&(track->DCAxy()<3.0)&&(fabs(track->P().pseudoRapidity())<0.5)){
-	mult++;
+bool mikesStarStandardEventCut::Pass(const StHbtEvent* event) {
+   double VertexZPos = event->PrimVertPos().z();
+   cout << "mikesStarStandardEventCut:: VertexZPos: " << mVertZPos[0] << " < " << VertexZPos << " < " << mVertZPos[1]
+        << endl;
+   bool goodEvent = ((VertexZPos > mVertZPos[0]) && (VertexZPos < mVertZPos[1]));
+   if (goodEvent) {
+      //  int mult =  event->NumberOfTracks();
+      int mult = 0;
+      StHbtTrack* track;
+      for (StHbtTrackIterator pIter = event->TrackCollection()->begin(); pIter != event->TrackCollection()->end();
+           pIter++) {
+         track = *pIter;
+         if ((track->Charge() < 0) && (track->NHits() >= 10) && (track->DCAxy() < 3.0) &&
+             (fabs(track->P().pseudoRapidity()) < 0.5)) {
+            mult++;
+         }
       }
-    }
 
-    //    (*mOutFile) << event->NumberOfTracks() << " " << mult << " " << VertexZPos << endl;
-    cout << "mikesStarStandardEventCut:: mult:       " << mEventMult[0] << " < " << mult << " < " << mEventMult[1] << endl;
-    goodEvent = (goodEvent&& (mult > mEventMult[0]) && (mult < mEventMult[1]));
-  }
-  
-  goodEvent ? mNEventsPassed++ : mNEventsFailed++ ;
-  cout << "mikesStarStandardEventCut:: return : " << goodEvent << endl;
+      //    (*mOutFile) << event->NumberOfTracks() << " " << mult << " " << VertexZPos << endl;
+      cout << "mikesStarStandardEventCut:: mult:       " << mEventMult[0] << " < " << mult << " < " << mEventMult[1]
+           << endl;
+      goodEvent = (goodEvent && (mult > mEventMult[0]) && (mult < mEventMult[1]));
+   }
 
+   goodEvent ? mNEventsPassed++ : mNEventsFailed++;
+   cout << "mikesStarStandardEventCut:: return : " << goodEvent << endl;
 
-  return (goodEvent);
+   return (goodEvent);
 }
 //------------------------------
-StHbtString mikesStarStandardEventCut::Report(){
-  string Stemp;
-  char Ctemp[100];
-  sprintf(Ctemp,"\nMultiplicity:\t %d-%d",mEventMult[0],mEventMult[1]);
-  Stemp = Ctemp;
-  sprintf(Ctemp,"\nVertex Z-position:\t %E-%E",mVertZPos[0],mVertZPos[1]);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"\nNumber of events which passed:\t%ld  Number which failed:\t%ld",mNEventsPassed,mNEventsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString mikesStarStandardEventCut::Report() {
+   string Stemp;
+   char Ctemp[100];
+   sprintf(Ctemp, "\nMultiplicity:\t %d-%d", mEventMult[0], mEventMult[1]);
+   Stemp = Ctemp;
+   sprintf(Ctemp, "\nVertex Z-position:\t %E-%E", mVertZPos[0], mVertZPos[1]);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "\nNumber of events which passed:\t%ld  Number which failed:\t%ld", mNEventsPassed, mNEventsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }

@@ -4,18 +4,18 @@
 #ifdef __ROOT__
 
 #ifndef ROOT_TH1
-#include "TH1.h"
 #include "TF1.h"
+#include "TH1.h"
 #endif
 
 #ifndef ROOT_TH2
-#include "TH2.h"
 #include "TF2.h"
+#include "TH2.h"
 #endif
 
 //#ifndef ROOT_TH3
-#include "TH3.h"
 #include "TF3.h"
+#include "TH3.h"
 //#endif
 
 #include "StHbtMaker/Infrastructure/CTH.hh"
@@ -31,13 +31,12 @@ typedef TF1 StHbtTF1;
 typedef TF2 StHbtTF2;
 typedef TF3 StHbtTF3;
 
-#else // __ROOT__
+#else  // __ROOT__
 
 #inclue "StHbtMaker/Infrastructure/franks2HistoD.h"
 typedef franks1HistoD StHbt1DHisto;
 typedef franks2HistoD StHbt2DHisto;
 
-#endif // __ROOT__
+#endif  // __ROOT__
 
 #endif
-

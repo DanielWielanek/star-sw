@@ -9,9 +9,9 @@
 #ifndef StHbtTTreeV0_h
 #define StHbtTTreeV0_h
 
-#include "TObject.h"
 #include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StarClassLibrary/StThreeVectorF.hh"
+#include "TObject.h"
 
 class StHbtEvent;
 class StHbtV0;
@@ -19,51 +19,54 @@ class StHbtV0;
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-class StHbtTTreeV0 : public TObject  {
-public:
-  StHbtTTreeV0(){/* no-op */}
-  StHbtTTreeV0(const StHbtEvent*, const StHbtV0* ); // copy constructor
-  virtual ~StHbtTTreeV0(){/* no-op */}
+class StHbtTTreeV0 : public TObject {
+  public:
+   StHbtTTreeV0() { /* no-op */
+   }
+   StHbtTTreeV0(const StHbtEvent*, const StHbtV0*);  // copy constructor
+   virtual ~StHbtTTreeV0() {                         /* no-op */
+   }
 
-  friend class StHbtTTreeReader;
-  friend class StHbtV0;
-protected:
-  float mDecayLengthV0;
-  float mDecayVertexV0X;
-  float mDecayVertexV0Y;
-  float mDecayVertexV0Z;
-  float mDcaV0Daughters;
-  float mDcaV0ToPrimVertex;
-  float mDcaPosToPrimVertex;
-  float mDcaNegToPrimVertex;
-  float mMomPosX;
-  float mMomPosY;
-  float mMomPosZ;
-  float mMomNegX;
-  float mMomNegY;
-  float mMomNegZ;
-  unsigned short  mKeyPos;
-  unsigned short  mKeyNeg;
-  unsigned int mTrackTopologyMapPos[2];
-  unsigned int mTrackTopologyMapNeg[2];
-  float mChi2V0;
-  float mClV0;
-  float mChi2Pos;
-  float mClPos;
-  float mChi2Neg;
-  float mClNeg;
-  float mDedxPos;
-  float mErrDedxPos;//Gael 04Fev2002
-  float mLenDedxPos;//Gael 04Fev2002
-  float mDedxNeg;
-  float mErrDedxNeg;//Gael 04Fev2002
-  float mLenDedxNeg;//Gael 04Fev2002
+   friend class StHbtTTreeReader;
+   friend class StHbtV0;
 
-  unsigned short mNumDedxPos;
-  unsigned short mNumDedxNeg;
-  unsigned short mTpcHitsPos;
-  unsigned short mTpcHitsNeg;
-  ClassDef(StHbtTTreeV0,3)
+  protected:
+   float mDecayLengthV0;
+   float mDecayVertexV0X;
+   float mDecayVertexV0Y;
+   float mDecayVertexV0Z;
+   float mDcaV0Daughters;
+   float mDcaV0ToPrimVertex;
+   float mDcaPosToPrimVertex;
+   float mDcaNegToPrimVertex;
+   float mMomPosX;
+   float mMomPosY;
+   float mMomPosZ;
+   float mMomNegX;
+   float mMomNegY;
+   float mMomNegZ;
+   unsigned short mKeyPos;
+   unsigned short mKeyNeg;
+   unsigned int mTrackTopologyMapPos[2];
+   unsigned int mTrackTopologyMapNeg[2];
+   float mChi2V0;
+   float mClV0;
+   float mChi2Pos;
+   float mClPos;
+   float mChi2Neg;
+   float mClNeg;
+   float mDedxPos;
+   float mErrDedxPos;  // Gael 04Fev2002
+   float mLenDedxPos;  // Gael 04Fev2002
+   float mDedxNeg;
+   float mErrDedxNeg;  // Gael 04Fev2002
+   float mLenDedxNeg;  // Gael 04Fev2002
+
+   unsigned short mNumDedxPos;
+   unsigned short mNumDedxNeg;
+   unsigned short mTpcHitsPos;
+   unsigned short mTpcHitsNeg;
+   ClassDef(StHbtTTreeV0, 3)
 };
 
 #endif

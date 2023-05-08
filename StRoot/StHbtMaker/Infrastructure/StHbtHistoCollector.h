@@ -24,40 +24,39 @@
 #ifndef StHbtHistoCollector_h
 #define StHbtHistoCollector_h
 
-#include "StHbtMaker/Infrastructure/CTHCollection.hh"
 #include "StChain.h"
+#include "StHbtMaker/Infrastructure/CTHCollection.hh"
 
 class CTH1D;
 class CTH2D;
 class CTH3D;
 
-
 class StHbtHistoCollector {
-public:
-    static StHbtHistoCollector* Instance();
-    void Clear();
-    void Add(CTH1D*);  
-    void Add(CTH2D*);  
-    void Add(CTH3D*);  
-    void Write();  
+  public:
+   static StHbtHistoCollector* Instance();
+   void Clear();
+   void Add(CTH1D*);
+   void Add(CTH2D*);
+   void Add(CTH3D*);
+   void Write();
 
-    friend class nobody;
-protected: 
-  StHbtHistoCollector();
-  virtual ~StHbtHistoCollector() { /* no-op */ };
-private:
-  static StHbtHistoCollector* _instance;
-  
-  CTH1DCollection m1DList;
-  CTH2DCollection m2DList;
-  CTH3DCollection m3DList;
+   friend class nobody;
 
- public:  
+  protected:
+   StHbtHistoCollector();
+   virtual ~StHbtHistoCollector(){/* no-op */};
+
+  private:
+   static StHbtHistoCollector* _instance;
+
+   CTH1DCollection m1DList;
+   CTH2DCollection m2DList;
+   CTH3DCollection m3DList;
+
+  public:
 #ifdef __ROOT__
-  ClassDef(StHbtHistoCollector,0)
+   ClassDef(StHbtHistoCollector, 0)
 #endif
-
 };
 
 #endif
- 

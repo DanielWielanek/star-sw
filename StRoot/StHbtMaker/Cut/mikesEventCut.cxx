@@ -7,7 +7,7 @@
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *   A simple event-wise cut that selects on multiplicity and z-position
- *   of primary vertex           
+ *   of primary vertex
  *
  ***************************************************************************
  *
@@ -60,44 +60,42 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/mikesEventCut.h"
+
 #include <cstdio>
 
 #ifdef __ROOT__
 ClassImp(mikesEventCut)
 #endif
 
-mikesEventCut::mikesEventCut(){
-  mNEventsPassed =  mNEventsFailed = 0;
-} 
+    mikesEventCut::mikesEventCut() {
+   mNEventsPassed = mNEventsFailed = 0;
+}
 //------------------------------
-//mikesEventCut::~mikesEventCut(){
+// mikesEventCut::~mikesEventCut(){
 //  /* noop */
 //}
 //------------------------------
-bool mikesEventCut::Pass(const StHbtEvent* event){
-  int mult =  event->NumberOfTracks();
-  double VertexZPos = event->PrimVertPos().z();
-  cout << "mikesEventCut:: mult:       " << mEventMult[0] << " < " << mult << " < " << mEventMult[1] << endl;
-  cout << "mikesEventCut:: VertexZPos: " << mVertZPos[0] << " < " << VertexZPos << " < " << mVertZPos[1] << endl;
-  bool goodEvent =
-    ((mult > mEventMult[0]) && 
-     (mult < mEventMult[1]) && 
-     (VertexZPos > mVertZPos[0]) &&
-     (VertexZPos < mVertZPos[1]));
-  goodEvent ? mNEventsPassed++ : mNEventsFailed++ ;
-  cout << "mikesEventCut:: return : " << goodEvent << endl;
-  return (goodEvent);
+bool mikesEventCut::Pass(const StHbtEvent* event) {
+   int mult = event->NumberOfTracks();
+   double VertexZPos = event->PrimVertPos().z();
+   cout << "mikesEventCut:: mult:       " << mEventMult[0] << " < " << mult << " < " << mEventMult[1] << endl;
+   cout << "mikesEventCut:: VertexZPos: " << mVertZPos[0] << " < " << VertexZPos << " < " << mVertZPos[1] << endl;
+   bool goodEvent =
+       ((mult > mEventMult[0]) && (mult < mEventMult[1]) && (VertexZPos > mVertZPos[0]) && (VertexZPos < mVertZPos[1]));
+   goodEvent ? mNEventsPassed++ : mNEventsFailed++;
+   cout << "mikesEventCut:: return : " << goodEvent << endl;
+   return (goodEvent);
 }
 //------------------------------
-StHbtString mikesEventCut::Report(){
-  string Stemp;
-  char Ctemp[100];
-  sprintf(Ctemp,"\nMultiplicity:\t %d-%d",mEventMult[0],mEventMult[1]);
-  Stemp = Ctemp;
-  sprintf(Ctemp,"\nVertex Z-position:\t %E-%E",mVertZPos[0],mVertZPos[1]);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"\nNumber of events which passed:\t%ld  Number which failed:\t%ld",mNEventsPassed,mNEventsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString mikesEventCut::Report() {
+   string Stemp;
+   char Ctemp[100];
+   sprintf(Ctemp, "\nMultiplicity:\t %d-%d", mEventMult[0], mEventMult[1]);
+   Stemp = Ctemp;
+   sprintf(Ctemp, "\nVertex Z-position:\t %E-%E", mVertZPos[0], mVertZPos[1]);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "\nNumber of events which passed:\t%ld  Number which failed:\t%ld", mNEventsPassed, mNEventsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }

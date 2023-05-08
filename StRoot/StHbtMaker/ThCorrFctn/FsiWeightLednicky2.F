@@ -1,19 +1,16 @@
-c         1         2         3         4         5         6         7         8
-c---------|---------|---------|---------|---------|---------|---------|---------|
-*-- Author :    R.Lednicky      20/01/95
-      SUBROUTINE FSIW(J,WEIF,WEI,WEIN)
+c 1 2 3 4 5 6 7 8 c-- ------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- |
+    *--Author : R.Lednicky 20 / 01 /
+            95 SUBROUTINE FSIW(J, WEIF, WEI, WEIN)
 
-C=======================================================================
-C    Calculates final state interaction (FSI) weights
-C    WEIF = weight due to particle - (effective) nucleus FSI (p-N)
-C    WEI  = weight due to p-p-N FSI
-C    WEIN = weight due to p-p FSI; note that WEIN=WEI if I3C=0;
-C                                  note that if I3C=1 the calculation of
-C                                  WEIN can be skipped by putting J=0
-C.......................................................................
-C    Correlation Functions:
-C    CF(p-p-N)   = sum(WEI)/sum(WEIF)
-C    CF(p-p)     = sum(WEIN)/sum(1); here the nucleus is completely
+                C
+        == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+    = C Calculates final state
+    interaction(FSI) weights C WEIF = weight due to particle - (effective)nucleus
+                                      FSI(p - N) C WEI = weight due to p - p - N FSI C WEIN = weight due to p - p FSI;
+note that WEIN = WEI if I3C = 0;
+C note that if I3C = 1 the calculation of C WEIN can be skipped by putting J =
+    0 C.......................................................................C Correlation Functions
+    : C CF(p - p - N) = sum(WEI) / sum(WEIF) C CF(p - p) = sum(WEIN) / sum(1); here the nucleus is completely
 C                                    inactive
 C    CF(p-p-"N") = sum(WEIN*WEIF')/sum(WEIF'), where WEIN and WEIF'
 C                  are not correlated (calculated at different emission
@@ -473,119 +470,73 @@ C---    shift fit by Pirner et al. (91).
 C          SUBROUTINE FSIINI
 C---Note:
 C-- ICH= 0 (1) if the Coulomb interaction is absent (present);
-C-- ISPIN= JJ= 1,2,..,MSPIN denote increasing values of the pair
-C-- total spin S.
-C-- To calculate the CF of two particles (with masses m1, m2 and
-C-- charges C1, C2) the following information is required:
-C-- AM= twice the reduced mass= 2*m1*m2/(m1+m2) in GeV/c^2,
-C-- DM= (m1-m2)/(m1+m2), required if NS=2;
-C-- AC= Bohr radius= 2*137.036*0.1973/(C1*C2*AMH) in fm;
-C-- AC > 1.D9 if C1*C2= 0, AC < 0 if C1*C2 < 0;
-C-- MSPIN= MSPINH(LL)= number of the values of the total pair spin S;
+   C-- ISPIN = JJ = 1, 2, ..,
+       MSPIN denote increasing values of the pair C-- total spin S.C-- To calculate the CF of two particles(
+           with masses m1, m2 and C-- charges C1, C2) the following information is required : C-- AM =
+           twice the reduced mass = 2 * m1 * m2 / (m1 + m2) in GeV / c ^ 2,
+       C-- DM = (m1 - m2) / (m1 + m2), required if NS = 2;
+   C-- AC = Bohr radius = 2 * 137.036 * 0.1973 / (C1 * C2 * AMH) in fm;
+   C-- AC > 1.D9 if C1 *C2 = 0, AC < 0 if C1 * C2 < 0;
+   C-- MSPIN = MSPINH(LL) = number of the values of the total pair spin S;
 C-- FD= FDH(LL,JJ), RD= RDH(LL,JJ)= scattering length and effective
-C-- radius for each value of the total pair spin S, JJ= 1,..,MSPIN;     ;
-C-- the corresponding square well parameters EB= EBH(LL,JJ), RB=
-C-- RBH(LL,JJ) (required if NS=1) may be calculated by sear.f;
+C-- radius for each value of the total pair spin S, JJ= 1,..,MSPIN;
+;
+C-- the corresponding square well parameters EB = EBH(LL, JJ),
+                                             RB = C-- RBH(LL, JJ)(required if NS = 1) may be calculated by sear.f;
 C-- if the effective range approximation is not valid (as is the case,
 C-- e.g., for two-pion system) a code for calculation of the scattering
 C-- amplitude should be supplemented;
-C-- RHO= RHOH(LL,JJ), SF= SFH(LL,JJ), SE= SEH(LL) are spin factors;
-C-- RHO= the probability that the spins j1 and j2 of the two particles
-C-- will combine in a total spin S;
+C-- RHO = RHOH(LL, JJ), SF = SFH(LL, JJ), SE = SEH(LL) are spin factors;
+C-- RHO = the probability that the spins j1 and j2 of the two particles C-- will combine in a total spin S;
 C-- RHO= (2*S+1)/[(2j1+1)*(2j2+1)] for unpolarized particles;
-C-- RHO= (1-P1*P2)/4 and (3+P1*P2)/4 correspond to S=0 and 1 in the
-C-- case of spin-1/2 particles with polarizations P1 and P2;
-C-----------------------------------------------------------------------
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/FSI_POC/AMN,AM1,AM2,CN,C1,C2,AC1,AC2
-      COMMON/FSI_PRF/PPX,PPY,PPZ,AK,AKS,
-     1               X,Y,Z,T,RP,RPS
-      COMMON/FSI_SPIN/RHO(10)
-      COMMON/FSI_ACH/HPR,AC,ACH,ACHR,ISPIN,MSPIN
-      COMMON/FSI_NS/LL,NS,ICH,ISI,IQS,I3C,I3S
-      COMMON/FSI_FD/FD(10),RD(10)
-      COMMON/FSI_C/C(10),AM,AMS,DM
-      COMMON/FSI_CONS/PI,PI2,SPI,DR,W
-      COMPLEX*16 C
-      COMMON/FSI_AA/AA
-      COMMON/FSI_AAPI/AAPI(20,2)/FSI_AAND/AAND(20,4)
-      COMMON/FSI_AAPIN/AAPIN(20,2)
-      COMMON/FSI_AAPAP/AAPAPR(3,2),AAPAPI(3,2)
-      COMMON/FSI_SW/RB(10),EB(10),BK(10),CDK(10),SDK(10),
-     1              SBKRB(10),SDKK(10)
-      COMMON/FSI_FDH/FDH(30,10),RDH(30,10),EBH(30,10),RBH(30,10)
-      COMMON/FSI_RHOH/RHOH(30,10)
-      COMMON/FSI_AMCH/AM1H(30),AM2H(30),C1H(30),C2H(30),MSPINH(30)
-C============= declarations pour l'appel de READ_FILE()============
-c      CHARACTER*10 KEY
-c      CHARACTER*8  CH8
-c      INTEGER*4    INT4
-c      REAL*8       REAL8
-c      INTEGER*4    IERR
-C
-C--- mass of the first and second particle
-      DATA AM1H/.93956563D0,.93827231D0,.93956563D0,3.72737978D0,
-     C          .13957D0,.13498D0,.13957D0, .93956563D0, .93827231D0,
-     C          4*.13957D0,4*.493677D0,
-     C          2*1.87561339D0,2*2.80892165D0,2*.497672D0,
-     C          1.87561339D0,3*.93827231D0,.93956563D0, 
-     C          1.115684D0,.93827231D0/
-      DATA AM2H/.93956563D0,.93827231D0,.93827231D0,3.72737978D0,
-     C          .13957D0,.13498D0,.13957D0, 2*1.87561339D0,
-     C          2*.493677D0,2*.93827231D0,
-     C          2*.493677D0,2*.93827231D0,
-     C          1.87561339D0,3.72737978D0,2.80892165D0,3.72737978D0,
-     C          2*.497672D0,2*2.80892165D0,3.72737978D0,
-     C          3*1.115684D0,.93827231D0/
-c--------|---------|---------|---------|---------|---------|---------|----------
-C---  charge of the first and second particle
-      DATA C1H/0.D0,1.D0,0.D0,2.D0, 1.D0,0.D0,1.D0,0.D0,1.D0,
-     C         3*1.D0,-1.D0,3*1.D0,-1.D0,
-     C         4*1.D0,2*0.D0,4*1.D0,2*0.D0, 1.D0/
-      DATA C2H/0.D0,1.D0,1.D0,2.D0,-1.D0,0.D0,3*1.D0,
-     C         -1.D0,3*1.D0,-1.D0,3*1.D0,
-     C         1.D0,2.D0,1.D0,2.D0,2*0.D0,2*1.D0,2.D0,3*0.D0,-1.D0/
-C---MSPIN vs (LL)
-      DATA MSPINH/3*2,4*1,2*2,8*1,3,1,2,1,2*1,2*2,1,3*2, 2/
-C---Spin factors <RHO vs (LL,ISPIN)
-      DATA RHOH/3*.25D0, 4*1.D0, 2*.3333D0, 8*1.D0, 
-     1          .1111D0,1.D0,.25D0,1.D0,2*1.D0,
-     1          .3333D0,.25D0,1.D0,3*.25D0, .25D0,
-     2          3*.75D0, 4*0.D0, 2*.6667D0, 8*0.D0, 
-     2          .3333D0,.0D0,.75D0,.0D0,2*0.D0,
-     2          .6667D0,.75D0,0.D0,3*.75D0, .75D0, 
-     3          17*.0D0,.5556D0,3*0.D0, 8*0.D0,1*0.D0,210*0.D0/
-C---Scattering length FD and effective radius RD in fm vs (LL,ISPIN)
-      DATA FDH/
-     1 	   17.0D0,7.8D0,23.7D0,2230.1218D0,.225D0,.081D0,-.063D0,
-     1     -.65D0,-2.73D0,
-     1     .137D0,-.071D0,-.148D0,.112D0,2*1.D-6,-.360D0,
-     1     2*1.D-6,1.344D0,6*1.D-6,-5.628D0,2.18D0,2.40D0, 
-     1     2.81D0,              ! ND potential 
-C     1     0.50D0,              ! NSC97e potential lam-lam
-     1     1*0.001D0,        
-C     c     2 -10.8D0,2*-5.4D0,4*0.D0,-6.35D0,-11.88D0,8*0.D0,9*0.D0,
-     2     3*-5.4D0,4*0.D0,-6.35D0,-11.88D0,8*0.D0,9*0.D0,
-     2     1.93D0,1.84D0,
-     2     0.50D0,              ! triplet f0 lam-lam=singlet f0 ND
-                                ! not contributing in s-wave FSI approx.
-     2     1*0.001D0,
-     3     240*0.D0/
-c--------|---------|---------|---------|---------|---------|---------|----------     
-      DATA RDH/
-     1     2.7D0,2.8D0,2.7D0,1.12139906D0,-44.36D0,64.0D0,784.9D0,
-     1     477.9D0, 2.27D0, 9*0.D0,-69.973D0, 6*0.D0,3.529D0,
-     1     3.19D0,3.15D0,
-     1     2.95D0,              ! ND potential lam-lam
-C     1  10.6D0, ! NSC97e potential lam-lam
-     1     1*0.D0,  
-     2     3*1.7D0,4*0.D0,2.0D0,2.63D0, 17*0.D0,3.35D0,3.37D0, 
-     2     2.95D0,              ! triplet d0 lam-lam=singlet d0 ND
-                                ! not contributing in s-wave approx.  
-     2     1*0.D0, 
-     3     240*0.D0/
-C---  Corresponding square well parameters RB (width in fm) and
-C--   EB =SQRT(-AM*U) (in GeV/c); U is the well height
+C-- RHO = (1 - P1 * P2) / 4 and (3 + P1 * P2) / 4 correspond to S =
+              0 and 1 in the C-- case of spin - 1 / 2 particles with polarizations P1 and P2;
+C-- ---------------------------------------------------------------------IMPLICIT REAL * 8(A - H, O - Z) COMMON /
+    FSI_POC / AMN,
+    AM1, AM2, CN, C1, C2, AC1, AC2 COMMON / FSI_PRF / PPX, PPY, PPZ, AK, AKS, 1 X, Y, Z, T, RP,
+    RPS COMMON / FSI_SPIN / RHO(10) COMMON / FSI_ACH / HPR, AC, ACH, ACHR, ISPIN, MSPIN COMMON / FSI_NS / LL, NS, ICH,
+    ISI, IQS, I3C, I3S COMMON / FSI_FD / FD(10), RD(10) COMMON / FSI_C / C(10), AM, AMS, DM COMMON / FSI_CONS / PI, PI2,
+    SPI, DR,
+    W COMPLEX * 16 C COMMON / FSI_AA / AA COMMON / FSI_AAPI / AAPI(20, 2) / FSI_AAND / AAND(20, 4) COMMON / FSI_AAPIN /
+        AAPIN(20, 2) COMMON / FSI_AAPAP / AAPAPR(3, 2),
+    AAPAPI(3, 2) COMMON / FSI_SW / RB(10), EB(10), BK(10), CDK(10), SDK(10), 1 SBKRB(10),
+    SDKK(10) COMMON / FSI_FDH / FDH(30, 10), RDH(30, 10), EBH(30, 10),
+    RBH(30, 10) COMMON / FSI_RHOH / RHOH(30, 10) COMMON / FSI_AMCH / AM1H(30), AM2H(30), C1H(30), C2H(30),
+    MSPINH(30) C == == == == == ==
+    = declarations pour l'appel de READ_FILE()============ c CHARACTER * 10 KEY c CHARACTER * 8 CH8 c INTEGER *
+              4 INT4 c REAL * 8 REAL8 c INTEGER * 4 IERR C C-- -
+          mass of the first and
+      second particle DATA AM1H / .93956563D0,
+    .93827231D0, .93956563D0, 3.72737978D0, C .13957D0, .13498D0, .13957D0, .93956563D0, .93827231D0, C 4 * .13957D0,
+    4 * .493677D0, C 2 * 1.87561339D0, 2 * 2.80892165D0, 2 * .497672D0, C 1.87561339D0, 3 * .93827231D0, .93956563D0,
+    C 1.115684D0, .93827231D0 / DATA AM2H / .93956563D0, .93827231D0, .93827231D0, 3.72737978D0, C .13957D0, .13498D0,
+    .13957D0, 2 * 1.87561339D0, C 2 * .493677D0, 2 * .93827231D0, C 2 * .493677D0, 2 * .93827231D0, C 1.87561339D0,
+    3.72737978D0, 2.80892165D0, 3.72737978D0, C 2 * .497672D0, 2 * 2.80892165D0, 3.72737978D0, C 3 * 1.115684D0,
+    .93827231D0 / c-- ------ | --------- | --------- | --------- | --------- | --------- | --------- |
+            ----------C-- - charge of the first and
+        second particle DATA C1H / 0.D0,
+    1.D0, 0.D0, 2.D0, 1.D0, 0.D0, 1.D0, 0.D0, 1.D0, C 3 * 1.D0, -1.D0, 3 * 1.D0, -1.D0, C 4 * 1.D0, 2 * 0.D0, 4 * 1.D0,
+    2 * 0.D0, 1.D0 / DATA C2H / 0.D0, 1.D0, 1.D0, 2.D0, -1.D0, 0.D0, 3 * 1.D0, C - 1.D0, 3 * 1.D0, -1.D0, 3 * 1.D0,
+    C 1.D0, 2.D0, 1.D0, 2.D0, 2 * 0.D0, 2 * 1.D0, 2.D0, 3 * 0.D0, -1.D0 / C-- - MSPIN vs(LL) DATA MSPINH / 3 * 2, 4 * 1,
+    2 * 2, 8 * 1, 3, 1, 2, 1, 2 * 1, 2 * 2, 1, 3 * 2, 2 / C-- - Spin factors < RHO vs(LL, ISPIN) DATA RHOH / 3 * .25D0,
+    4 * 1.D0, 2 * .3333D0, 8 * 1.D0, 1 .1111D0, 1.D0, .25D0, 1.D0, 2 * 1.D0, 1 .3333D0, .25D0, 1.D0, 3 * .25D0, .25D0,
+    2 3 * .75D0, 4 * 0.D0, 2 * .6667D0, 8 * 0.D0, 2 .3333D0, .0D0, .75D0, .0D0, 2 * 0.D0, 2 .6667D0, .75D0, 0.D0,
+    3 * .75D0, .75D0, 3 17 * .0D0, .5556D0, 3 * 0.D0, 8 * 0.D0, 1 * 0.D0,
+    210 * 0.D0 / C-- - Scattering length FD and effective radius RD in fm vs(LL, ISPIN) DATA FDH / 1 17.0D0, 7.8D0,
+    23.7D0, 2230.1218D0, .225D0, .081D0, -.063D0, 1 - .65D0, -2.73D0, 1 .137D0, -.071D0, -.148D0, .112D0, 2 * 1.D - 6,
+    -.360D0, 1 2 * 1.D - 6, 1.344D0, 6 * 1.D - 6, -5.628D0, 2.18D0, 2.40D0, 1 2.81D0, !ND potential C 1 0.50D0,
+    !NSC97e potential lam - lam 1 1 * 0.001D0, C c 2 - 10.8D0, 2 * -5.4D0, 4 * 0.D0, -6.35D0, -11.88D0, 8 * 0.D0,
+    9 * 0.D0, 2 3 * -5.4D0, 4 * 0.D0, -6.35D0, -11.88D0, 8 * 0.D0, 9 * 0.D0, 2 1.93D0, 1.84D0, 2 0.50D0,
+    !triplet f0 lam - lam = singlet f0 ND !not contributing in s - wave FSI approx.2 1 * 0.001D0,
+                      3 240 * 0.D0 / c-- ------ | --------- | --------- | --------- | --------- | --------- |
+                          --------- | ----------DATA RDH / 1 2.7D0,
+                      2.8D0, 2.7D0, 1.12139906D0, -44.36D0, 64.0D0, 784.9D0, 1 477.9D0, 2.27D0, 9 * 0.D0, -69.973D0,
+                      6 * 0.D0, 3.529D0, 1 3.19D0, 3.15D0, 1 2.95D0, !ND potential lam - lam C 1 10.6D0,
+                      !NSC97e potential lam - lam 1 1 * 0.D0, 2 3 * 1.7D0, 4 * 0.D0, 2.0D0, 2.63D0, 17 * 0.D0, 3.35D0,
+                      3.37D0, 2 2.95D0,
+                      !triplet d0 lam - lam = singlet d0 ND !not contributing in s - wave approx.2 1 * 0.D0,
+                      3 240 * 0.D0 / C-- - Corresponding square well parameters RB(width in fm) and C-- EB =
+                          SQRT(-AM * U)(in GeV / c); U is the well height
       DATA RBH/2.545739D0,   2.779789D0, 2.585795D0, 5.023544D0,
      1     .124673D0, .3925180D0,.09D0, 2.D0, 4.058058D0, 17*0.D0, 
      1     2.252623D0, 2.278575D0, 
@@ -1125,280 +1076,176 @@ C-- F(JJ)*C(JJ)= DEVIATION OF THE BETHE-SALPETER AMPL. FROM PLANE WAVE
       SHH=SH
       IF(ICH.EQ.1) SHH=ACH*SH
   3   IF(NS.EQ.2)GOTO1
-C---F= ASYMPTOTIC FORMULA (T= 0 APPROX.); NS= 4
-  6   F(JJ)=DCMPLX(CHH,SHH)
-      IF(NS.NE.1)GOTO 10
-C---F INSIDE THE SQUARE-WELL (T= 0 APPROX.); NS= 1
-      IF(RSS.GE.RB(JJ)) GOTO 10
-      IF(AK.NE.0.D0.AND.JJ.EQ.1)SHK=SH/AK
-      H=BK(JJ)*RSS
-      CALL GST(XRA,H)
-      SKR=B*BK(JJ)
-      F(JJ)=DCMPLX(CDK(JJ),SDK(JJ))*SKR
-      CH1=(SDKK(JJ)*SKR-SHK*SBKRB(JJ))/C(JJ)
-      F(JJ)=(F(JJ)+CH1)/SBKRB(JJ)
-      GOTO 10
-  1   CONTINUE
-C---F= ASYMPTOTIC FORMULA (T= 0 NOT REQUIRED); NS= 2
-      IF(JJ.GT.1)GOTO 8
-      IF(TSS.EQ.0.D0)GOTO6
-      TSSA=DABS(TSS)
-      IF(DM.NE.0.D0)GOTO 11
-      H=AM*.5D0/TSSA
-      IF(AK.NE.0.D0)GOTO4
-      HM=H*RPS
-      IF(HM.GE.3.D15)GOTO6
-      FS1=DFRSIN(HM)
-      FC1=DFRCOS(HM)
-      FC2=FC1
-      FS2=FS1
-      GOTO5
-  4   CONTINUE
-      H1=AK*TSSA/AM
-      HM=H*(RSS-H1)**2
-      HP=H*(RSS+H1)**2
-      IF(HP.GE.3.D15)GOTO6
-      FS1=DFRSIN(HM)
-      FC1=DFRCOS(HM)
-      FS2=DFRSIN(HP)
-      FC2=DFRCOS(HP)
-      GOTO 5
-  11  CONTINUE
-      FS1=0.D0
-      FS2=0.D0
-      FC1=0.D0
-      FC2=0.D0
-      DO 13 I=1,2
-      IF(I.EQ.1)TSSH=TSSA*(1+DM)
-      IF(I.EQ.2)TSSH=TSSA*(1-DM)
-      H=AM*.5D0/TSSH
-      IF(AK.NE.0.D0)GOTO 12
-      HM=H*RPS
-      IF(HM.GE.3.D15)GOTO6
-      FS1=FS1+DFRSIN(HM)/2
-      FC1=FC1+DFRCOS(HM)/2
-      IF(I.EQ.1)GOTO 13
-      FC2=FC1
-      FS2=FS1
-      GOTO 13
-  12  CONTINUE
-      H1=AK*TSSH/AM
-      HM=H*(RSS-H1)**2
-      HP=H*(RSS+H1)**2
-      IF(HP.GE.3.D15)GOTO6
-      FS1=FS1+DFRSIN(HM)/2
-      FC1=FC1+DFRCOS(HM)/2
-      FS2=FS2+DFRSIN(HP)/2
-      FC2=FC2+DFRCOS(HP)/2
-  13  CONTINUE
-  5   C12=FC1+FS2
-      S12=FS1+FC2
-      A12=FS1-FC2
-      A21=FS2-FC1
-      A2=.5D0*(CHH*(A12+A21)+SH*(A12-A21))+SHH
-      A1=.5D0*(CHH*(C12+S12)+SH*(C12-S12))
-      F(JJ)=.3989422D0*DCMPLX(A1,A2)
-      GOTO 10
-  8   F(JJ)=F(1)
- 10   CONTINUE
-      RETURN
-      END
-      FUNCTION EXF(X)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IF(X.LT.-15.D0) GO TO 1
-      EXF=DEXP(X)
-      RETURN
-  1   EXF=.0D0
-      RETURN
-      END
-      SUBROUTINE SEQ(X,H)
-C---CALC. FUNCTIONS B, P (EQS. (17) OF G-K-L-L);
-C-- NEEDED TO CALC. THE CONFLUENT HYPERGEOMETRIC FUNCTION GST.
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/FSI_BP/B,P
-      DIMENSION BH(3),PH(3)
-      DATA ERR/1.D-7/
-      BH(1)=1.D0
-      PH(1)=1.D0
-      PH(2)=.0D0
-      BH(2)=.5D0*X
-      B=1+BH(2)
-      P=1.D0
-      HS=H*H
-      J=0
-  2   J=J+1
-      BH(3)=(X*BH(2)-HS*BH(1))/((J+1)*(J+2))
-      PH(3)=(X*PH(2)-HS*PH(1)-(2*J+1)*X*BH(2))/(J*(J+1))
-      B=B+BH(3)
-      P=P+PH(3)
-      Z=DABS(BH(2))+DABS(BH(3))+DABS(PH(2))+DABS(PH(3))
-      IF(Z.LT.ERR)RETURN
-      BH(1)=BH(2)
-      BH(2)=BH(3)
-      PH(1)=PH(2)
-      PH(2)=PH(3)
-      GOTO 2
-      END
-      SUBROUTINE SEQA(X,H)
-C---CALC. FUNCTIONS CHH=REAL(GST), SH=IMAG(GST)/ACH, B=SH/H
-C-- IN THE ASYMPTOTIC REGION H=K*R >> 1.
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/FSI_BP/B,P
-      COMMON/FSI_SHH/SH,CHH
-      COMMON/FSI_ETA/ETA
-      COMMON/FSI_ACH/HPR,AC,ACH,ACHR,ISPIN,MSPIN
-      COMMON/FSI_COULPH/EIDC
-      COMPLEX*16 EIDC,GST
-      ARG=H-ETA*DLOG(2*H)
-      GST=DCMPLX(DCOS(ARG),DSIN(ARG))
-      GST=ACHR*EIDC*GST
-      CHH=DREAL(GST)
-      SH=DIMAG(GST)/ACH
-      B=SH/H
-      RETURN
-      END
-      SUBROUTINE FF(RHO,H)
-C---Calc. F12, F21;
-C-- F12= FF0* plane wave,  FF0=F*ACHR,
-C---F is the confluent hypergeometric function,
-C-- ACHR=sqrt(ACH), where ACH is the Coulomb factor
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/FSI_ACH/HPR,AC,ACH,ACHR,ISPIN,MSPIN
-      COMMON/FSI_NS/LL,NS,ICH,ISI,IQS,I3C,I3S
-      COMMON/FSI_ETA/ETA
-      COMMON/FSI_FFF/F12,F21
-      COMPLEX*16 FF0,F12,F21
-      C=DCOS(H)
-      S=DSIN(H)
-      F12=DCMPLX(C,-S)
-      F21=DCMPLX(C,S)
-      IF(ICH.EQ.0)RETURN
-      RHOP=RHO+H
-      RHOM=RHO-H
-      F12=FF0(RHO,H)*F12
-      F21=FF0(RHO,-H)*F21
-      RETURN
-      END
-      FUNCTION FAS(RKS)
-C-- FAS=F*ACHR
-C---F is the confluent hypergeometric function at k*r >> 1
-C-- ACHR=sqrt(ACH), where ACH is the Coulomb factor
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMPLEX*16 FAS,EIDC,ZZ1
-      COMMON/FSI_ACH/HPR,AC,ACH,ACHR,ISPIN,MSPIN
-      COMMON/FSI_ETA/ETA
-      COMMON/FSI_COULPH/EIDC
-      D1=DLOG(RKS)*ETA
-      D2=ETA*ETA/RKS
-      ZZ1=DCMPLX(DCOS(D1),DSIN(D1))/EIDC
-      FAS=DCMPLX(1.D0,-D2)*ZZ1
-      FAS=FAS-DCMPLX(DCOS(RKS),DSIN(RKS))*ETA/RKS/ZZ1
-      RETURN
-      END
-      FUNCTION FF0(RHO,H)
-C-- FF0=F*ACHR
-C-- F is the confluent hypergeometric function
-C-- (Eq. (15) of G-K-L-L), F= 1 at r* << AC
-C-- ACHR=sqrt(ACH), where ACH is the Coulomb factor
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/FSI_ACH/HPR,AC,ACH,ACHR,ISPIN,MSPIN
-      COMMON/FSI_NS/LL,NS,ICH,ISI,IQS,I3C,I3S
-      COMMON/FSI_ETA/ETA
-      COMPLEX*16 ALF,ALF1,Z,S,A,FF0,FAS
-      DATA ERR/1.D-5/
-      S=DCMPLX(1.D0,0.D0)
-      FF0=S
-      RHOP=RHO+H
-CC      GOTO 5 ! rejects the approx. calcul. of hyperg. f-ion F
-      IF(RHOP.LT.20.D0)GOTO5
-      FF0=FAS(RHOP) ! approx. calc.
-      RETURN
-  5   ALF=DCMPLX(.0D0,-ETA)
-      ALF1=ALF-1
-      Z=DCMPLX(.0D0,RHOP)
-      J=0
-  3   J=J+1
-      A=(ALF1+J)/(J*J)
-      S=S*A*Z
-      FF0=FF0+S
-      ZR=DABS(DREAL(S))
-      ZI=DABS(DIMAG(S))
-      IF((ZR+ZI).GT.ERR)GOTO3
-      FF0=FF0*ACHR
-      RETURN
-      END
-      FUNCTION HC(XA)
-C---HC = h-function of Landau-Lifshitz: h(x)=Re[psi(1-i/x)]+ln(x)
-C-- psi(x) is the digamma function (the logarithmic derivative of
-C-- the gamma function)
-      IMPLICIT REAL*8 (A-H,O-Z)
-      DIMENSION BN(15)
-      DATA BN/.8333333333D-1,.8333333333D-2,.396825396825D-2,
-     1        .4166666667D-2,.7575757576D-2,.2109279609D-1,
-     2        .8333333333D-1,.4432598039D0 ,.305395433D1,
-     3        .2645621212D2, .2814601449D3, .3607510546D4,
-     4        .5482758333D5, .9749368235D6, .200526958D8/
-      X=DABS(XA)
-      IF(X.LT..33D0) GOTO 1
-CC      IF(X.GE.3.5D0) GO TO 2
-      S=.0D0
-      N=0
-   3  N=N+1
-      DS=1.D0/N/((N*X)**2+1)
-      S=S+DS
-      IF(DS.GT.0.1D-12) GOTO 3
-C---Provides 7 digit accuracy
-      HC=S-.5772156649D0+DLOG(X)
-      RETURN
-CC   2  HC=1.2D0/X**2+DLOG(X)-.5772156649 D0
-CC      RETURN
-   1  X2=X*X
-      XP=X2
-      HC=0.D0
-      IMA=9
-      IF(X.LT.0.1D0)IMA=3
-      DO 4 I=1,IMA
-      HC=HC+XP*BN(I)
-   4  XP=X2*XP
-      RETURN
-      END
-      FUNCTION ACP(X)
-C--- ACP = COULOMB PENETRATION FACTOR
-      IMPLICIT REAL*8 (A-H,O-Z)
-      IF(X.LT.0.05D0.AND.X.GE.0.D0) GO TO 1
-      Y=6.2831853D0/X
-      ACP=Y/(EXF(Y)-1)
-      RETURN
-   1  ACP=1.D-6
-      RETURN
-      END
-      SUBROUTINE GST(X,H)
-C---CALC. THE CONFL. HYPERGEOM. F-N = CHH+i*SH
-C-- AND THE COULOMB F-S B, P (CALLS SEQ OR SEQA).
-      IMPLICIT REAL*8 (A-H,O-Z)
-      COMMON/FSI_ACH/HPR,AC,ACH,ACHR,ISPIN,MSPIN
-      COMMON/FSI_NS/LL,NS,ICH,ISI,IQS,I3C,I3S
-      COMMON/FSI_SHH/SH,CHH
-      COMMON/FSI_BP/B,P
-  1   IF(ICH.EQ.1)GOTO 2
-  3   SH=DSIN(H)
-      CHH=DCOS(H)
-      B=1.D0
-      IF(H.NE.0.D0)B=SH/H
-      P=CHH
-      RETURN
-  2   CONTINUE
-      IF(H.GT.15.D0)GOTO4 ! comment out if you want to reject
-                   ! the approximate calculation of hyperg. f-ion G
-      CALL SEQ(X,H) ! exact calculation
-      SH=H*B
-      CHH=P+B*X*(DLOG(DABS(X))+HPR)
-      RETURN
-  4   CALL SEQA(X,H)
-      RETURN
-      END
-      FUNCTION FF1(RHO,H)
-C---FF1=FF0; used for particle-nucleus system
+C---F= ASYMPTOTIC FORMULA (T= 0 APPROX.);
+NS = 4 6 F(JJ) = DCMPLX(CHH, SHH) IF(NS.NE .1) GOTO 10 C-- - F INSIDE THE SQUARE - WELL(T = 0 APPROX.);
+NS = 1 IF(RSS.GE.RB(JJ)) GOTO 10 IF(AK.NE .0.D0.AND.JJ.EQ.1) SHK =
+    SH / AK H = BK(JJ) * RSS CALL GST(XRA, H) SKR = B * BK(JJ) F(JJ) = DCMPLX(CDK(JJ), SDK(JJ)) *SKR CH1 =
+                                                        (SDKK(JJ) * SKR - SHK * SBKRB(JJ)) / C(JJ) F(JJ) =
+                                                            (F(JJ) + CH1) / SBKRB(JJ) GOTO 10 1 CONTINUE C-- - F =
+                                                                ASYMPTOTIC FORMULA(T = 0 NOT REQUIRED);
+NS = 2 IF(JJ.GT .1) GOTO 8 IF(TSS.EQ .0.D0) GOTO6 TSSA = DABS(TSS) IF(DM.NE .0.D0) GOTO 11 H =
+    AM * .5D0 / TSSA IF(AK.NE .0.D0) GOTO4 HM =
+        H * RPS IF(HM.GE .3.D15) GOTO6 FS1 = DFRSIN(HM) FC1 = DFRCOS(HM) FC2 = FC1 FS2 = FS1 GOTO5 4 CONTINUE H1 =
+            AK *TSSA / AM HM = H * (RSS - H1) ** 2 HP =
+                                   H * (RSS + H1) * *2 IF(HP.GE .3.D15) GOTO6 FS1 = DFRSIN(HM) FC1 = DFRCOS(HM) FS2 =
+                                       DFRSIN(HP) FC2 = DFRCOS(HP) GOTO 5 11 CONTINUE FS1 = 0.D0 FS2 = 0.D0 FC1 =
+                                           0.D0 FC2 = 0.D0 DO 13 I = 1,
+                                                  2 IF(I.EQ .1) TSSH =
+                                                      TSSA * (1 + DM) IF(I.EQ .2) TSSH =
+                                                          TSSA * (1 - DM) H =
+                                                              AM * .5D0 / TSSH IF(AK.NE .0.D0) GOTO 12 HM =
+                                                                  H * RPS IF(HM.GE .3.D15) GOTO6 FS1 =
+                                                                      FS1 + DFRSIN(HM) / 2 FC1 =
+                                                                          FC1 +
+                                                                          DFRCOS(HM) /
+                                                                              2 IF(I.EQ .1)
+                                                                                  GOTO 13 FC2 = FC1 FS2 = FS1 GOTO 13 12 CONTINUE H1 =
+                                                                              AK *TSSH /
+                                                                              AM HM =
+                                                                                  H *
+                                                                                  (RSS -
+                                                                                   H1) ** 2 HP =
+                                                                                      H *
+                                                                                      (RSS + H1) *
+                                                                                      *2 IF(HP.GE .3.D15)
+                                                                                          GOTO6 FS1 =
+                                                                                          FS1 + DFRSIN(HM) /
+                                                                                                    2 FC1 =
+                                                                                              FC1 + DFRCOS(HM) /
+                                                                                                        2 FS2 =
+                                                                                                  FS2 + DFRSIN(HP) /
+                                                                                                            2 FC2 =
+                                                                                                      FC2 +
+                                                                                                      DFRCOS(HP) /
+                                                                                                          2 13 CONTINUE 5 C12 =
+                                                                                                          FC1 +
+                                                                                                          FS2 S12 =
+                                                                                                              FS1 +
+                                                                                                              FC2 A12 =
+                                                                                                                  FS1 -
+                                                                                                                  FC2 A21 =
+                                                                                                                      FS2 -
+                                                                                                                      FC1 A2 =
+                                                                                                                          .5D0 *
+                                                                                                                              (CHH *
+                                                                                                                                   (A12 +
+                                                                                                                                    A21) +
+                                                                                                                               SH *
+                                                                                                                                   (A12 -
+                                                                                                                                    A21)) +
+                                                                                                                          SHH A1 =
+                                                                                                                              .5D0 *
+                                                                                                                              (CHH *
+                                                                                                                                   (C12 +
+                                                                                                                                    S12) +
+                                                                                                                               SH *
+                                                                                                                                   (C12 -
+                                                                                                                                    S12))
+                                                                                                                                  F(JJ) =
+                                                                                                                                  .3989422D0 *
+                                                                                                                                  DCMPLX(
+                                                                                                                                      A1,
+                                                                                                                                      A2)
+                                                                                                                                      GOTO 10 8 F(
+                                                                                                                                          JJ) =
+                                                                                                                                      F(1) 10 CONTINUE
+                                                                                                                                          RETURN END FUNCTION
+                                                                                                                                              EXF(X) IMPLICIT
+                                                                                                                                                  REAL *
+                                                                                                                                      8(A - H,
+                                                                                                                                        O - Z)
+                                                                                                                                          IF(X.LT.-
+                                                                                                                                             15.D0) GO
+                                                                                                                                              TO 1 EXF = DEXP(
+                                                                                                                                          X) RETURN 1 EXF =
+                                                                                                                                          .0D0 RETURN
+                                                                                                                                              END SUBROUTINE SEQ(
+                                                                                                                                                  X,
+                                                                                                                                                  H)
+                                                                                                                                                  C-- -
+                                                                                                                                          CALC.FUNCTIONS
+                                                                                                                                              B,
+                                                  P(EQS.(17)OF G - K - L - L);
+C-- NEEDED TO CALC.THE CONFLUENT HYPERGEOMETRIC FUNCTION GST.IMPLICIT REAL * 8(A - H, O - Z) COMMON / FSI_BP / B,
+    P DIMENSION BH(3),
+    PH(3) DATA ERR / 1.D - 7 / BH(1) = 1.D0 PH(1) = 1.D0 PH(2) = .0D0 BH(2) = .5D0 *X B =
+        1 + BH(2) P = 1.D0 HS = H *H J = 0 2 J =
+            J + 1 BH(3) =
+                (X * BH(2) - HS * BH(1)) / ((J + 1) * (J + 2)) PH(3) =
+                    (X * PH(2) - HS * PH(1) - (2 * J + 1) * X * BH(2)) / (J * (J + 1)) B =
+                        B + BH(3) P =
+                            P + PH(3) Z =
+                                DABS(BH(2)) + DABS(BH(3)) +
+                                DABS(PH(2)) + DABS(PH(3)) IF(Z.LT.ERR) RETURN BH(1) = BH(2) BH(2) = BH(3) PH(1) = PH(2)
+                                    PH(2) = PH(3) GOTO 2 END SUBROUTINE SEQA(X, H) C-- - CALC.FUNCTIONS CHH = REAL(GST),
+                               SH = IMAG(GST) / ACH,
+                               B = SH / H C-- IN THE ASYMPTOTIC REGION H =
+                                       K * R >> 1. IMPLICIT REAL * 8(A - H, O - Z) COMMON / FSI_BP / B,
+                               P COMMON / FSI_SHH / SH, CHH COMMON / FSI_ETA / ETA COMMON / FSI_ACH / HPR, AC, ACH,
+                               ACHR, ISPIN, MSPIN COMMON / FSI_COULPH / EIDC COMPLEX * 16 EIDC,
+                               GST ARG = H - ETA * DLOG(2 * H) GST = DCMPLX(DCOS(ARG), DSIN(ARG)) GST =
+                                             ACHR *EIDC *GST CHH = DREAL(GST) SH =
+                                                 DIMAG(GST) / ACH B =
+                                                     SH / H RETURN END SUBROUTINE FF(RHO, H) C-- - Calc.F12,
+                               F21;
+C-- F12 = FF0 * plane wave, FF0 = F * ACHR, C-- - F is the confluent hypergeometric function, C-- ACHR = sqrt(ACH),
+    where ACH is the Coulomb factor IMPLICIT REAL * 8(A - H, O - Z) COMMON / FSI_ACH / HPR, AC, ACH, ACHR, ISPIN,
+    MSPIN COMMON / FSI_NS / LL, NS, ICH, ISI, IQS, I3C, I3S COMMON / FSI_ETA / ETA COMMON / FSI_FFF / F12,
+    F21 COMPLEX * 16 FF0, F12,
+    F21 C = DCOS(H) S = DSIN(H) F12 = DCMPLX(C, -S) F21 = DCMPLX(C, S) IF(ICH.EQ .0) RETURN RHOP =
+        RHO + H RHOM = RHO - H F12 = FF0(RHO, H) *F12 F21 =
+                           FF0(RHO, -H) * F21 RETURN END FUNCTION FAS(RKS) C-- FAS =
+                               F *ACHR C-- - F is the confluent hypergeometric function at k *r >> 1 C-- ACHR =
+                                   sqrt(ACH),
+    where ACH is the Coulomb factor IMPLICIT REAL * 8(A - H, O - Z) COMPLEX * 16 FAS, EIDC, ZZ1 COMMON / FSI_ACH / HPR,
+    AC, ACH, ACHR, ISPIN,
+    MSPIN COMMON / FSI_ETA / ETA COMMON / FSI_COULPH / EIDC D1 = DLOG(RKS) *ETA D2 =
+        ETA *ETA / RKS ZZ1 =
+            DCMPLX(DCOS(D1), DSIN(D1)) / EIDC FAS = DCMPLX(1.D0, -D2) *ZZ1 FAS =
+                FAS - DCMPLX(DCOS(RKS), DSIN(RKS)) * ETA / RKS / ZZ1 RETURN END FUNCTION FF0(RHO, H) C-- FF0 =
+                    F * ACHR C-- F is the confluent hypergeometric function C--(Eq.(15)of G - K - L - L),
+    F = 1 at r * << AC C-- ACHR = sqrt(ACH),
+    where ACH is the Coulomb factor IMPLICIT REAL * 8(A - H, O - Z) COMMON / FSI_ACH / HPR, AC, ACH, ACHR, ISPIN,
+    MSPIN COMMON / FSI_NS / LL, NS, ICH, ISI, IQS, I3C, I3S COMMON / FSI_ETA / ETA COMPLEX * 16 ALF, ALF1, Z, S, A, FF0,
+    FAS DATA ERR / 1.D - 5 / S = DCMPLX(1.D0, 0.D0) FF0 = S RHOP =
+        RHO + H CC GOTO 5 !rejects the approx.calcul.of hyperg.f - ion F IF(RHOP.LT .20.D0) GOTO5 FF0 =
+            FAS(RHOP) !approx.calc.RETURN 5 ALF = DCMPLX(.0D0, -ETA) ALF1 =
+                ALF - 1 Z = DCMPLX(.0D0, RHOP) J = 0 3 J =
+                    J + 1 A = (ALF1 + J) / (J * J) S = S *A *Z FF0 =
+                                  FF0 + S ZR = DABS(DREAL(S)) ZI = DABS(DIMAG(S)) IF((ZR + ZI).GT.ERR) GOTO3 FF0 =
+                                      FF0 * ACHR RETURN END FUNCTION HC(XA) C-- - HC =
+                                          h - function of Landau -
+                                          Lifshitz
+    : h(x) = Re[psi(1 - i / x)] +
+             ln(x) C-- psi(x) is the digamma function(the logarithmic derivative of C-- the gamma function)
+                     IMPLICIT REAL *
+                 8(A - H, O - Z) DIMENSION BN(15) DATA BN / .8333333333D -
+             1,
+    .8333333333D - 2, .396825396825D - 2, 1 .4166666667D - 2, .7575757576D - 2, .2109279609D - 1, 2 .8333333333D - 1,
+    .4432598039D0, .305395433D1, 3 .2645621212D2, .2814601449D3, .3607510546D4, 4 .5482758333D5, .9749368235D6,
+    .200526958D8 / X = DABS(XA) IF(X.LT..33D0) GOTO 1 CC IF(X.GE .3.5D0) GO TO 2 S = .0D0 N = 0 3 N =
+        N + 1 DS = 1.D0 / N / ((N * X) * *2 + 1) S =
+                       S + DS IF(DS.GT .0.1D - 12) GOTO 3 C-- - Provides 7 digit accuracy HC =
+                           S - .5772156649D0 + DLOG(X) RETURN CC 2 HC =
+                               1.2D0 / X * *2 + DLOG(X) - .5772156649 D0 CC RETURN 1 X2 = X *X XP = X2 HC = 0.D0 IMA =
+                                   9 IF(X.LT .0.1D0) IMA = 3 DO 4 I = 1,
+    IMA HC =
+        HC + XP * BN(I) 4 XP =
+            X2 * XP RETURN END FUNCTION ACP(X) C-- - ACP =
+                COULOMB PENETRATION FACTOR IMPLICIT REAL * 8(A - H, O - Z) IF(X.LT .0.05D0.AND.X.GE.0.D0) GO TO 1 Y =
+                    6.2831853D0 / X ACP =
+                        Y / (EXF(Y) - 1) RETURN 1 ACP =
+                            1.D - 6 RETURN END SUBROUTINE GST(X, H) C-- - CALC.THE CONFL.HYPERGEOM.F - N =
+                                CHH + i * SH C-- AND THE COULOMB F - S B,
+    P(CALLS SEQ OR SEQA).IMPLICIT REAL * 8(A - H, O - Z) COMMON / FSI_ACH / HPR, AC, ACH, ACHR, ISPIN,
+    MSPIN COMMON / FSI_NS / LL, NS, ICH, ISI, IQS, I3C, I3S COMMON / FSI_SHH / SH, CHH COMMON / FSI_BP / B,
+    P 1 IF(ICH.EQ .1) GOTO 2 3 SH = DSIN(H) CHH = DCOS(H) B = 1.D0 IF(H.NE .0.D0) B =
+        SH / H P =
+            CHH RETURN 2 CONTINUE IF(H.GT .15.D0)
+                GOTO4 !comment out if you want to reject !the approximate calculation of hyperg.f -
+            ion G CALL SEQ(X, H) !exact calculation SH = H *B CHH =
+                P + B * X * (DLOG(DABS(X)) + HPR) RETURN 4 CALL SEQA(X, H) RETURN END FUNCTION FF1(RHO, H) C-- - FF1 =
+                    FF0; used for particle-nucleus system
 C-- FF0=F12*ACHR
 C-- F12 is the confluent hypergeometric function
 C-- (Eq. (15) of G-K-L-L), F12= 1 at r* << AC
@@ -1466,7 +1313,8 @@ C---NOTE THAT SCATT. AMPL.= 1/CMPLX(G(AK),-AK*ACH)
       CALL DERIW(X,H)              ! PPR=P'(k,d)= dP(k,r)/dln(r) at r=d
       ZZ=PPR-PRHOS
       IF(ICH.EQ.1)ZZ=ZZ+X*(BRHOS+BPR*(DLOG(DABS(X))+HPR))
-C   ZZ= P'(k,d)-P(k,d)+x*{B(k,d)+B'(k,d)*[ln!x!+2*C-1+h(k*ac)]}
+C   ZZ= P'(k,d)-P(k,d)+x*{B(k,d)+B'(k,d)*[ln!x!+2*C-1+h(k*ac)]
+}
       GG=(BRHOP*CDK(JJ)-BRHO*ZZ)/RB(JJ)
 C   GG= [B'(kp,d)*ReG(k,d)-B(kp,d)*ZZ]/d
       G=GG/(BRHO*BPR-BRHOP*BRHOS)
@@ -1537,4 +1385,3 @@ C                               1 : key not found
 c      IF(IERR.EQ.1)STOP 
       RETURN
       END
-

@@ -15,20 +15,19 @@
 #ifndef StHbtTrackCutCollection_hh
 #define StHbtTrackCutCollection_hh
 
-#include "StHbtMaker/Base/StHbtTrackCut.h"
-
 #include <list>
+
+#include "StHbtMaker/Base/StHbtTrackCut.h"
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
-
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtTrackCut*, allocator<StHbtTrackCut*> >            StHbtTrackCutCollection;
-typedef list<StHbtTrackCut*, allocator<StHbtTrackCut*> >::iterator  StHbtTrackCutIterator;
+typedef list<StHbtTrackCut*, allocator<StHbtTrackCut*> > StHbtTrackCutCollection;
+typedef list<StHbtTrackCut*, allocator<StHbtTrackCut*> >::iterator StHbtTrackCutIterator;
 #else
-typedef list<StHbtTrackCut*>            StHbtTrackCutCollection;
-typedef list<StHbtTrackCut*>::iterator  StHbtTrackCutIterator;
+typedef list<StHbtTrackCut*> StHbtTrackCutCollection;
+typedef list<StHbtTrackCut*>::iterator StHbtTrackCutIterator;
 #endif
 
 #endif

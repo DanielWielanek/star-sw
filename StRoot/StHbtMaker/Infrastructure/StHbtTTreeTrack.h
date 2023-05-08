@@ -8,9 +8,9 @@
 #ifndef StHbtTTreeTrack_h
 #define StHbtTTreeTrack_h
 
-#include "TObject.h"
-#include "StarClassLibrary/StPhysicalHelixD.hh"
 #include "StarClassLibrary/StHelixD.hh"
+#include "StarClassLibrary/StPhysicalHelixD.hh"
+#include "TObject.h"
 
 // a StPhysicalHelix is 104 byes, so we make our own helix
 
@@ -44,47 +44,47 @@ class StHbtTrack;
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 class StHbtTTreeTrack : public TObject {
-public:
-  StHbtTTreeTrack(){/* no-op*/};//!
-  StHbtTTreeTrack(const StHbtEvent*, const StHbtTrack*);//!
-  //  virtual ~StHbtTTreeTrack(){/* no-op*/};//!
-private:
-  Short_t mTrackType;
-  Short_t mNHits;
-  Short_t mNHitsPoss; 
-  Short_t mNHitsDedx;
-  Short_t mPidProbElectron;
-  Short_t mPidProbPion;
-  Short_t mPidProbKaon;
-  Short_t mPidProbProton;
-  Short_t mHelixH;
-  Short_t mHelixGlobalH;
-  Short_t mTrackId;
-  Float_t mNSigmaElectron;
-  Float_t mNSigmaPion;
-  Float_t mNSigmaKaon;
-  Float_t mNSigmaProton;
-  Float_t mdEdx;
-  Float_t mChiSqXY;
-  Float_t mChiSqZ;
-  UInt_t  mMap[2];
-  Float_t mHelixC;
-  Float_t mHelixDip;
-  Float_t mHelixPhase;
-  Float_t mHelixX;
-  Float_t mHelixY;
-  Float_t mHelixZ;
-  Float_t mHelixGlobalC;
-  Float_t mHelixGlobalDip;
-  Float_t mHelixGlobalPhase;
-  Float_t mHelixGlobalX;
-  Float_t mHelixGlobalY;
-  Float_t mHelixGlobalZ;
+  public:
+   StHbtTTreeTrack(){/* no-op*/};                          //!
+   StHbtTTreeTrack(const StHbtEvent*, const StHbtTrack*);  //!
+                                                           //  virtual ~StHbtTTreeTrack(){/* no-op*/};//!
+  private:
+   Short_t mTrackType;
+   Short_t mNHits;
+   Short_t mNHitsPoss;
+   Short_t mNHitsDedx;
+   Short_t mPidProbElectron;
+   Short_t mPidProbPion;
+   Short_t mPidProbKaon;
+   Short_t mPidProbProton;
+   Short_t mHelixH;
+   Short_t mHelixGlobalH;
+   Short_t mTrackId;
+   Float_t mNSigmaElectron;
+   Float_t mNSigmaPion;
+   Float_t mNSigmaKaon;
+   Float_t mNSigmaProton;
+   Float_t mdEdx;
+   Float_t mChiSqXY;
+   Float_t mChiSqZ;
+   UInt_t mMap[2];
+   Float_t mHelixC;
+   Float_t mHelixDip;
+   Float_t mHelixPhase;
+   Float_t mHelixX;
+   Float_t mHelixY;
+   Float_t mHelixZ;
+   Float_t mHelixGlobalC;
+   Float_t mHelixGlobalDip;
+   Float_t mHelixGlobalPhase;
+   Float_t mHelixGlobalX;
+   Float_t mHelixGlobalY;
+   Float_t mHelixGlobalZ;
 
-  friend class StHbtTTreeReader; //!
-  friend class StHbtEvent; //!
-  friend class StHbtTrack; //!
-  ClassDef(StHbtTTreeTrack,1)
+   friend class StHbtTTreeReader;  //!
+   friend class StHbtEvent;        //!
+   friend class StHbtTrack;        //!
+   ClassDef(StHbtTTreeTrack, 1)
 };
 
 #endif

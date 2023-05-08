@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *              Histogram classes (inherited from TH?Ds) which 
+ *              Histogram classes (inherited from TH?Ds) which
  *              will be listed by the StHbtHistoCollector
  *
  ***************************************************************************
@@ -35,59 +35,54 @@
 #ifndef CTH_hh
 #define CTH_hh
 
+#include "StChain.h"
+#include "StHbtMaker/Infrastructure/StHbtHistoCollector.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
 
-#include "StHbtMaker/Infrastructure/StHbtHistoCollector.h"
-#include "StChain.h"
-
 class CTH1D : public TH1D {
-public:
-  CTH1D(): TH1D(){
-      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();//!
-    collector->Add(this);
-  }
-  CTH1D(const char* name, const char* title, 
-	Int_t nbinsx, Axis_t xlow, Axis_t xup) : TH1D(name, title, nbinsx, xlow, xup){
-      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();//!
-    collector->Add(this);
-  }
-  ClassDef(CTH1D,1)
+  public:
+   CTH1D() : TH1D() {
+      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();  //!
+      collector->Add(this);
+   }
+   CTH1D(const char* name, const char* title, Int_t nbinsx, Axis_t xlow, Axis_t xup)
+       : TH1D(name, title, nbinsx, xlow, xup) {
+      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();  //!
+      collector->Add(this);
+   }
+   ClassDef(CTH1D, 1)
 };
 
 class CTH2D : public TH2D {
-public:
-  CTH2D() : TH2D(){
-    StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
-    collector->Add(this);
-  }
-  CTH2D(const char* name, const char* title, 
-	Int_t nbinsx, Axis_t xlow, Axis_t xup, 
-	Int_t nbinsy, Axis_t ylow, Axis_t yup) : TH2D(name, title, nbinsx, xlow, xup, nbinsy, ylow, yup){
-    StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
-    collector->Add(this);
-  }
-  ClassDef(CTH2D,1)
+  public:
+   CTH2D() : TH2D() {
+      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
+      collector->Add(this);
+   }
+   CTH2D(const char* name, const char* title, Int_t nbinsx, Axis_t xlow, Axis_t xup, Int_t nbinsy, Axis_t ylow,
+         Axis_t yup)
+       : TH2D(name, title, nbinsx, xlow, xup, nbinsy, ylow, yup) {
+      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
+      collector->Add(this);
+   }
+   ClassDef(CTH2D, 1)
 };
 
 class CTH3D : public TH3D {
-public:
-  CTH3D() : TH3D(){
-    StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
-    collector->Add(this);
-  }
-  CTH3D(const char* name, const char* title, 
-	Int_t nbinsx, Axis_t xlow, Axis_t xup, 
-	Int_t nbinsy, Axis_t ylow, Axis_t yup, 
-	Int_t nbinsz, Axis_t zlow, Axis_t zup) : TH3D(name, title, nbinsx, xlow, xup, nbinsy, ylow, yup, nbinsz, zlow, zup){
-    StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
-    collector->Add(this);
-  }
-  ClassDef(CTH3D,1)
+  public:
+   CTH3D() : TH3D() {
+      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
+      collector->Add(this);
+   }
+   CTH3D(const char* name, const char* title, Int_t nbinsx, Axis_t xlow, Axis_t xup, Int_t nbinsy, Axis_t ylow,
+         Axis_t yup, Int_t nbinsz, Axis_t zlow, Axis_t zup)
+       : TH3D(name, title, nbinsx, xlow, xup, nbinsy, ylow, yup, nbinsz, zlow, zup) {
+      StHbtHistoCollector* collector = StHbtHistoCollector::Instance();
+      collector->Add(this);
+   }
+   ClassDef(CTH3D, 1)
 };
 
-
-
 #endif
- 

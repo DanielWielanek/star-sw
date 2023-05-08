@@ -61,7 +61,8 @@
  * b) some destructors have been declared as virtual
  *
  * Revision 1.11  1999/12/03 22:24:37  lisa
- * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits mechanism
+ * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits
+ *mechanism
  *
  * Revision 1.10  1999/11/24 22:01:41  laue
  * reader adopted to the new StEvent 2.x
@@ -93,7 +94,8 @@
  * replace placeholder HbtV0Track stuff with Helens StHbtV0 classes
  *
  * Revision 1.5  1999/09/09 02:59:55  lisa
- * fix Randys factor of 2 in CoulombCorrection AND add SetCut methods to StStandardHbtEventReader which were forgotten last commit
+ * fix Randys factor of 2 in CoulombCorrection AND add SetCut methods to StStandardHbtEventReader which were forgotten
+ *last commit
  *
  * Revision 1.4  1999/09/08 04:15:53  lisa
  * persistent microDST implementation tweaked to please fickle solaris details
@@ -117,16 +119,13 @@
 #ifndef StStandardHbtEventReader_hh
 #define StStandardHbtEventReader_hh
 
+#include "StChain.h"
+#include "StEvent/StEnumerations.h"
 #include "StHbtMaker/Base/StHbtEventReader.hh"
 #include "StHbtMaker/Reader/StHbtTagReader.h"
-
-
 #include "StMaker.h"
-#include "StChain.h"
-#include "St_DataSetIter.h"
-
-#include "StEvent/StEnumerations.h"
 #include "StStrangeMuDstMaker/StStrangeMuDstMaker.h"
+#include "St_DataSetIter.h"
 
 class StPionPlus;
 class StKaonPlus;
@@ -138,78 +137,74 @@ class StFlowEvent;
 class StFlowAnalysisMaker;
 class StFlowSelection;
 
-class StStandardHbtEventReader : public StMaker, public StHbtEventReader{
+class StStandardHbtEventReader : public StMaker, public StHbtEventReader {
+  private:
+   StMaker* mTheEventMaker;           //! this is the chain where the StEventReaderMaker is
+   StStrangeMuDstMaker* mTheV0Maker;  //! this is the chain where the StStrangeMuDstMaker is
 
-private:
+   StHbtTagReader* mTheTagReader;  //! this tag reader opens a tags.root file
 
-  StMaker* mTheEventMaker;      //! this is the chain where the StEventReaderMaker is
-  StStrangeMuDstMaker* mTheV0Maker; //! this is the chain where the StStrangeMuDstMaker is
+   StTrackType mTrackType;
+   bool mReadTracks;
+   bool mReadV0s;
+   bool mReadXis;
+   bool mReadKinks;
 
-  StHbtTagReader* mTheTagReader;  //! this tag reader opens a tags.root file 
+   StFlowMaker* mFlowMaker;                  //!
+   StFlowAnalysisMaker* mFlowAnalysisMaker;  //!
 
-  StTrackType mTrackType;
-  bool mReadTracks;
-  bool mReadV0s;
-  bool mReadXis;
-  bool mReadKinks;
+  protected:
+  public:
+   StStandardHbtEventReader();
+   ~StStandardHbtEventReader();
 
-  StFlowMaker* mFlowMaker;             //!
-  StFlowAnalysisMaker* mFlowAnalysisMaker; //!
+   StHbtEvent* ReturnHbtEvent();
+   StHbtString Report();
 
- protected:
+   void SetTheEventMaker(StMaker*);
+   StMaker* TheEventMaker();
+   void SetTheV0Maker(StStrangeMuDstMaker*);
+   StStrangeMuDstMaker* TheV0Maker();
+   void SetTheTagReader(StHbtTagReader*);
+   StHbtTagReader* TheTagReader();
 
- public:
-  StStandardHbtEventReader();
-  ~StStandardHbtEventReader();
-
-  StHbtEvent* ReturnHbtEvent();
-  StHbtString Report();
-
-  void SetTheEventMaker(StMaker*);
-  StMaker* TheEventMaker();
-  void SetTheV0Maker(StStrangeMuDstMaker*);
-  StStrangeMuDstMaker* TheV0Maker();
-  void SetTheTagReader(StHbtTagReader*);
-  StHbtTagReader* TheTagReader();
-
-  StTrackType TrackType(); 
-  bool ReadTracks();
-  bool ReadV0s();
-  bool ReadXis();
-  bool ReadKinks();
-  void SetTrackType(StTrackType);
-  void SetReadTracks(bool);
-  void SetReadV0s(bool);
-  void SetReadXis(bool);
-  void SetReadKinks(bool);
-  void SetFlowMaker(StFlowMaker* flowMaker);
-  void SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal);
+   StTrackType TrackType();
+   bool ReadTracks();
+   bool ReadV0s();
+   bool ReadXis();
+   bool ReadKinks();
+   void SetTrackType(StTrackType);
+   void SetReadTracks(bool);
+   void SetReadV0s(bool);
+   void SetReadXis(bool);
+   void SetReadKinks(bool);
+   void SetFlowMaker(StFlowMaker* flowMaker);
+   void SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal);
 
 #ifdef __ROOT__
-  ClassDef(StStandardHbtEventReader, 1)
+   ClassDef(StStandardHbtEventReader, 1)
 #endif
 };
 
-inline void StStandardHbtEventReader::SetTheEventMaker(StMaker* maker){mTheEventMaker=maker;}
-inline StMaker* StStandardHbtEventReader::TheEventMaker(){return mTheEventMaker;}
-inline void StStandardHbtEventReader::SetTheV0Maker(StStrangeMuDstMaker* maker){mTheV0Maker=maker;}
-inline StStrangeMuDstMaker* StStandardHbtEventReader::TheV0Maker(){return mTheV0Maker;}
-inline void StStandardHbtEventReader::SetTheTagReader(StHbtTagReader* maker){mTheTagReader=maker;}
-inline StHbtTagReader* StStandardHbtEventReader::TheTagReader(){return mTheTagReader;}
-inline StTrackType StStandardHbtEventReader::TrackType() { return mTrackType;}
-inline bool StStandardHbtEventReader::ReadTracks() { return mReadTracks;}
-inline bool StStandardHbtEventReader::ReadV0s() { return mReadV0s;}
-inline bool StStandardHbtEventReader::ReadXis() { return mReadXis;}
-inline bool StStandardHbtEventReader::ReadKinks() { return mReadKinks;}
-inline void StStandardHbtEventReader::SetTrackType(StTrackType t) { mTrackType=t;}
-inline void StStandardHbtEventReader::SetReadTracks(bool b) { mReadTracks=b;}
-inline void StStandardHbtEventReader::SetReadV0s(bool b) { mReadV0s=b;}
-inline void StStandardHbtEventReader::SetReadXis(bool b) { mReadXis=b;}
-inline void StStandardHbtEventReader::SetReadKinks(bool b) { mReadKinks=b;}
-inline void StStandardHbtEventReader::SetFlowMaker(StFlowMaker* flowMaker){mFlowMaker = flowMaker;}
+inline void StStandardHbtEventReader::SetTheEventMaker(StMaker* maker) { mTheEventMaker = maker; }
+inline StMaker* StStandardHbtEventReader::TheEventMaker() { return mTheEventMaker; }
+inline void StStandardHbtEventReader::SetTheV0Maker(StStrangeMuDstMaker* maker) { mTheV0Maker = maker; }
+inline StStrangeMuDstMaker* StStandardHbtEventReader::TheV0Maker() { return mTheV0Maker; }
+inline void StStandardHbtEventReader::SetTheTagReader(StHbtTagReader* maker) { mTheTagReader = maker; }
+inline StHbtTagReader* StStandardHbtEventReader::TheTagReader() { return mTheTagReader; }
+inline StTrackType StStandardHbtEventReader::TrackType() { return mTrackType; }
+inline bool StStandardHbtEventReader::ReadTracks() { return mReadTracks; }
+inline bool StStandardHbtEventReader::ReadV0s() { return mReadV0s; }
+inline bool StStandardHbtEventReader::ReadXis() { return mReadXis; }
+inline bool StStandardHbtEventReader::ReadKinks() { return mReadKinks; }
+inline void StStandardHbtEventReader::SetTrackType(StTrackType t) { mTrackType = t; }
+inline void StStandardHbtEventReader::SetReadTracks(bool b) { mReadTracks = b; }
+inline void StStandardHbtEventReader::SetReadV0s(bool b) { mReadV0s = b; }
+inline void StStandardHbtEventReader::SetReadXis(bool b) { mReadXis = b; }
+inline void StStandardHbtEventReader::SetReadKinks(bool b) { mReadKinks = b; }
+inline void StStandardHbtEventReader::SetFlowMaker(StFlowMaker* flowMaker) { mFlowMaker = flowMaker; }
 inline void StStandardHbtEventReader::SetFlowAnalysisMaker(StFlowAnalysisMaker* flowAnal) {
-  mFlowAnalysisMaker = flowAnal;
+   mFlowAnalysisMaker = flowAnal;
 }
 
 #endif
-

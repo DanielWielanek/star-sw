@@ -7,7 +7,7 @@
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *   The ParticleCollection is the main component of the picoEvent
- *   It points to the particle objects in the picoEvent.           
+ *   It points to the particle objects in the picoEvent.
  *
  ***************************************************************************
  *
@@ -22,19 +22,20 @@
  **************************************************************************/
 #ifndef StHbtParticleCollection_hh
 #define StHbtParticleCollection_hh
-#include "StHbtMaker/Infrastructure/StHbtParticle.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtParticle.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtParticle*, allocator<StHbtParticle*> >            StHbtParticleCollection;
-typedef list<StHbtParticle*, allocator<StHbtParticle*> >::iterator  StHbtParticleIterator;
+typedef list<StHbtParticle*, allocator<StHbtParticle*> > StHbtParticleCollection;
+typedef list<StHbtParticle*, allocator<StHbtParticle*> >::iterator StHbtParticleIterator;
 #else
-typedef list<StHbtParticle*>            StHbtParticleCollection;
-typedef list<StHbtParticle*>::iterator  StHbtParticleIterator;
+typedef list<StHbtParticle*> StHbtParticleCollection;
+typedef list<StHbtParticle*>::iterator StHbtParticleIterator;
 #endif
 
 #endif

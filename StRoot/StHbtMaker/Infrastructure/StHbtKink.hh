@@ -35,7 +35,7 @@
  * Revision 1.1  2001/05/25 23:23:59  lisa
  * Added in StHbtKink stuff
  *
- * 
+ *
  *
  ***********************************************************************/
 #ifndef StHbtKink_hh
@@ -46,88 +46,65 @@ class StHbtTTreeEvent;
 class StHbtTTreeKink;
 //#include "StEvent/StKinkVertex.h"  // from StEvent
 #include "StHbtMaker/Infrastructure/StHbtTrack.hh"
-
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"  //same as in StHbtTrack.hh
 #include "Stiostream.h"
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh" //same as in StHbtTrack.hh
 
 class StHbtKink {
-public:
-  StHbtKink(){/* no-op */}
-  StHbtKink( const StHbtKink&); // copy constructor
+  public:
+   StHbtKink() { /* no-op */
+   }
+   StHbtKink(const StHbtKink&);  // copy constructor
 #ifdef __ROOT__
-  StHbtKink( const StKinkVertex&, StHbtThreeVector PrimaryVertex); // create a StHbtKink from a StKinkVertex
-  StHbtKink( const StHbtTTreeEvent*, const StHbtTTreeKink*); 
+   StHbtKink(const StKinkVertex&, StHbtThreeVector PrimaryVertex);  // create a StHbtKink from a StKinkVertex
+   StHbtKink(const StHbtTTreeEvent*, const StHbtTTreeKink*);
 #endif
-  ~StHbtKink(){/* no-op */}
+   ~StHbtKink() { /* no-op */
+   }
 
-  // Get's
-  float        DcaParentDaughter() const;
-  float        DcaDaughterPrimaryVertex() const;
-  float        DcaParentPrimaryVertex() const;
-  float        HitDistanceParentDaughter() const;
-  float        HitDistanceParentVertex() const;
-  float        DeltaEnergy(int i=0) const;
-  float        DecayAngle() const;
-  float        DecayAngleCM() const;
-  StHbtTrack   Daughter() const;
-  StHbtTrack   Parent() const;
-  StHbtThreeVector Position() const; 
+   // Get's
+   float DcaParentDaughter() const;
+   float DcaDaughterPrimaryVertex() const;
+   float DcaParentPrimaryVertex() const;
+   float HitDistanceParentDaughter() const;
+   float HitDistanceParentVertex() const;
+   float DeltaEnergy(int i = 0) const;
+   float DecayAngle() const;
+   float DecayAngleCM() const;
+   StHbtTrack Daughter() const;
+   StHbtTrack Parent() const;
+   StHbtThreeVector Position() const;
 
-  
-  friend ostream& operator<<(ostream& out, StHbtKink& kink);
-  friend istream& operator>>(istream& in,  StHbtKink& kink);
+   friend ostream& operator<<(ostream& out, StHbtKink& kink);
+   friend istream& operator>>(istream& in, StHbtKink& kink);
 
-  friend class StHbtIOBinary;
-  friend class StHbtTTreeKink;
+   friend class StHbtIOBinary;
+   friend class StHbtTTreeKink;
 
-protected:
-
-  float        mDcaParentDaughter;           // from StKinkVertex class directly 
-  float        mDcaDaughterPrimaryVertex;    // from StKinkVertex class directly 
-  float        mDcaParentPrimaryVertex;      // from StKinkVertex class directly 
-  float        mHitDistanceParentDaughter;   // from StKinkVertex class directly 
-  float        mHitDistanceParentVertex;     // from StKinkVertex class directly 
-  float        mDeltaEnergy[3];              // from StKinkVertex class directly 
-  float        mDecayAngle;                  // from StKinkVertex class directly 
-  float        mDecayAngleCM;                // from StKinkVertex class directly 
-  StHbtTrack   mDaughter;                    // from StKinkVertex class directly 
-  StHbtTrack   mParent;                      // from StVertex class (which StKinkVertex inherits from)
-  StHbtThreeVector mPosition;                // from StMeasuredPoint class (which StVertex inherits from)
-
+  protected:
+   float mDcaParentDaughter;          // from StKinkVertex class directly
+   float mDcaDaughterPrimaryVertex;   // from StKinkVertex class directly
+   float mDcaParentPrimaryVertex;     // from StKinkVertex class directly
+   float mHitDistanceParentDaughter;  // from StKinkVertex class directly
+   float mHitDistanceParentVertex;    // from StKinkVertex class directly
+   float mDeltaEnergy[3];             // from StKinkVertex class directly
+   float mDecayAngle;                 // from StKinkVertex class directly
+   float mDecayAngleCM;               // from StKinkVertex class directly
+   StHbtTrack mDaughter;              // from StKinkVertex class directly
+   StHbtTrack mParent;                // from StVertex class (which StKinkVertex inherits from)
+   StHbtThreeVector mPosition;        // from StMeasuredPoint class (which StVertex inherits from)
 };
 
 // Get's
-inline float        StHbtKink::DcaParentDaughter() const {return mDcaParentDaughter;}
-inline float        StHbtKink::DcaDaughterPrimaryVertex() const {return mDcaDaughterPrimaryVertex;}
-inline float        StHbtKink::DcaParentPrimaryVertex() const {return mDcaParentPrimaryVertex;}
-inline float        StHbtKink::HitDistanceParentDaughter() const {return mHitDistanceParentDaughter;}
-inline float        StHbtKink::HitDistanceParentVertex() const {return mHitDistanceParentVertex;}
-inline float        StHbtKink::DeltaEnergy(int i) const {return mDeltaEnergy[i];}
-inline float        StHbtKink::DecayAngle() const {return mDecayAngle;}
-inline float        StHbtKink::DecayAngleCM() const {return mDecayAngleCM;}
-inline StHbtTrack   StHbtKink::Daughter() const {return mDaughter;}
-inline StHbtTrack   StHbtKink::Parent() const {return mParent;}
-inline StHbtThreeVector StHbtKink::Position() const {return mPosition;}
-
-
-
+inline float StHbtKink::DcaParentDaughter() const { return mDcaParentDaughter; }
+inline float StHbtKink::DcaDaughterPrimaryVertex() const { return mDcaDaughterPrimaryVertex; }
+inline float StHbtKink::DcaParentPrimaryVertex() const { return mDcaParentPrimaryVertex; }
+inline float StHbtKink::HitDistanceParentDaughter() const { return mHitDistanceParentDaughter; }
+inline float StHbtKink::HitDistanceParentVertex() const { return mHitDistanceParentVertex; }
+inline float StHbtKink::DeltaEnergy(int i) const { return mDeltaEnergy[i]; }
+inline float StHbtKink::DecayAngle() const { return mDecayAngle; }
+inline float StHbtKink::DecayAngleCM() const { return mDecayAngleCM; }
+inline StHbtTrack StHbtKink::Daughter() const { return mDaughter; }
+inline StHbtTrack StHbtKink::Parent() const { return mParent; }
+inline StHbtThreeVector StHbtKink::Position() const { return mPosition; }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

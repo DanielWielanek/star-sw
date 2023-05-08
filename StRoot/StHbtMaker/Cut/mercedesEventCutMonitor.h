@@ -6,12 +6,12 @@
  *
  ***************************************************************************
  *
- * Event Cut Monitor that plots just the tracks that passed 
+ * Event Cut Monitor that plots just the tracks that passed
  * mercedesStarStandardEventCut in the multiplicity plot
  * Plots: EventMultiplicity (just # of tracks that passed the event cut),
- * ZVertexPosition, and 2D plot: EventMultiplicity vs Tracks (# of tracks that 
- * passed the cuts vs # of tracks in the event) 
- * 
+ * ZVertexPosition, and 2D plot: EventMultiplicity vs Tracks (# of tracks that
+ * passed the cuts vs # of tracks in the event)
+ *
  ***************************************************************************
  *
  * $Log: mercedesEventCutMonitor.h,v $
@@ -24,47 +24,43 @@
  *
  **************************************************************************/
 
-
 #ifndef mercedesEventCutMonitor_hh
 #define mercedesEventCutMonitor_hh
 
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
-#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
 #include "StHbtMaker/Base/StHbtCutMonitor.hh"
+#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
-class mercedesEventCutMonitor : public StHbtCutMonitor{
+class mercedesEventCutMonitor : public StHbtCutMonitor {
+  private:
+   StHbt1DHisto* mEventMultHisto;
+   StHbt1DHisto* mZVertexPosHisto;
+   StHbt2DHisto* mEventMultvsTracks;
 
-private:
+  public:
+   mercedesEventCutMonitor();
+   virtual ~mercedesEventCutMonitor();
 
-  StHbt1DHisto* mEventMultHisto; 
-  StHbt1DHisto* mZVertexPosHisto;
-  StHbt2DHisto* mEventMultvsTracks;
+   virtual StHbtString Report();
+   virtual void Fill(const StHbtEvent* event);
+   virtual void Finish();
 
-public:
-  mercedesEventCutMonitor();
-  virtual ~mercedesEventCutMonitor();
+   // These dummy Fill() functions were introduced to remove a compiler
+   //   warning related to overloaded base-class Fill() functions being
+   //   hidden by a single version of Fill() in this derived class
+   void Fill(const StHbtParticleCollection* d) { ; }
+   void Fill(const StHbtEvent* d1, const StHbtParticleCollection* d2) { ; }
+   void Fill(const StHbtPair* d) { ; }
+   void Fill(const StHbtKink* d) { ; }
+   void Fill(const StHbtV0* d) { ; }
+   void Fill(const StHbtTrack* d) { ; }
 
-  virtual StHbtString Report(); 
-  virtual void Fill(const StHbtEvent* event);
-  virtual void Finish();
-  
-  
-  // These dummy Fill() functions were introduced to remove a compiler
-  //   warning related to overloaded base-class Fill() functions being 
-  //   hidden by a single version of Fill() in this derived class
-  void Fill(const StHbtParticleCollection* d) {;}
-  void Fill(const StHbtEvent *d1, const StHbtParticleCollection* d2) {;}
-  void Fill(const StHbtPair* d) {;}
-  void Fill(const StHbtKink* d) {;}
-  void Fill(const StHbtV0* d) {;}
-  void Fill(const StHbtTrack* d) {;}
+   StHbt1DHisto* EventMultHisto() { return mEventMultHisto; }
+   StHbt1DHisto* ZVertexPosHisto() { return mZVertexPosHisto; }
+   StHbt2DHisto* EventMultvsTracks() { return mEventMultvsTracks; }
 
-  StHbt1DHisto* EventMultHisto() {return mEventMultHisto;}
-  StHbt1DHisto* ZVertexPosHisto() {return mZVertexPosHisto;}
-  StHbt2DHisto* EventMultvsTracks() {return mEventMultvsTracks;}
-  
-#ifdef __ROOT__ 
- ClassDef(mercedesEventCutMonitor, 1)
+#ifdef __ROOT__
+   ClassDef(mercedesEventCutMonitor, 1)
 #endif
 };
 

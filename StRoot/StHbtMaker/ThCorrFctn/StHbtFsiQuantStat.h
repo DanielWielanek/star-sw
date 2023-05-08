@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Laurent Conin, Fabrice Retiere, Subatech, France
  ***************************************************************************
@@ -9,7 +9,7 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  **************************************************************************/
 #ifndef StHbtFsiQuanStat_hh
@@ -17,16 +17,15 @@
 
 #include "StHbtMaker/Base/StHbtFsiWeight.hh"
 
-class StHbtFsiQuantStat : public  StHbtFsiWeight {
- public:
+class StHbtFsiQuantStat : public StHbtFsiWeight {
+  public:
+   double GetWeight(const StHbtThPair* aThPair);
 
-  double GetWeight(const StHbtThPair* aThPair);
-   
-  //virtual StHbtString Report(); 
+   // virtual StHbtString Report();
 
 #ifdef __ROOT__
-   ClassDef(StHbtFsiQuantStat,0)
+   ClassDef(StHbtFsiQuantStat, 0)
 #endif
 };
-  
+
 #endif

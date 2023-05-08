@@ -23,19 +23,20 @@
 
 #ifndef StHbtPicoEventCollection_hh
 #define StHbtPicoEventCollection_hh
-#include "StHbtMaker/Infrastructure/StHbtPicoEvent.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtPicoEvent.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtPicoEvent*, allocator<StHbtPicoEvent*> >            StHbtPicoEventCollection;
-typedef list<StHbtPicoEvent*, allocator<StHbtPicoEvent*> >::iterator  StHbtPicoEventIterator;
+typedef list<StHbtPicoEvent*, allocator<StHbtPicoEvent*> > StHbtPicoEventCollection;
+typedef list<StHbtPicoEvent*, allocator<StHbtPicoEvent*> >::iterator StHbtPicoEventIterator;
 #else
-typedef list<StHbtPicoEvent*>            StHbtPicoEventCollection;
-typedef list<StHbtPicoEvent*>::iterator  StHbtPicoEventIterator;
+typedef list<StHbtPicoEvent*> StHbtPicoEventCollection;
+typedef list<StHbtPicoEvent*>::iterator StHbtPicoEventIterator;
 #endif
 
 #endif

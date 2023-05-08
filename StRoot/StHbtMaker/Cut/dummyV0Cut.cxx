@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Mike Lisa, Ohio State, lisa@mps.ohio-state.edu
  ***************************************************************************
@@ -10,29 +10,24 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  **************************************************************************/
 
 #include "StHbtMaker/Cut/dummyV0Cut.h"
 
-#ifdef __ROOT__ 
+#ifdef __ROOT__
 ClassImp(dummyV0Cut)
 #endif
-//________________________
-dummyV0Cut::dummyV0Cut(){
-  mNpassed = mNfailed = 0;
+    //________________________
+    dummyV0Cut::dummyV0Cut() {
+   mNpassed = mNfailed = 0;
 }
 //________________________
-bool dummyV0Cut::Pass(const StHbtV0* v0)
-{
-  mNpassed++;
-  return (true);
+bool dummyV0Cut::Pass(const StHbtV0* v0) {
+   mNpassed++;
+   return (true);
 }
 //________________________
-StHbtString dummyV0Cut::Report()
-{
-  return "dummyV0Cut\n";
-}
+StHbtString dummyV0Cut::Report() { return "dummyV0Cut\n"; }
 //________________________
-

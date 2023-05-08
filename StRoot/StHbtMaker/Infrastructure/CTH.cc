@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *              Histogram classes (inherited from TH?Ds) which 
+ *              Histogram classes (inherited from TH?Ds) which
  *              will be listed by the StHbtHistoCollector
  *
  ***************************************************************************
@@ -20,7 +20,4 @@
  **************************************************************************/
 #include "StHbtMaker/Infrastructure/CTH.hh"
 
-ClassImp(CTH1D)
-ClassImp(CTH2D)
-ClassImp(CTH3D)
- 
+ClassImp(CTH1D) ClassImp(CTH2D) ClassImp(CTH3D)

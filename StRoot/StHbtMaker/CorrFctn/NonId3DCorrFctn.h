@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a simple Q-invariant correlation function           
+ *   a simple Q-invariant correlation function
  *
  ***************************************************************************
  *
@@ -50,90 +50,83 @@
 #include "StHbtMaker/Base/StHbtCorrFctn.hh"
 
 class NonId3DCorrFctn : public StHbtCorrFctn {
-public:
-  NonId3DCorrFctn(char* title, const int& nbins, const float& QinvLo, 
-		     const float& QinvHi);
-  NonId3DCorrFctn(char* title, const int& nbins, const float& QinvLo, 
-		     const float& QinvHi, const int mqSideSel);
-  NonId3DCorrFctn(char* title, const int& nbins, const float& QinvLo, 
-		     const float& QinvHi, const float KCompCut);
-  virtual ~NonId3DCorrFctn();
+  public:
+   NonId3DCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
+   NonId3DCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi, const int mqSideSel);
+   NonId3DCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi, const float KCompCut);
+   virtual ~NonId3DCorrFctn();
 
-  virtual void makeHistos(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
+   virtual void makeHistos(char* title, const int& nbins, const float& QinvLo, const float& QinvHi);
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
-  virtual void Write();
+   virtual void Finish();
+   virtual void Write();
 
+  private:
+   StHbt1DHisto* mNumOutP;
+   StHbt1DHisto* mDenOutP;
+   StHbt1DHisto* mRatOutP;
+   StHbt1DHisto* mNumOutN;
+   StHbt1DHisto* mDenOutN;
+   StHbt1DHisto* mRatOutN;
+   StHbt1DHisto* mRatOut;
+   StHbt1DHisto* mRatOutNOverP;
 
-private:
-  StHbt1DHisto* mNumOutP;
-  StHbt1DHisto* mDenOutP;  
-  StHbt1DHisto* mRatOutP;  
-  StHbt1DHisto* mNumOutN;
-  StHbt1DHisto* mDenOutN;  
-  StHbt1DHisto* mRatOutN;
-  StHbt1DHisto* mRatOut; 
-  StHbt1DHisto* mRatOutNOverP;
+   StHbt1DHisto* mNumSideP;
+   StHbt1DHisto* mDenSideP;
+   StHbt1DHisto* mRatSideP;
+   StHbt1DHisto* mNumSideN;
+   StHbt1DHisto* mDenSideN;
+   StHbt1DHisto* mRatSideN;
+   StHbt1DHisto* mRatSide;
+   StHbt1DHisto* mRatSideNOverP;
 
-  StHbt1DHisto* mNumSideP;
-  StHbt1DHisto* mDenSideP;  
-  StHbt1DHisto* mRatSideP;  
-  StHbt1DHisto* mNumSideN;
-  StHbt1DHisto* mDenSideN;  
-  StHbt1DHisto* mRatSideN;
-  StHbt1DHisto* mRatSide; 
-  StHbt1DHisto* mRatSideNOverP;
+   StHbt1DHisto* mNumLongP;
+   StHbt1DHisto* mDenLongP;
+   StHbt1DHisto* mRatLongP;
+   StHbt1DHisto* mNumLongN;
+   StHbt1DHisto* mDenLongN;
+   StHbt1DHisto* mRatLongN;
+   StHbt1DHisto* mRatLong;
+   StHbt1DHisto* mRatLongNOverP;
 
-  StHbt1DHisto* mNumLongP;
-  StHbt1DHisto* mDenLongP;  
-  StHbt1DHisto* mRatLongP;  
-  StHbt1DHisto* mNumLongN;
-  StHbt1DHisto* mDenLongN;  
-  StHbt1DHisto* mRatLongN;
-  StHbt1DHisto* mRatLong; 
-  StHbt1DHisto* mRatLongNOverP;
+   StHbt2DHisto* mHOutKSame;
+   StHbt2DHisto* mHOutKDiff;
+   StHbt2DHisto* mHSideKSame;
+   StHbt2DHisto* mHSideKDiff;
+   StHbt2DHisto* mHLongKSame;
+   StHbt2DHisto* mHLongKDiff;
 
-  StHbt2DHisto* mHOutKSame;
-  StHbt2DHisto* mHOutKDiff;
-  StHbt2DHisto* mHSideKSame;
-  StHbt2DHisto* mHSideKDiff;
-  StHbt2DHisto* mHLongKSame;
-  StHbt2DHisto* mHLongKDiff;
+   /*   StHbt2DHisto* mHQSideExitNum; */
+   /*   StHbt2DHisto* mHKStarExitNumSideP; */
+   /*   StHbt2DHisto* mHKStarExitNumSideN; */
 
-/*   StHbt2DHisto* mHQSideExitNum; */
-/*   StHbt2DHisto* mHKStarExitNumSideP; */
-/*   StHbt2DHisto* mHKStarExitNumSideN; */
+   /*   StHbt2DHisto* mHQSideExitDen; */
+   /*   StHbt2DHisto* mHKStarExitDenSideP; */
+   /*   StHbt2DHisto* mHKStarExitDenSideN; */
 
-/*   StHbt2DHisto* mHQSideExitDen; */
-/*   StHbt2DHisto* mHKStarExitDenSideP; */
-/*   StHbt2DHisto* mHKStarExitDenSideN; */
+   /*   StHbt2DHisto* mHQOutExitNum; */
+   /*   StHbt2DHisto* mHKStarExitNumOutP; */
+   /*   StHbt2DHisto* mHKStarExitNumOutN; */
 
-/*   StHbt2DHisto* mHQOutExitNum; */
-/*   StHbt2DHisto* mHKStarExitNumOutP; */
-/*   StHbt2DHisto* mHKStarExitNumOutN; */
+   /*   StHbt2DHisto* mHQOutExitDen; */
+   /*   StHbt2DHisto* mHKStarExitDenOutP; */
+   /*   StHbt2DHisto* mHKStarExitDenOutN; */
 
-/*   StHbt2DHisto* mHQOutExitDen; */
-/*   StHbt2DHisto* mHKStarExitDenOutP; */
-/*   StHbt2DHisto* mHKStarExitDenOutN; */
+   //  StHbt2DHisto* mHPt1KStarOutNum;
+   //  StHbt2DHisto* mHPt1KStarOutDen;
+   //  StHbt2DHisto* mHPt2KStarOutNum;
+   //  StHbt2DHisto* mHPt2KStarOutDen;
 
-//  StHbt2DHisto* mHPt1KStarOutNum;
-//  StHbt2DHisto* mHPt1KStarOutDen;
-//  StHbt2DHisto* mHPt2KStarOutNum;
-//  StHbt2DHisto* mHPt2KStarOutDen;
+   int mqSideSel;
+   float mKCompCut;
 
-  int mqSideSel;
-  float mKCompCut;
-  
-
-#ifdef __ROOT__ 
-  ClassDef(NonId3DCorrFctn, 1)
+#ifdef __ROOT__
+   ClassDef(NonId3DCorrFctn, 1)
 #endif
 };
 
-
 #endif
-

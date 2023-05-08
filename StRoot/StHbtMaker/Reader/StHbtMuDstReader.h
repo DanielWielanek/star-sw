@@ -8,14 +8,11 @@
 
 #include <string>
 
-#include "StMaker.h"
-#include "StChain.h"
-#include "St_DataSetIter.h"
-#include "StMuDSTMaker/COMMON/StMuArrays.h"
-
 #include "Base/StHbtEventReader.hh"
-
-
+#include "StChain.h"
+#include "StMaker.h"
+#include "StMuDSTMaker/COMMON/StMuArrays.h"
+#include "St_DataSetIter.h"
 
 class StMuEvent;
 class StMuDst;
@@ -51,152 +48,157 @@ class TTree;
 class TChain;
 class TClonesArray;
 
-//!class ioMode;//!enum ioMode {ioRead, ioWrite};
-//!class ioNameMode;//!enum ioNameMode {ioFix, ioAuto};
+//! class ioMode;//!enum ioMode {ioRead, ioWrite};
+//! class ioNameMode;//!enum ioNameMode {ioFix, ioAuto};
 
 class StHbtMuDstReader : public StHbtEventReader {
- public:
-  StHbtMuDstReader(int mode, int nameMode, const char* dirName="./", const char* fileName="test.event.root", const char* filter=".", int maxfiles=10 );
-  ~StHbtMuDstReader();
-  
-  StHbtEvent* ReturnHbtEvent();
-  int Init();
-  int Init(const char* ReadWrite, StHbtString& Message)
-          { return StHbtEventReader::Init(ReadWrite,Message);}//WarnOff
-  void Clear();
-  void Finish();
+  public:
+   StHbtMuDstReader(int mode, int nameMode, const char* dirName = "./", const char* fileName = "test.event.root",
+                    const char* filter = ".", int maxfiles = 10);
+   ~StHbtMuDstReader();
 
-  bool readTracks();
-  bool readV0s();
-  bool readXis();
-  bool readKinks();
-  unsigned int trackType(); 
-  StMuDst* muDst();
-  TChain* chain();
-  TTree* tree();
-  StEvent* stEvent();
-  StStrangeMuDstMaker* stStrangeMuDstMaker();
+   StHbtEvent* ReturnHbtEvent();
+   int Init();
+   int Init(const char* ReadWrite, StHbtString& Message) {
+      return StHbtEventReader::Init(ReadWrite, Message);
+   }  // WarnOff
+   void Clear();
+   void Finish();
 
-  void setTrackFilter(StMuCut* c);
-  void setL3TrackFilter(StMuCut* c);
-  void setProbabilityPidFile(const char* file);
-  void setStEvent(StEvent*);
-  void setStStrangeMuDstMaker(StStrangeMuDstMaker*);
-  void setTrackType(unsigned int);
-  void setReadTracks(bool);
-  void setReadV0s(bool);
-  void setReadXis(bool);
-  void setReadKinks(bool);
+   bool readTracks();
+   bool readV0s();
+   bool readXis();
+   bool readKinks();
+   unsigned int trackType();
+   StMuDst* muDst();
+   TChain* chain();
+   TTree* tree();
+   StEvent* stEvent();
+   StStrangeMuDstMaker* stStrangeMuDstMaker();
 
-  enum ioMode {ioRead, ioWrite};
-  enum ioNameMode {ioFix, ioAuto};
-private:
- 
-  StMuDst* mStMuDst;
+   void setTrackFilter(StMuCut* c);
+   void setL3TrackFilter(StMuCut* c);
+   void setProbabilityPidFile(const char* file);
+   void setStEvent(StEvent*);
+   void setStStrangeMuDstMaker(StStrangeMuDstMaker*);
+   void setTrackType(unsigned int);
+   void setReadTracks(bool);
+   void setReadV0s(bool);
+   void setReadXis(bool);
+   void setReadKinks(bool);
 
-  StEvent* mStEvent;
-  StStrangeMuDstMaker* mStStrangeMuDstMaker;
-  StIOMaker* mIOMaker;
+   enum ioMode { ioRead, ioWrite };
+   enum ioNameMode { ioFix, ioAuto };
 
-  ioMode mIoMode;
-  ioNameMode mIoNameMode;
-  string mDirName;
-  string mFileName;
-  string mFilter;
-  int mMaxFiles;
+  private:
+   StMuDst* mStMuDst;
 
-  unsigned int mTrackType;
-  bool mReadTracks;
-  bool mReadV0s;
-  bool mReadXis;
-  bool mReadKinks;
-  bool mFinish;
+   StEvent* mStEvent;
+   StStrangeMuDstMaker* mStStrangeMuDstMaker;
+   StIOMaker* mIOMaker;
 
-  StMuCut* mTrackFilter;
-  StMuCut* mL3TrackFilter;
+   ioMode mIoMode;
+   ioNameMode mIoNameMode;
+   string mDirName;
+   string mFileName;
+   string mFilter;
+   int mMaxFiles;
 
-  TFile* mCurrentFile;
-  string mCurrentFileName;
+   unsigned int mTrackType;
+   bool mReadTracks;
+   bool mReadV0s;
+   bool mReadXis;
+   bool mReadKinks;
+   bool mFinish;
 
-  TChain* mChain;
-  TTree* mTTree;
+   StMuCut* mTrackFilter;
+   StMuCut* mL3TrackFilter;
 
-  int mEventCounter;
-  int mSplit;
-  int mCompress;
-  int mBufferSize;
+   TFile* mCurrentFile;
+   string mCurrentFileName;
 
-  StHbtEvent* mHbtEvent;
-  StuProbabilityPidAlgorithm* mProbabilityPidAlgorithm;
+   TChain* mChain;
+   TTree* mTTree;
 
+   int mEventCounter;
+   int mSplit;
+   int mCompress;
+   int mBufferSize;
 
-  //! protected:
-  
-  string buildFileName(string dir, string fileName, string extention);
-  void openWrite(string fileName);
-  void write();
-  void closeWrite();
+   StHbtEvent* mHbtEvent;
+   StuProbabilityPidAlgorithm* mProbabilityPidAlgorithm;
 
-  void makeChain(const char* dir, const char* filter, int maxFiles=10);
-  void openRead();
-  void read();
-  void closeRead();
+   //! protected:
 
-  void clear(TClonesArray* t, int& counter);
-  void clear();
-  TClonesArray* clonesArray(TClonesArray* p, const char* type, int size, int& counter);
+   string buildFileName(string dir, string fileName, string extention);
+   void openWrite(string fileName);
+   void write();
+   void closeWrite();
 
-  void fill();
-  void fillTrees(StEvent* ev, StMuCut* cut=0);
-  void fillEvent(StEvent* ev, StMuCut* cut=0);
-  void fillStrange(StStrangeMuDstMaker*);
-  void fillL3Tracks(StEvent* ev, StMuCut* cut=0);
-  void fillTracks(StEvent* ev, StMuCut* cut=0);
-  void fillDetectorStates(StEvent* ev);
-  void fillL3AlgorithmInfo(StEvent* ev);
-  template <class T> void addType(TClonesArray* tcaFrom, TClonesArray* tcaTo , T t);
-  template <class T> int addType(TClonesArray* tcaTo , T t);
-  template <class T, class U> int addType(TClonesArray* tcaTo , U u, T t);
-  void addTrackNode(const StEvent* ev, const StTrackNode* node, StMuCut* cut, TClonesArray* gTCA=0, TClonesArray* pTCA=0, TClonesArray* oTCA=0, bool l3=false);
-  int addTrack(TClonesArray* tca, const StEvent* event, const StTrack* track, StMuCut* cut, int index2Global, bool l3=false);
-/*   int addRichSpectra(const StRichSpectra* rich); */
-/*   int addDetectorState(const StDetectorState* states); */
-/*   int addL3AlgorithmInfo(TClonesArray* tca, StL3AlgorithmInfo* alg); */
+   void makeChain(const char* dir, const char* filter, int maxFiles = 10);
+   void openRead();
+   void read();
+   void closeRead();
 
-  StRichSpectra* richSpectra(const StTrack* track);
+   void clear(TClonesArray* t, int& counter);
+   void clear();
+   TClonesArray* clonesArray(TClonesArray* p, const char* type, int size, int& counter);
 
+   void fill();
+   void fillTrees(StEvent* ev, StMuCut* cut = 0);
+   void fillEvent(StEvent* ev, StMuCut* cut = 0);
+   void fillStrange(StStrangeMuDstMaker*);
+   void fillL3Tracks(StEvent* ev, StMuCut* cut = 0);
+   void fillTracks(StEvent* ev, StMuCut* cut = 0);
+   void fillDetectorStates(StEvent* ev);
+   void fillL3AlgorithmInfo(StEvent* ev);
+   template <class T>
+   void addType(TClonesArray* tcaFrom, TClonesArray* tcaTo, T t);
+   template <class T>
+   int addType(TClonesArray* tcaTo, T t);
+   template <class T, class U>
+   int addType(TClonesArray* tcaTo, U u, T t);
+   void addTrackNode(const StEvent* ev, const StTrackNode* node, StMuCut* cut, TClonesArray* gTCA = 0,
+                     TClonesArray* pTCA = 0, TClonesArray* oTCA = 0, bool l3 = false);
+   int addTrack(TClonesArray* tca, const StEvent* event, const StTrack* track, StMuCut* cut, int index2Global,
+                bool l3 = false);
+   /*   int addRichSpectra(const StRichSpectra* rich); */
+   /*   int addDetectorState(const StDetectorState* states); */
+   /*   int addL3AlgorithmInfo(TClonesArray* tca, StL3AlgorithmInfo* alg); */
 
-  string basename(string);
- 
-  friend class StMuDst;
+   StRichSpectra* richSpectra(const StTrack* track);
 
-  TClonesArray* arrays[__NARRAYS__];
-  TClonesArray* mArrays[__NARRAYS__];
+   string basename(string);
 
-  TClonesArray* strangeArrays[__NSTRANGEARRAYS__];
-  TClonesArray* mStrangeArrays[__NSTRANGEARRAYS__];
+   friend class StMuDst;
 
-  ClassDef(StHbtMuDstReader, 1)
+   TClonesArray* arrays[__NARRAYS__];
+   TClonesArray* mArrays[__NARRAYS__];
+
+   TClonesArray* strangeArrays[__NSTRANGEARRAYS__];
+   TClonesArray* mStrangeArrays[__NSTRANGEARRAYS__];
+
+   ClassDef(StHbtMuDstReader, 1)
 };
 
-inline StMuDst* StHbtMuDstReader::muDst() { return mStMuDst;}
+inline StMuDst* StHbtMuDstReader::muDst() { return mStMuDst; }
 inline TChain* StHbtMuDstReader::chain() { return mChain; }
 inline TTree* StHbtMuDstReader::tree() { return mTTree; }
-inline void StHbtMuDstReader::setTrackFilter(StMuCut* c) { mTrackFilter=c;}
-inline void StHbtMuDstReader::setL3TrackFilter(StMuCut* c) { mL3TrackFilter=c;}
-inline void StHbtMuDstReader::setStStrangeMuDstMaker(StStrangeMuDstMaker* s) {mStStrangeMuDstMaker=s;}
-inline StStrangeMuDstMaker* StHbtMuDstReader::stStrangeMuDstMaker() {return mStStrangeMuDstMaker;}
-inline void StHbtMuDstReader::setTrackType(unsigned int t) {mTrackType=t;}
-inline unsigned int StHbtMuDstReader::trackType() {return mTrackType;}
+inline void StHbtMuDstReader::setTrackFilter(StMuCut* c) { mTrackFilter = c; }
+inline void StHbtMuDstReader::setL3TrackFilter(StMuCut* c) { mL3TrackFilter = c; }
+inline void StHbtMuDstReader::setStStrangeMuDstMaker(StStrangeMuDstMaker* s) { mStStrangeMuDstMaker = s; }
+inline StStrangeMuDstMaker* StHbtMuDstReader::stStrangeMuDstMaker() { return mStStrangeMuDstMaker; }
+inline void StHbtMuDstReader::setTrackType(unsigned int t) { mTrackType = t; }
+inline unsigned int StHbtMuDstReader::trackType() { return mTrackType; }
 
-inline bool StHbtMuDstReader::readTracks() { return mReadTracks;}
-inline bool StHbtMuDstReader::readV0s() { return mReadV0s;}
-inline bool StHbtMuDstReader::readXis() { return mReadXis;}
-inline bool StHbtMuDstReader::readKinks() { return mReadKinks;}
-inline void StHbtMuDstReader::setReadTracks(bool b) { mReadTracks=b;}
-inline void StHbtMuDstReader::setReadV0s(bool b) { mReadV0s=b;}
-inline void StHbtMuDstReader::setReadXis(bool b) { mReadXis=b;}
-inline void StHbtMuDstReader::setReadKinks(bool b) { mReadKinks=b;}
+inline bool StHbtMuDstReader::readTracks() { return mReadTracks; }
+inline bool StHbtMuDstReader::readV0s() { return mReadV0s; }
+inline bool StHbtMuDstReader::readXis() { return mReadXis; }
+inline bool StHbtMuDstReader::readKinks() { return mReadKinks; }
+inline void StHbtMuDstReader::setReadTracks(bool b) { mReadTracks = b; }
+inline void StHbtMuDstReader::setReadV0s(bool b) { mReadV0s = b; }
+inline void StHbtMuDstReader::setReadXis(bool b) { mReadXis = b; }
+inline void StHbtMuDstReader::setReadKinks(bool b) { mReadKinks = b; }
 
 #endif
 

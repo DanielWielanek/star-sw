@@ -11,7 +11,7 @@
  *  gone through Event and Track cuts, so only Pair cuts are left.
  *  PicoEvents are *internal* to the code, and are stored in the
  *  Event-mixing buffers.
- *           
+ *
  *
  ***************************************************************************
  *
@@ -29,27 +29,25 @@
 
 #include "StHbtMaker/Infrastructure/StHbtParticleCollection.hh"
 
-class StHbtPicoEvent{
-public:
-  StHbtPicoEvent();
-  ~StHbtPicoEvent();
+class StHbtPicoEvent {
+  public:
+   StHbtPicoEvent();
+   ~StHbtPicoEvent();
 
-  /* may want to have other stuff in here, like where is primary vertex */
+   /* may want to have other stuff in here, like where is primary vertex */
 
-  StHbtParticleCollection* FirstParticleCollection();
-  StHbtParticleCollection* SecondParticleCollection();
-  StHbtParticleCollection* ThirdParticleCollection();
+   StHbtParticleCollection* FirstParticleCollection();
+   StHbtParticleCollection* SecondParticleCollection();
+   StHbtParticleCollection* ThirdParticleCollection();
 
-private:
-  StHbtParticleCollection* mFirstParticleCollection;
-  StHbtParticleCollection* mSecondParticleCollection;
-  StHbtParticleCollection* mThirdParticleCollection;
+  private:
+   StHbtParticleCollection* mFirstParticleCollection;
+   StHbtParticleCollection* mSecondParticleCollection;
+   StHbtParticleCollection* mThirdParticleCollection;
 };
 
-inline StHbtParticleCollection* StHbtPicoEvent::FirstParticleCollection(){return mFirstParticleCollection;}
-inline StHbtParticleCollection* StHbtPicoEvent::SecondParticleCollection(){return mSecondParticleCollection;}
-inline StHbtParticleCollection* StHbtPicoEvent::ThirdParticleCollection(){return mThirdParticleCollection;}
-
-
+inline StHbtParticleCollection* StHbtPicoEvent::FirstParticleCollection() { return mFirstParticleCollection; }
+inline StHbtParticleCollection* StHbtPicoEvent::SecondParticleCollection() { return mSecondParticleCollection; }
+inline StHbtParticleCollection* StHbtPicoEvent::ThirdParticleCollection() { return mThirdParticleCollection; }
 
 #endif

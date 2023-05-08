@@ -25,7 +25,9 @@
  * Enable calculation of exit/entrance separation for V0 daughters
  *
  * Revision 1.16  2001/12/14 23:11:30  fretiere
- * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle the hit information and cope with my code
+ * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function
+ *which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle
+ *the hit information and cope with my code
  *
  * Revision 1.15  2001/05/25 23:23:59  lisa
  * Added in StHbtKink stuff
@@ -91,144 +93,137 @@
 #ifndef StHbtParticle_hh
 #define StHbtParticle_hh
 
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
-#include "StHbtMaker/Infrastructure/StHbtTrack.hh"
-#include "StHbtMaker/Infrastructure/StHbtV0.hh"
 #include "StHbtMaker/Infrastructure/StHbtKink.hh"
+#include "StHbtMaker/Infrastructure/StHbtTrack.hh"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
+#include "StHbtMaker/Infrastructure/StHbtV0.hh"
 #include "StHbtMaker/Infrastructure/StHbtXi.hh"
 #include "StPhysicalHelixD.hh"
 // ***
 class StHbtHiddenInfo;
 // ***
-class StHbtParticle{
-public:
-  StHbtParticle();
-  StHbtParticle(const StHbtTrack* const hbtTrack, const double& mass);
-  StHbtParticle(const StHbtV0* const hbtV0, const double& mass);
-  StHbtParticle(const StHbtKink* const hbtKink, const double& mass);
-  StHbtParticle(const StHbtXi* const hbtXi, const double& mass);
-  ~StHbtParticle();
+class StHbtParticle {
+  public:
+   StHbtParticle();
+   StHbtParticle(const StHbtTrack* const hbtTrack, const double& mass);
+   StHbtParticle(const StHbtV0* const hbtV0, const double& mass);
+   StHbtParticle(const StHbtKink* const hbtKink, const double& mass);
+   StHbtParticle(const StHbtXi* const hbtXi, const double& mass);
+   ~StHbtParticle();
 
-  const StHbtLorentzVector& FourMomentum() const;
+   const StHbtLorentzVector& FourMomentum() const;
 
-  StPhysicalHelixD& Helix();
+   StPhysicalHelixD& Helix();
 
-  const StHbtThreeVector DecayVertexPosition() const;
+   const StHbtThreeVector DecayVertexPosition() const;
 
-  unsigned long TopologyMap(const int word) const;
-  int NumberOfHits() const;
+   unsigned long TopologyMap(const int word) const;
+   int NumberOfHits() const;
 
-  unsigned long TrackId() const;         // only for particles from tracks 
-  unsigned short   NegTrackId() const;   // only for particles from v0 
-  unsigned short   PosTrackId() const;   // only for particles from v0 
+   unsigned long TrackId() const;      // only for particles from tracks
+   unsigned short NegTrackId() const;  // only for particles from v0
+   unsigned short PosTrackId() const;  // only for particles from v0
 
-  StHbtTrack* Track() const;
-  StHbtV0* V0() const;
-  StHbtKink* Kink() const;
+   StHbtTrack* Track() const;
+   StHbtV0* V0() const;
+   StHbtKink* Kink() const;
 
-  const StHbtThreeVector& NominalTpcExitPoint() const;     // position track exits TPC assuming start at (0,0,0)
-  const StHbtThreeVector& NominalTpcEntrancePoint() const; // position track crosses IFC assuming start at (0,0,0)
-  const StHbtThreeVector& TpcV0PosExitPoint() const;  
-  const StHbtThreeVector& TpcV0PosEntrancePoint() const;
-  const StHbtThreeVector& TpcV0NegExitPoint() const;  
-  const StHbtThreeVector& TpcV0NegEntrancePoint() const;
+   const StHbtThreeVector& NominalTpcExitPoint() const;      // position track exits TPC assuming start at (0,0,0)
+   const StHbtThreeVector& NominalTpcEntrancePoint() const;  // position track crosses IFC assuming start at (0,0,0)
+   const StHbtThreeVector& TpcV0PosExitPoint() const;
+   const StHbtThreeVector& TpcV0PosEntrancePoint() const;
+   const StHbtThreeVector& TpcV0NegExitPoint() const;
+   const StHbtThreeVector& TpcV0NegEntrancePoint() const;
 
-  // the following method is for explicit internal calculation to fill datamembers.
-  // It is invoked automatically if StHbtParticle constructed from StHbtTrack
-  //void CalculateNominalTpcExitAndEntrancePoints(); // NOTE - this requires the mHelix, so be sure this is filled
+   // the following method is for explicit internal calculation to fill datamembers.
+   // It is invoked automatically if StHbtParticle constructed from StHbtTrack
+   // void CalculateNominalTpcExitAndEntrancePoints(); // NOTE - this requires the mHelix, so be sure this is filled
 
+   StHbtThreeVector mNominalPosSample[11];  // I make this public for convenience and speed of StHbtPair()
+   float mZ[45];
+   float mU[45];
+   int mSect[45];
 
-  StHbtThreeVector mNominalPosSample[11];  // I make this public for convenience and speed of StHbtPair()
-  float mZ[45];
-  float mU[45];
-  int mSect[45];
+   void ResetFourMomentum(const StHbtLorentzVector& fourMomentum);
 
-  void ResetFourMomentum(const StHbtLorentzVector& fourMomentum);
+   const StHbtHiddenInfo* HiddenInfo() const;
+   // Fab private
+   StHbtHiddenInfo* getHiddenInfo() const;
+   void SetHiddenInfo(StHbtHiddenInfo* aHiddenInfo);
+   void CalculatePurity();
+   double GetPionPurity();
+   double GetKaonPurity();
+   double GetProtonPurity();
+   void CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, StHbtThreeVector* PrimVert,
+                                          StHbtThreeVector* SecVert, StHbtThreeVector* tmpTpcEntrancePoint,
+                                          StHbtThreeVector* tmpTpcExitPoint, StHbtThreeVector* tmpPosSample,
+                                          float* tmpZ, float* tmpU, int* tmpSect);
 
-  const StHbtHiddenInfo*  HiddenInfo() const;
-  // Fab private
-  StHbtHiddenInfo*  getHiddenInfo() const;
-  void SetHiddenInfo(StHbtHiddenInfo* aHiddenInfo);
-  void CalculatePurity();
-  double GetPionPurity();
-  double GetKaonPurity();
-  double GetProtonPurity();
-  void CalculateTpcExitAndEntrancePoints( StPhysicalHelixD* tHelix,
-					  StHbtThreeVector* PrimVert,
-					  StHbtThreeVector* SecVert,
-					  StHbtThreeVector* tmpTpcEntrancePoint,
-					  StHbtThreeVector* tmpTpcExitPoint,
-					  StHbtThreeVector* tmpPosSample,
-					  float* tmpZ,float* tmpU,int* tmpSect);
+   // For V0 Neg Daugthers TpcEntrance/ExitPoints
+   StHbtThreeVector* mTpcV0NegPosSample;
+   float* mV0NegZ;
+   float* mV0NegU;
+   int* mV0NegSect;
 
-  // For V0 Neg Daugthers TpcEntrance/ExitPoints
-  StHbtThreeVector* mTpcV0NegPosSample;
-  float* mV0NegZ;
-  float* mV0NegU;
-  int* mV0NegSect;
- 
-private:
-  StHbtTrack* mTrack;  // copy of the track the particle was formed of, else Null
-  StHbtV0* mV0;        // copy of the v0 the particle was formed of, else Null
-  StHbtKink* mKink;        // copy of the v0 the particle was formed of, else Null
-  StHbtXi* mXi;
+  private:
+   StHbtTrack* mTrack;  // copy of the track the particle was formed of, else Null
+   StHbtV0* mV0;        // copy of the v0 the particle was formed of, else Null
+   StHbtKink* mKink;    // copy of the v0 the particle was formed of, else Null
+   StHbtXi* mXi;
 
-  StHbtLorentzVector mFourMomentum;
-  StPhysicalHelixD mHelix;
-  unsigned long  mMap[2]; 
-  int mNhits;
-  StHbtThreeVector mNominalTpcExitPoint;
-  StHbtThreeVector mNominalTpcEntrancePoint;
-  StHbtHiddenInfo* mHiddenInfo;  // Fab private
+   StHbtLorentzVector mFourMomentum;
+   StPhysicalHelixD mHelix;
+   unsigned long mMap[2];
+   int mNhits;
+   StHbtThreeVector mNominalTpcExitPoint;
+   StHbtThreeVector mNominalTpcEntrancePoint;
+   StHbtHiddenInfo* mHiddenInfo;  // Fab private
 
-  double mPurity[6];
+   double mPurity[6];
 
-  static double mPrimPimPar0;
-  static double mPrimPimPar1;
-  static double mPrimPimPar2;
-  static double mPrimPipPar0;
-  static double mPrimPipPar1;
-  static double mPrimPipPar2;
-  static double mPrimPmPar0;
-  static double mPrimPmPar1;
-  static double mPrimPmPar2;
-  static double mPrimPpPar0;
-  static double mPrimPpPar1;
-  static double mPrimPpPar2;
+   static double mPrimPimPar0;
+   static double mPrimPimPar1;
+   static double mPrimPimPar2;
+   static double mPrimPipPar0;
+   static double mPrimPipPar1;
+   static double mPrimPipPar2;
+   static double mPrimPmPar0;
+   static double mPrimPmPar1;
+   static double mPrimPmPar2;
+   static double mPrimPpPar0;
+   static double mPrimPpPar1;
+   static double mPrimPpPar2;
 
    // For V0 Daugthers TpcEntrance/ExitPoints
-  StHbtThreeVector mPrimaryVertex;
-  StHbtThreeVector mSecondaryVertex;
+   StHbtThreeVector mPrimaryVertex;
+   StHbtThreeVector mSecondaryVertex;
 
-  StPhysicalHelixD mHelixV0Pos;
-  StHbtThreeVector mTpcV0PosEntrancePoint;
-  StHbtThreeVector mTpcV0PosExitPoint;
+   StPhysicalHelixD mHelixV0Pos;
+   StHbtThreeVector mTpcV0PosEntrancePoint;
+   StHbtThreeVector mTpcV0PosExitPoint;
 
-  StPhysicalHelixD mHelixV0Neg;
-  StHbtThreeVector mTpcV0NegEntrancePoint;
-  StHbtThreeVector mTpcV0NegExitPoint;
+   StPhysicalHelixD mHelixV0Neg;
+   StHbtThreeVector mTpcV0NegEntrancePoint;
+   StHbtThreeVector mTpcV0NegExitPoint;
 };
 
 inline StHbtTrack* StHbtParticle::Track() const { return mTrack; }
-inline unsigned long  StHbtParticle::TrackId() const { return mTrack->TrackId(); }; 
-inline const StHbtLorentzVector& StHbtParticle::FourMomentum() const {return mFourMomentum;}
-inline StPhysicalHelixD& StHbtParticle::Helix() {return mHelix;}
-inline unsigned long StHbtParticle::TopologyMap(const int word) const {return mMap[word];}
-inline int StHbtParticle::NumberOfHits() const {return mNhits;}
+inline unsigned long StHbtParticle::TrackId() const { return mTrack->TrackId(); };
+inline const StHbtLorentzVector& StHbtParticle::FourMomentum() const { return mFourMomentum; }
+inline StPhysicalHelixD& StHbtParticle::Helix() { return mHelix; }
+inline unsigned long StHbtParticle::TopologyMap(const int word) const { return mMap[word]; }
+inline int StHbtParticle::NumberOfHits() const { return mNhits; }
 inline StHbtV0* StHbtParticle::V0() const { return mV0; }
 inline unsigned short StHbtParticle::NegTrackId() const { return mV0->idNeg(); }
 inline unsigned short StHbtParticle::PosTrackId() const { return mV0->idPos(); }
-inline const StHbtThreeVector StHbtParticle::DecayVertexPosition() const {return mV0->decayVertexV0(); }
+inline const StHbtThreeVector StHbtParticle::DecayVertexPosition() const { return mV0->decayVertexV0(); }
 // ***
-inline StHbtHiddenInfo* StHbtParticle::getHiddenInfo() const
-{return mHiddenInfo;}
-inline const StHbtHiddenInfo* StHbtParticle::HiddenInfo() const
-{return mHiddenInfo;}
-inline void StHbtParticle::SetHiddenInfo(StHbtHiddenInfo* aHiddenInfo)
-{ mHiddenInfo = aHiddenInfo->clone();}
+inline StHbtHiddenInfo* StHbtParticle::getHiddenInfo() const { return mHiddenInfo; }
+inline const StHbtHiddenInfo* StHbtParticle::HiddenInfo() const { return mHiddenInfo; }
+inline void StHbtParticle::SetHiddenInfo(StHbtHiddenInfo* aHiddenInfo) { mHiddenInfo = aHiddenInfo->clone(); }
 // ***
 
-inline void StHbtParticle::ResetFourMomentum(const StHbtLorentzVector& vec){mFourMomentum = vec;}
+inline void StHbtParticle::ResetFourMomentum(const StHbtLorentzVector& vec) { mFourMomentum = vec; }
 
 inline StHbtKink* StHbtParticle::Kink() const { return mKink; }
 

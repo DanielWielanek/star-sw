@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Mike Lisa, Ohio State, lisa@mps.ohio-state.edu
  ***************************************************************************
@@ -10,10 +10,9 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  **************************************************************************/
-
 
 #ifndef dummyV0Cut_hh
 #define dummyV0Cut_hh
@@ -24,24 +23,21 @@
 
 #include "StHbtMaker/Base/StHbtV0Cut.h"
 
-class dummyV0Cut : public StHbtV0Cut{
-public:
-  dummyV0Cut();
-  //~dummyV0Cut(){/* no-op*/}
+class dummyV0Cut : public StHbtV0Cut {
+  public:
+   dummyV0Cut();
+   //~dummyV0Cut(){/* no-op*/}
 
+   virtual bool Pass(const StHbtV0*);
 
-  virtual bool Pass(const StHbtV0*);
+   virtual StHbtString Report();
 
-  virtual StHbtString Report();
-
-
-#ifdef __ROOT__ 
-  ClassDef(dummyV0Cut, 1)
+#ifdef __ROOT__
+   ClassDef(dummyV0Cut, 1)
 #endif
 
-private:
-  long mNpassed;
-  long mNfailed;
+       private : long mNpassed;
+   long mNfailed;
 };
 
 #endif

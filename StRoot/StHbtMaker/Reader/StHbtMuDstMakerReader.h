@@ -8,15 +8,11 @@
 
 #include <string>
 
-#include "StMaker.h"
-#include "StChain.h"
-#include "St_DataSetIter.h"
-
-#include "StMuDSTMaker/COMMON/StMuDstMaker.h"
-
 #include "Base/StHbtEventReader.hh"
-
-
+#include "StChain.h"
+#include "StMaker.h"
+#include "StMuDSTMaker/COMMON/StMuDstMaker.h"
+#include "St_DataSetIter.h"
 
 class StMuEvent;
 class StMuDst;
@@ -51,89 +47,90 @@ class TTree;
 class TChain;
 class TClonesArray;
 
-//!class ioMode;//!enum ioMode {ioRead, ioWrite};
-//!class ioNameMode;//!enum ioNameMode {ioFix, ioAuto};
+//! class ioMode;//!enum ioMode {ioRead, ioWrite};
+//! class ioNameMode;//!enum ioNameMode {ioFix, ioAuto};
 
 class StHbtMuDstMakerReader : public StHbtEventReader {
- public:
-  StHbtMuDstMakerReader(StMuDstMaker* maker);
-  ~StHbtMuDstMakerReader();
-  
-  StHbtEvent* ReturnHbtEvent();
-  int Init();
-  int Init(const char* ReadWrite, StHbtString& Message)
-          { return StHbtEventReader::Init(ReadWrite,Message);}//WarnOff
-  void Clear();
-  void clear();
-  void Finish();
+  public:
+   StHbtMuDstMakerReader(StMuDstMaker* maker);
+   ~StHbtMuDstMakerReader();
 
-  bool readTracks();
-  bool readV0s();
-  bool readXis();
-  bool readKinks();
-  unsigned int trackType(); 
-  StMuDst* muDst();
+   StHbtEvent* ReturnHbtEvent();
+   int Init();
+   int Init(const char* ReadWrite, StHbtString& Message) {
+      return StHbtEventReader::Init(ReadWrite, Message);
+   }  // WarnOff
+   void Clear();
+   void clear();
+   void Finish();
 
-  StStrangeMuDstMaker* stStrangeMuDstMaker();
-  StFlowMaker* flowMaker();
+   bool readTracks();
+   bool readV0s();
+   bool readXis();
+   bool readKinks();
+   unsigned int trackType();
+   StMuDst* muDst();
 
-  void setProbabilityPidFile(const char* file);
-  void setFlowMaker(StFlowMaker*);
-  void setTrackType(unsigned int);
-  void setReadTracks(bool);
-  void setReadV0s(bool);
-  void setReadXis(bool);
-  void setReadKinks(bool);
+   StStrangeMuDstMaker* stStrangeMuDstMaker();
+   StFlowMaker* flowMaker();
 
-  enum ioMode {ioRead, ioWrite};
-  enum ioNameMode {ioFix, ioAuto};
-private:
- 
-  StMuDst* mMuDst;
+   void setProbabilityPidFile(const char* file);
+   void setFlowMaker(StFlowMaker*);
+   void setTrackType(unsigned int);
+   void setReadTracks(bool);
+   void setReadV0s(bool);
+   void setReadXis(bool);
+   void setReadKinks(bool);
 
-  StStrangeMuDstMaker* mStStrangeMuDstMaker;
-  StFlowMaker* mFlowMaker;
-  StMuDstMaker* mMuDstMaker;
+   enum ioMode { ioRead, ioWrite };
+   enum ioNameMode { ioFix, ioAuto };
 
-  ioMode mIoMode;
-  ioNameMode mIoNameMode;
-  string mDirName;
-  string mFileName;
-  string mFilter;
-  int mMaxFiles;
+  private:
+   StMuDst* mMuDst;
 
-  unsigned int mTrackType;
-  bool mReadTracks;
-  bool mReadV0s;
-  bool mReadXis;
-  bool mReadKinks;
-  bool mFinish;
+   StStrangeMuDstMaker* mStStrangeMuDstMaker;
+   StFlowMaker* mFlowMaker;
+   StMuDstMaker* mMuDstMaker;
 
-  TFile* mCurrentFile;
-  string mCurrentFileName;
+   ioMode mIoMode;
+   ioNameMode mIoNameMode;
+   string mDirName;
+   string mFileName;
+   string mFilter;
+   int mMaxFiles;
 
-  int mEventCounter;
+   unsigned int mTrackType;
+   bool mReadTracks;
+   bool mReadV0s;
+   bool mReadXis;
+   bool mReadKinks;
+   bool mFinish;
 
-  StHbtEvent* mHbtEvent;
-  StuProbabilityPidAlgorithm* mProbabilityPidAlgorithm;
+   TFile* mCurrentFile;
+   string mCurrentFileName;
 
-  ClassDef(StHbtMuDstMakerReader, 1)
+   int mEventCounter;
+
+   StHbtEvent* mHbtEvent;
+   StuProbabilityPidAlgorithm* mProbabilityPidAlgorithm;
+
+   ClassDef(StHbtMuDstMakerReader, 1)
 };
 
-inline StMuDst* StHbtMuDstMakerReader::muDst() { return mMuDst;}
-inline void StHbtMuDstMakerReader::setFlowMaker(StFlowMaker* f) {mFlowMaker=f;}
-inline StFlowMaker* StHbtMuDstMakerReader::flowMaker() {return mFlowMaker;}
-inline void StHbtMuDstMakerReader::setTrackType(unsigned int t) {mTrackType=t;}
-inline unsigned int StHbtMuDstMakerReader::trackType() {return mTrackType;}
+inline StMuDst* StHbtMuDstMakerReader::muDst() { return mMuDst; }
+inline void StHbtMuDstMakerReader::setFlowMaker(StFlowMaker* f) { mFlowMaker = f; }
+inline StFlowMaker* StHbtMuDstMakerReader::flowMaker() { return mFlowMaker; }
+inline void StHbtMuDstMakerReader::setTrackType(unsigned int t) { mTrackType = t; }
+inline unsigned int StHbtMuDstMakerReader::trackType() { return mTrackType; }
 
-inline bool StHbtMuDstMakerReader::readTracks() { return mReadTracks;}
-inline bool StHbtMuDstMakerReader::readV0s() { return mReadV0s;}
-inline bool StHbtMuDstMakerReader::readXis() { return mReadXis;}
-inline bool StHbtMuDstMakerReader::readKinks() { return mReadKinks;}
-inline void StHbtMuDstMakerReader::setReadTracks(bool b) { mReadTracks=b;}
-inline void StHbtMuDstMakerReader::setReadV0s(bool b) { mReadV0s=b;}
-inline void StHbtMuDstMakerReader::setReadXis(bool b) { mReadXis=b;}
-inline void StHbtMuDstMakerReader::setReadKinks(bool b) { mReadKinks=b;}
+inline bool StHbtMuDstMakerReader::readTracks() { return mReadTracks; }
+inline bool StHbtMuDstMakerReader::readV0s() { return mReadV0s; }
+inline bool StHbtMuDstMakerReader::readXis() { return mReadXis; }
+inline bool StHbtMuDstMakerReader::readKinks() { return mReadKinks; }
+inline void StHbtMuDstMakerReader::setReadTracks(bool b) { mReadTracks = b; }
+inline void StHbtMuDstMakerReader::setReadV0s(bool b) { mReadV0s = b; }
+inline void StHbtMuDstMakerReader::setReadXis(bool b) { mReadXis = b; }
+inline void StHbtMuDstMakerReader::setReadKinks(bool b) { mReadKinks = b; }
 
 #endif
 

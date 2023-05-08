@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a simple Q-invariant correlation function           
+ *   a simple Q-invariant correlation function
  *
  ***************************************************************************
  *
@@ -40,90 +40,79 @@
 #ifndef NonIdPurityCorrFctn_hh
 #define NonIdPurityCorrFctn_hh
 
-#include "StHbtMaker/Base/StHbtCorrFctn.hh"
 #include <TProfile.h>
 
+#include "StHbtMaker/Base/StHbtCorrFctn.hh"
+
 class NonIdPurityCorrFctn : public StHbtCorrFctn {
-public:
-  NonIdPurityCorrFctn(char* title, const int& nbins, const float& QinvLo, 
-		      const float& QinvHi, int p1Type, int p2Type);
-  virtual ~NonIdPurityCorrFctn();
+  public:
+   NonIdPurityCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi, int p1Type, int p2Type);
+   virtual ~NonIdPurityCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
-  virtual void Write();
+   virtual void Finish();
+   virtual void Write();
 
-  StHbt1DHisto* NumP();
-  StHbt1DHisto* DenP();
-  StHbt1DHisto* RatP();
-  StHbt1DHisto* NumN();
-  StHbt1DHisto* DenN();
-  StHbt1DHisto* RatN();
-  StHbt1DHisto* Rat();
-  TProfile* PairPurityOut();
-  TProfile* PairPuritySide();
-  TProfile* PairPurityLong();
+   StHbt1DHisto* NumP();
+   StHbt1DHisto* DenP();
+   StHbt1DHisto* RatP();
+   StHbt1DHisto* NumN();
+   StHbt1DHisto* DenN();
+   StHbt1DHisto* RatN();
+   StHbt1DHisto* Rat();
+   TProfile* PairPurityOut();
+   TProfile* PairPuritySide();
+   TProfile* PairPurityLong();
 
-private:
-  StHbt1DHisto* mNumP;
-  StHbt1DHisto* mDenP;  
-  StHbt1DHisto* mRatP;  
-  StHbt1DHisto* mNumN;
-  StHbt1DHisto* mDenN;  
-  StHbt1DHisto* mRatN;
-  StHbt1DHisto* mRat; 
-  StHbt1DHisto* mRatNOverP;
+  private:
+   StHbt1DHisto* mNumP;
+   StHbt1DHisto* mDenP;
+   StHbt1DHisto* mRatP;
+   StHbt1DHisto* mNumN;
+   StHbt1DHisto* mDenN;
+   StHbt1DHisto* mRatN;
+   StHbt1DHisto* mRat;
+   StHbt1DHisto* mRatNOverP;
 
-/*   StHbt1DHisto* mNumPinvP; */
-/*   StHbt1DHisto* mDenPinvP;   */
-/*   StHbt1DHisto* mNumPinvN; */
-/*   StHbt1DHisto* mDenPinvN;   */
-/*   StHbt1DHisto* mRatPinv;  */
+   /*   StHbt1DHisto* mNumPinvP; */
+   /*   StHbt1DHisto* mDenPinvP;   */
+   /*   StHbt1DHisto* mNumPinvN; */
+   /*   StHbt1DHisto* mDenPinvN;   */
+   /*   StHbt1DHisto* mRatPinv;  */
 
-/*   StHbt1DHisto* mRatPinvNormP; */
-/*   StHbt1DHisto* mRatPinvNormN; */
-/*   StHbt1DHisto* mRatPinvNorm; */
-/*   StHbt1DHisto* mRatPinvNormNOverP; */
+   /*   StHbt1DHisto* mRatPinvNormP; */
+   /*   StHbt1DHisto* mRatPinvNormN; */
+   /*   StHbt1DHisto* mRatPinvNorm; */
+   /*   StHbt1DHisto* mRatPinvNormNOverP; */
 
-/*   StHbt2DHisto* mQinvPt1; */
-/*   StHbt2DHisto* mQinvY1; */
+   /*   StHbt2DHisto* mQinvPt1; */
+   /*   StHbt2DHisto* mQinvY1; */
 
-/*   StHbt2DHisto* mHKCVKSame; */
-/*   StHbt2DHisto* mHKCVKDiff; */
+   /*   StHbt2DHisto* mHKCVKSame; */
+   /*   StHbt2DHisto* mHKCVKDiff; */
 
-  int mp1Type, mp2Type;
-  TProfile* mPairPurityOut;
-  TProfile* mPairPuritySide;
-  TProfile* mPairPurityLong;
-  
-#ifdef __ROOT__ 
-  ClassDef(NonIdPurityCorrFctn, 1)
+   int mp1Type, mp2Type;
+   TProfile* mPairPurityOut;
+   TProfile* mPairPuritySide;
+   TProfile* mPairPurityLong;
+
+#ifdef __ROOT__
+   ClassDef(NonIdPurityCorrFctn, 1)
 #endif
 };
 
-inline StHbt1DHisto* NonIdPurityCorrFctn::NumP()
-{return  mNumP;}
-inline StHbt1DHisto* NonIdPurityCorrFctn::DenP()
-{return  mDenP;}
-inline StHbt1DHisto* NonIdPurityCorrFctn::RatP()
-{return  mRatP;}
-inline StHbt1DHisto* NonIdPurityCorrFctn::NumN()
-{return  mNumN;}
-inline StHbt1DHisto* NonIdPurityCorrFctn::DenN()
-{return  mDenN;}
-inline StHbt1DHisto* NonIdPurityCorrFctn::RatN()
-{return  mRatN;}
-inline StHbt1DHisto* NonIdPurityCorrFctn::Rat()
-{return  mRat;}
-inline TProfile* NonIdPurityCorrFctn::PairPurityOut()
-{return  mPairPurityOut;}
-inline TProfile* NonIdPurityCorrFctn::PairPuritySide()
-{return  mPairPuritySide;}
-inline TProfile* NonIdPurityCorrFctn::PairPurityLong()
-{return  mPairPurityLong;}
+inline StHbt1DHisto* NonIdPurityCorrFctn::NumP() { return mNumP; }
+inline StHbt1DHisto* NonIdPurityCorrFctn::DenP() { return mDenP; }
+inline StHbt1DHisto* NonIdPurityCorrFctn::RatP() { return mRatP; }
+inline StHbt1DHisto* NonIdPurityCorrFctn::NumN() { return mNumN; }
+inline StHbt1DHisto* NonIdPurityCorrFctn::DenN() { return mDenN; }
+inline StHbt1DHisto* NonIdPurityCorrFctn::RatN() { return mRatN; }
+inline StHbt1DHisto* NonIdPurityCorrFctn::Rat() { return mRat; }
+inline TProfile* NonIdPurityCorrFctn::PairPurityOut() { return mPairPurityOut; }
+inline TProfile* NonIdPurityCorrFctn::PairPuritySide() { return mPairPuritySide; }
+inline TProfile* NonIdPurityCorrFctn::PairPurityLong() { return mPairPurityLong; }
 
 #endif
-

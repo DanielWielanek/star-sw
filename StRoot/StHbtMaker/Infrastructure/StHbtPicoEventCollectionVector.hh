@@ -18,21 +18,23 @@
 
 #ifndef StHbtPicoEventCollectionVector_hh
 #define StHbtPicoEventCollectionVector_hh
-#include "StHbtMaker/Infrastructure/StHbtPicoEventCollection.hh"
-#include <vector>
 #include <list>
+#include <vector>
+
+#include "StHbtMaker/Infrastructure/StHbtPicoEventCollection.hh"
 
 #if !defined(ST_NO_NAMESPACES)
-using std::vector;
 using std::list;
+using std::vector;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef vector<StHbtPicoEventCollection*, allocator<StHbtPicoEventCollection*> >            StHbtPicoEventCollectionVector;  //!
-typedef vector<StHbtPicoEventCollection*, allocator<StHbtPicoEventCollection*> >::iterator  StHbtPicoEventCollectionIterator;//!
+typedef vector<StHbtPicoEventCollection*, allocator<StHbtPicoEventCollection*> > StHbtPicoEventCollectionVector;  //!
+typedef vector<StHbtPicoEventCollection*, allocator<StHbtPicoEventCollection*> >::iterator
+    StHbtPicoEventCollectionIterator;  //!
 #else
-typedef vector<StHbtPicoEventCollection*>            StHbtPicoEventCollectionVector;//!
-typedef vector<StHbtPicoEventCollection*>::iterator  StHbtPicoEventCollectionIterator;//!
+typedef vector<StHbtPicoEventCollection*> StHbtPicoEventCollectionVector;              //!
+typedef vector<StHbtPicoEventCollection*>::iterator StHbtPicoEventCollectionIterator;  //!
 #endif
 
 #endif

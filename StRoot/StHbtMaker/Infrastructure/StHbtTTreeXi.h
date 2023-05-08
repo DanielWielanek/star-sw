@@ -9,9 +9,9 @@
 #ifndef StHbtTTreeXi_h
 #define StHbtTTreeXi_h
 
-#include "TObject.h"
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StHbtMaker/Infrastructure/StHbtTTreeV0.h"
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
+#include "TObject.h"
 
 class StHbtEvent;
 class StHbtXi;
@@ -19,40 +19,42 @@ class StHbtXi;
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-class StHbtTTreeXi : public StHbtTTreeV0  {
-public:
-  StHbtTTreeXi(){/* no-op */}
-  StHbtTTreeXi(const StHbtEvent*, const StHbtXi* ); // copy constructor
-  virtual ~StHbtTTreeXi(){/* no-op */}
+class StHbtTTreeXi : public StHbtTTreeV0 {
+  public:
+   StHbtTTreeXi() { /* no-op */
+   }
+   StHbtTTreeXi(const StHbtEvent*, const StHbtXi*);  // copy constructor
+   virtual ~StHbtTTreeXi() {                         /* no-op */
+   }
 
-  friend class StHbtTTreeReader;
-  friend class StHbtXi;
-protected:
+   friend class StHbtTTreeReader;
+   friend class StHbtXi;
 
-  int   mCharge;                     // Written out
-  float mDecayVertexXiX;
-  float mDecayVertexXiY;
-  float mDecayVertexXiZ;
+  protected:
+   int mCharge;  // Written out
+   float mDecayVertexXiX;
+   float mDecayVertexXiY;
+   float mDecayVertexXiZ;
 
-  float mDcaXiDaughters;
-  float mDcaBachelorToPrimVertex;
-  float mDcaXiToPrimVertex;
-  float mMomBachelorX;
-  float mMomBachelorY;
-  float mMomBachelorZ;
+   float mDcaXiDaughters;
+   float mDcaBachelorToPrimVertex;
+   float mDcaXiToPrimVertex;
+   float mMomBachelorX;
+   float mMomBachelorY;
+   float mMomBachelorZ;
 
-  unsigned short mKeyBachelor;
-  unsigned int mTopologyMapBachelor[2];
+   unsigned short mKeyBachelor;
+   unsigned int mTopologyMapBachelor[2];
 
-  float mChi2Xi;
-  float mClXi;
-  float mChi2Bachelor;
-  float mClBachelor;
+   float mChi2Xi;
+   float mClXi;
+   float mChi2Bachelor;
+   float mClBachelor;
 
-  float mDedxBachelor;
-  unsigned short mNumDedxBachelor;
+   float mDedxBachelor;
+   unsigned short mNumDedxBachelor;
 
-  ClassDef(StHbtTTreeXi,1)
+   ClassDef(StHbtTTreeXi, 1)
 };
 
 #endif

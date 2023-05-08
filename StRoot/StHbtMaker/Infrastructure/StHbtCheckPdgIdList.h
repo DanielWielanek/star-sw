@@ -17,50 +17,47 @@
  *
  **************************************************************************/
 
-
 #ifndef StHbtCheckPdgIdList_hh
 #define StHbtCheckPdgIdList_hh
 
-#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include <list>
+
+#include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<int, allocator<int> >            pdgIdList;       
-typedef list<int, allocator<int> >::iterator  pdgIdListIterator;
+typedef list<int, allocator<int> > pdgIdList;
+typedef list<int, allocator<int> >::iterator pdgIdListIterator;
 #else
-typedef list<int>            pdgIdList;
-typedef list<int>::iterator  pdgIdListIterator;
+typedef list<int> pdgIdList;
+typedef list<int>::iterator pdgIdListIterator;
 #endif
 
 class StHbtCheckPdgIdList {
+  public:
+   pdgIdList* mAcceptedParticles;  //!
+   pdgIdList* mAcceptedMothers;    //!
+   pdgIdList* mAcceptedDaughters;  //!
 
-public:
+   StHbtCheckPdgIdList();
+   virtual ~StHbtCheckPdgIdList();
 
-  pdgIdList* mAcceptedParticles; //!
-  pdgIdList* mAcceptedMothers;   //!
-  pdgIdList* mAcceptedDaughters; //!
+   StHbtString Report();
 
-  StHbtCheckPdgIdList();
-  virtual ~StHbtCheckPdgIdList();
-
-  StHbtString Report();
-
-  void AddAcceptedParticle( int pdgCode );
-  void AddAcceptedMother( int pdgCode );
-  void AddAcceptedDaughter( int pdgCode );
-  int  CheckPdgIdLists();                              // returns 1 if one of the three lists is not empty
-  int  CheckPdgIdList( pdgIdList* list);               // returns 1 if list is not empty
-  int  CheckPdgIdList( pdgIdList* list, int pdgCode ); // returns 1 if list is not empty or requested pdgCode is in list
-  int  CheckPdgIdList( int  pdgCode, int motherPdgCode, int daughterPdgCode);
+   void AddAcceptedParticle(int pdgCode);
+   void AddAcceptedMother(int pdgCode);
+   void AddAcceptedDaughter(int pdgCode);
+   int CheckPdgIdLists();                             // returns 1 if one of the three lists is not empty
+   int CheckPdgIdList(pdgIdList* list);               // returns 1 if list is not empty
+   int CheckPdgIdList(pdgIdList* list, int pdgCode);  // returns 1 if list is not empty or requested pdgCode is in list
+   int CheckPdgIdList(int pdgCode, int motherPdgCode, int daughterPdgCode);
 
 #ifdef __ROOT__
-  ClassDef(StHbtCheckPdgIdList, 0)
+   ClassDef(StHbtCheckPdgIdList, 0)
 #endif
 };
 
 #endif
-

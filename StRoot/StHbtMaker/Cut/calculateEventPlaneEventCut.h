@@ -32,86 +32,84 @@
 #ifndef calculateEventPlaneEventCut_hh
 #define calculateEventPlaneEventCut_hh
 
-#include "StMaker.h"
-
 #include "StHbtMaker/Base/StHbtEventCut.h"
+#include "StMaker.h"
 class StFlowMaker;
 class StFlowEvent;
 class StFlowAnalysisMaker;
 class StFlowSelection;
 
 class calculateEventPlaneEventCut : public StHbtEventCut {
+  public:
+   calculateEventPlaneEventCut();
+   calculateEventPlaneEventCut(calculateEventPlaneEventCut&);
+   //~calculateEventPlaneEventCut();
 
-public:
+   int NEventsPassed();
+   int NEventsFailed();
 
-  calculateEventPlaneEventCut();
-  calculateEventPlaneEventCut(calculateEventPlaneEventCut&);
-  //~calculateEventPlaneEventCut();
+   void SetEventMult(const int& lo, const int& hi);
+   void SetVertZPos(const float& lo, const float& hi);
 
-  int NEventsPassed();
-  int NEventsFailed();
+   void SetFlowMaker(char* title);
+   void SetFlowAnalysisMaker(char* title);
+   void FillFromHBT(const int& hbt);
 
-  void SetEventMult(const int& lo,const int& hi);
-  void SetVertZPos(const float& lo, const float& hi);
+   virtual StHbtString Report();
+   virtual bool Pass(const StHbtEvent*);
 
-  void SetFlowMaker(char* title);
-  void SetFlowAnalysisMaker(char* title);
-  void FillFromHBT(const int& hbt);
+   calculateEventPlaneEventCut* Clone();
 
-  virtual StHbtString Report();
-  virtual bool Pass(const StHbtEvent*);
+  private:                                   //
+   StFlowMaker* mFlowMaker;                  //!
+   StFlowAnalysisMaker* mFlowAnalysisMaker;  //!
 
-  calculateEventPlaneEventCut* Clone();
+   int mEventMult[2];   // range of multiplicity
+   float mVertZPos[2];  // range of z-position of vertex
 
-private:   // 
-  StFlowMaker* mFlowMaker;                 //!
-  StFlowAnalysisMaker* mFlowAnalysisMaker; //!
-
-  int mEventMult[2];      // range of multiplicity
-  float mVertZPos[2];     // range of z-position of vertex
-
-  int mFromHBT;
-  long mNEventsPassed;
-  long mNEventsFailed;
+   int mFromHBT;
+   long mNEventsPassed;
+   long mNEventsFailed;
 
 #ifdef __ROOT__
-  ClassDef(calculateEventPlaneEventCut, 1)
+   ClassDef(calculateEventPlaneEventCut, 1)
 #endif
-
 };
 
-inline void calculateEventPlaneEventCut::SetEventMult(const int& lo, const int& hi)
-    {mEventMult[0]=lo; mEventMult[1]=hi;}
-inline void calculateEventPlaneEventCut::SetVertZPos(const float& lo, const float& hi)
-    {mVertZPos[0]=lo; mVertZPos[1]=hi;}
+inline void calculateEventPlaneEventCut::SetEventMult(const int& lo, const int& hi) {
+   mEventMult[0] = lo;
+   mEventMult[1] = hi;
+}
+inline void calculateEventPlaneEventCut::SetVertZPos(const float& lo, const float& hi) {
+   mVertZPos[0] = lo;
+   mVertZPos[1] = hi;
+}
 
-inline int  calculateEventPlaneEventCut::NEventsPassed() {return mNEventsPassed;}
-inline int  calculateEventPlaneEventCut::NEventsFailed() {return mNEventsFailed;}
-inline void calculateEventPlaneEventCut::SetFlowMaker(char* title){
-  mFlowMaker = (StFlowMaker*)StMaker::GetChain()->GetMaker(title);
-  if (!mFlowMaker) {
-    cout << "No StFlowMaker found!" << endl;
-    assert(0);
-  }
+inline int calculateEventPlaneEventCut::NEventsPassed() { return mNEventsPassed; }
+inline int calculateEventPlaneEventCut::NEventsFailed() { return mNEventsFailed; }
+inline void calculateEventPlaneEventCut::SetFlowMaker(char* title) {
+   mFlowMaker = (StFlowMaker*)StMaker::GetChain()->GetMaker(title);
+   if (!mFlowMaker) {
+      cout << "No StFlowMaker found!" << endl;
+      assert(0);
+   }
 }
 inline void calculateEventPlaneEventCut::SetFlowAnalysisMaker(char* title) {
-  StMaker tempMaker;
-  mFlowAnalysisMaker = (StFlowAnalysisMaker*)tempMaker.GetMaker(title);
-  if (!mFlowAnalysisMaker) {
-    cout << "No StFlowAnalysisMaker found!" << endl;
-    assert(0);
-  }
+   StMaker tempMaker;
+   mFlowAnalysisMaker = (StFlowAnalysisMaker*)tempMaker.GetMaker(title);
+   if (!mFlowAnalysisMaker) {
+      cout << "No StFlowAnalysisMaker found!" << endl;
+      assert(0);
+   }
 }
-inline void calculateEventPlaneEventCut::FillFromHBT(const int& hbt) {
-  mFromHBT = hbt;
-}
+inline void calculateEventPlaneEventCut::FillFromHBT(const int& hbt) { mFromHBT = hbt; }
 inline calculateEventPlaneEventCut* calculateEventPlaneEventCut::Clone() {
-  calculateEventPlaneEventCut* c = new calculateEventPlaneEventCut(*this); return c;
+   calculateEventPlaneEventCut* c = new calculateEventPlaneEventCut(*this);
+   return c;
 }
 inline calculateEventPlaneEventCut::calculateEventPlaneEventCut(calculateEventPlaneEventCut& c) : StHbtEventCut(c) {
-  mNEventsPassed = 0;
-  mNEventsFailed = 0;
+   mNEventsPassed = 0;
+   mNEventsFailed = 0;
 }
-
 
 #endif

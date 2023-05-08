@@ -10,32 +10,31 @@
  *              of Wenshen Deng and Spiros Margetis
  *
  ***********************************************************************/
+#include "StHbtMaker/Infrastructure/StHbtTTreeKink.h"
+
 #include "StHbtMaker/Infrastructure/StHbtEvent.hh"
 #include "StHbtMaker/Infrastructure/StHbtKink.hh"
 #include "StHbtMaker/Infrastructure/StHbtTTreeTrack.h"
 
-#include "StHbtMaker/Infrastructure/StHbtTTreeKink.h"
-
 #ifdef __ROOT__
 ClassImp(StHbtTTreeKink)
 
-
-StHbtTTreeKink::StHbtTTreeKink(const StHbtEvent* e, const StHbtKink* k) {
-  mDcaParentDaughter = k->mDcaParentDaughter;  
-  mDcaDaughterPrimaryVertex = k->mDcaDaughterPrimaryVertex;
-  mDcaParentPrimaryVertex = k->mDcaParentPrimaryVertex;
-  mHitDistanceParentDaughter = k->mHitDistanceParentDaughter;
-  mHitDistanceParentVertex = k->mHitDistanceParentVertex;  
-  mDeltaEnergy[0] = k->mDeltaEnergy[0];           
-  mDeltaEnergy[1] = k->mDeltaEnergy[1];           
-  mDeltaEnergy[2] = k->mDeltaEnergy[2];           
-  mDecayAngle = k->mDecayAngle;               
-  mDecayAngleCM = k->mDecayAngleCM;           
-  mDaughter = StHbtTTreeTrack(e, &(k->mDaughter));
-  mParent = StHbtTTreeTrack(e, &(k->mParent));
-  mPositionX = k->mPosition.x();
-  mPositionY = k->mPosition.y();
-  mPositionZ = k->mPosition.z();
+    StHbtTTreeKink::StHbtTTreeKink(const StHbtEvent* e, const StHbtKink* k) {
+   mDcaParentDaughter = k->mDcaParentDaughter;
+   mDcaDaughterPrimaryVertex = k->mDcaDaughterPrimaryVertex;
+   mDcaParentPrimaryVertex = k->mDcaParentPrimaryVertex;
+   mHitDistanceParentDaughter = k->mHitDistanceParentDaughter;
+   mHitDistanceParentVertex = k->mHitDistanceParentVertex;
+   mDeltaEnergy[0] = k->mDeltaEnergy[0];
+   mDeltaEnergy[1] = k->mDeltaEnergy[1];
+   mDeltaEnergy[2] = k->mDeltaEnergy[2];
+   mDecayAngle = k->mDecayAngle;
+   mDecayAngleCM = k->mDecayAngleCM;
+   mDaughter = StHbtTTreeTrack(e, &(k->mDaughter));
+   mParent = StHbtTTreeTrack(e, &(k->mParent));
+   mPositionX = k->mPosition.x();
+   mPositionY = k->mPosition.y();
+   mPositionZ = k->mPosition.z();
 };
 
 #endif
@@ -61,20 +60,3 @@ StHbtTTreeKink::StHbtTTreeKink(const StHbtEvent* e, const StHbtKink* k) {
  *
  *
  ***********************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

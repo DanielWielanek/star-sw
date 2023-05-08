@@ -34,58 +34,57 @@
 //#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 
 class NonIdReal3DCorrFctn : public StHbtCorrFctn {
-public:
-  NonIdReal3DCorrFctn(char* title, const int& nbins, const float& QLo, const float& QHi);
-  virtual ~NonIdReal3DCorrFctn();
+  public:
+   NonIdReal3DCorrFctn(char* title, const int& nbins, const float& QLo, const float& QHi);
+   virtual ~NonIdReal3DCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void Finish();
+   virtual void Finish();
 
-  void Write();
-  
-  StHbt3DHisto* Numerator();
-  StHbt3DHisto* Denominator();
-  StHbt3DHisto* Ratio();
-  StHbt3DHisto* QinvHisto();
+   void Write();
 
-  // here are get and set for the range over which the correlation function 
-  // is normalized (in Qinv).  The range is set to 0.15..0.18 in the constuctor
-  // by default, but the Set's below override this
-  void SetNormRangeLo(float qLo);
-  void SetNormRangeHi(float qHi);
-  float GetNormRangeLo();
-  float GetNormRangeHi();
+   StHbt3DHisto* Numerator();
+   StHbt3DHisto* Denominator();
+   StHbt3DHisto* Ratio();
+   StHbt3DHisto* QinvHisto();
 
-private:
-  StHbt3DHisto* mNumerator;
-  StHbt3DHisto* mDenominator;
-  StHbt3DHisto* mRatio;
-  StHbt3DHisto* mQinvHisto;
+   // here are get and set for the range over which the correlation function
+   // is normalized (in Qinv).  The range is set to 0.15..0.18 in the constuctor
+   // by default, but the Set's below override this
+   void SetNormRangeLo(float qLo);
+   void SetNormRangeHi(float qHi);
+   float GetNormRangeLo();
+   float GetNormRangeHi();
 
-  // upper and lower bounds of Qinv region where to do normalization
-  float mQinvNormLo;
-  float mQinvNormHi;
+  private:
+   StHbt3DHisto* mNumerator;
+   StHbt3DHisto* mDenominator;
+   StHbt3DHisto* mRatio;
+   StHbt3DHisto* mQinvHisto;
 
-  // and here are the number of pairs in that region...
-  unsigned long int mNumRealsNorm;
-  unsigned long int mNumMixedNorm;
+   // upper and lower bounds of Qinv region where to do normalization
+   float mQinvNormLo;
+   float mQinvNormHi;
+
+   // and here are the number of pairs in that region...
+   unsigned long int mNumRealsNorm;
+   unsigned long int mNumMixedNorm;
 
 #ifdef __ROOT__
-  ClassDef(NonIdReal3DCorrFctn, 1)
+   ClassDef(NonIdReal3DCorrFctn, 1)
 #endif
 };
 
-inline  StHbt3DHisto* NonIdReal3DCorrFctn::Numerator(){return mNumerator;}
-inline  StHbt3DHisto* NonIdReal3DCorrFctn::Denominator(){return mDenominator;}
-inline  StHbt3DHisto* NonIdReal3DCorrFctn::Ratio(){return mRatio;}
-inline  StHbt3DHisto* NonIdReal3DCorrFctn::QinvHisto(){return mQinvHisto;}
-inline  void NonIdReal3DCorrFctn::SetNormRangeLo(float qLo){mQinvNormLo = qLo;}
-inline  void NonIdReal3DCorrFctn::SetNormRangeHi(float qHi){mQinvNormHi = qHi;}
-inline  float NonIdReal3DCorrFctn::GetNormRangeLo(){return mQinvNormLo;}
-inline  float NonIdReal3DCorrFctn::GetNormRangeHi(){return mQinvNormHi;}
+inline StHbt3DHisto* NonIdReal3DCorrFctn::Numerator() { return mNumerator; }
+inline StHbt3DHisto* NonIdReal3DCorrFctn::Denominator() { return mDenominator; }
+inline StHbt3DHisto* NonIdReal3DCorrFctn::Ratio() { return mRatio; }
+inline StHbt3DHisto* NonIdReal3DCorrFctn::QinvHisto() { return mQinvHisto; }
+inline void NonIdReal3DCorrFctn::SetNormRangeLo(float qLo) { mQinvNormLo = qLo; }
+inline void NonIdReal3DCorrFctn::SetNormRangeHi(float qHi) { mQinvNormHi = qHi; }
+inline float NonIdReal3DCorrFctn::GetNormRangeLo() { return mQinvNormLo; }
+inline float NonIdReal3DCorrFctn::GetNormRangeHi() { return mQinvNormHi; }
 
 #endif
-

@@ -33,7 +33,7 @@
 #ifndef StHbtEnumeration_hh
 #define StHbtEnumeration_hh
 
-enum StHbtParticleType {hbtUndefined, hbtTrack, hbtV0, hbtKink, hbtXi};
-enum StHbtIOMode {hbtRead, hbtWrite};
+enum StHbtParticleType { hbtUndefined, hbtTrack, hbtV0, hbtKink, hbtXi };
+enum StHbtIOMode { hbtRead, hbtWrite };
 
 #endif

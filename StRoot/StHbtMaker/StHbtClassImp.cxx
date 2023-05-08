@@ -6,8 +6,8 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- * Root fix. All the base classes which have a 'ClassDef' now need a 
- * corresponding 'ClassImp'  
+ * Root fix. All the base classes which have a 'ClassDef' now need a
+ * corresponding 'ClassImp'
  *
  ***************************************************************************
  *
@@ -33,15 +33,16 @@
 
 #include "StHbtMaker/Base/StHbtBaseAnalysis.h"
 #include "StHbtMaker/Base/StHbtEventCut.h"
+#include "StHbtMaker/Base/StHbtKinkCut.h"
 #include "StHbtMaker/Base/StHbtPairCut.h"
 #include "StHbtMaker/Base/StHbtParticleCut.h"
-#include "StHbtMaker/Base/StHbtTripletCut.h"
 #include "StHbtMaker/Base/StHbtTrackCut.h"
+#include "StHbtMaker/Base/StHbtTripletCut.h"
 #include "StHbtMaker/Base/StHbtV0Cut.h"
 #include "StHbtMaker/Base/StHbtXiCut.h"
-#include "StHbtMaker/Base/StHbtKinkCut.h"
 
 #ifdef __ROOT__
+// clang-format off
   ClassImp(StHbtBaseAnalysis)
   ClassImp(StHbtEventCut)
   ClassImp(StHbtPairCut)
@@ -51,4 +52,5 @@
   ClassImp(StHbtV0Cut)
   ClassImp(StHbtXiCut)
   ClassImp(StHbtKinkCut)
+// clang-format on
 #endif

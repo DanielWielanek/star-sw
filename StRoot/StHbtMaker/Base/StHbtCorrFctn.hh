@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *    base class for a STAR correlation function.  Users should inherit 
+ *    base class for a STAR correlation function.  Users should inherit
  *    from this and must implement constructor, destructor, Report(),
  *    AddMixedPair(), AddRealPair(), Finish()
  *
@@ -42,7 +42,8 @@
  * EventBegin() and EventEnd() functions implemented
  *
  * Revision 1.3  1999/12/03 22:24:33  lisa
- * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits mechanism
+ * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits
+ *mechanism
  *
  * Revision 1.2  1999/07/06 22:33:18  lisa
  * Adjusted all to work in pro and new - dev itself is broken
@@ -57,48 +58,49 @@
 
 #include "StHbtMaker/Base/StHbtBaseAnalysis.h"
 #include "StHbtMaker/Base/StHbtPairCut.h"
-#include "StHbtMaker/Infrastructure/StParityTypes.hh"  // can not forward declare typedefs
 #include "StHbtMaker/Infrastructure/StHbtEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 #include "StHbtMaker/Infrastructure/StHbtPair.hh"
 #include "StHbtMaker/Infrastructure/StHbtTriplet.hh"
-#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
+#include "StHbtMaker/Infrastructure/StParityTypes.hh"  // can not forward declare typedefs
 
-class StHbtCorrFctn{
+class StHbtCorrFctn {
+  public:
+   StHbtCorrFctn() { mPairCut = 0; }
+   StHbtCorrFctn(const StHbtCorrFctn&);
+   virtual ~StHbtCorrFctn() { /* no-op */
+   }
 
-public:
-  StHbtCorrFctn() { mPairCut = 0; }
-  StHbtCorrFctn(const StHbtCorrFctn& );
-  virtual ~StHbtCorrFctn(){/* no-op */}
+   virtual StHbtString Report() = 0;
 
-  virtual StHbtString Report() = 0;
+   virtual void ParityCompute(ParityBuff*, ParityBuff*, int);
 
-  virtual void ParityCompute(ParityBuff*, ParityBuff*, int);
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
 
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
+   virtual void AddRealTriplet(const StHbtTriplet*);
+   virtual void AddMixedTriplet(const StHbtTriplet*);
 
-  virtual void AddRealTriplet(const StHbtTriplet*);
-  virtual void AddMixedTriplet(const StHbtTriplet*);
+   virtual void EventBegin(const StHbtEvent*) { /* no-op */
+   }
+   virtual void EventEnd(const StHbtEvent*) { /* no-op */
+   }
+   virtual void Finish() = 0;
 
-  virtual void EventBegin(const StHbtEvent*) { /* no-op */ }
-  virtual void EventEnd(const StHbtEvent*) { /* no-op */ }
-  virtual void Finish() = 0;
+   virtual StHbtCorrFctn* Clone() { return 0; }
 
-  virtual StHbtCorrFctn* Clone() { return 0;}
+   virtual StHbtPairCut* GetPairCut() { return mPairCut; }
 
-  virtual StHbtPairCut* GetPairCut() { return mPairCut; }
+   // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
+   friend class StHbtBaseAnalysis;
+   StHbtBaseAnalysis* HbtAnalysis() { return myAnalysis; };
+   void SetAnalysis(StHbtBaseAnalysis*);
 
-  // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
-  friend class StHbtBaseAnalysis;
-  StHbtBaseAnalysis* HbtAnalysis(){return myAnalysis;};
-  void SetAnalysis(StHbtBaseAnalysis*);
+  protected:
+   StHbtBaseAnalysis* myAnalysis;
+   StHbtPairCut* mPairCut;
 
-protected:
-  StHbtBaseAnalysis* myAnalysis;
-  StHbtPairCut* mPairCut;
-
-private:
-
+  private:
 };
 
 inline void StHbtCorrFctn::ParityCompute(ParityBuff*, ParityBuff*, int) { cout << "Not implemented" << endl; }
@@ -107,7 +109,10 @@ inline void StHbtCorrFctn::AddMixedPair(const StHbtPair*) { cout << "Not impleme
 inline void StHbtCorrFctn::AddRealTriplet(const StHbtTriplet*) { cout << "Not implemented" << endl; }
 inline void StHbtCorrFctn::AddMixedTriplet(const StHbtTriplet*) { cout << "Not implemented" << endl; }
 
-inline StHbtCorrFctn::StHbtCorrFctn(const StHbtCorrFctn& c) { myAnalysis =0; mPairCut = c.mPairCut; }
+inline StHbtCorrFctn::StHbtCorrFctn(const StHbtCorrFctn& c) {
+   myAnalysis = 0;
+   mPairCut = c.mPairCut;
+}
 inline void StHbtCorrFctn::SetAnalysis(StHbtBaseAnalysis* analysis) { myAnalysis = analysis; }
 
 #endif

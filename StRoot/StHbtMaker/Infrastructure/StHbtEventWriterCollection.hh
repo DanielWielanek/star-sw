@@ -16,19 +16,19 @@
 #ifndef StHbtEventWriterCollection_hh
 #define StHbtEventWriterCollection_hh
 
-#include "StHbtMaker/Base/StHbtEventWriter.hh"
-
 #include <list>
+
+#include "StHbtMaker/Base/StHbtEventWriter.hh"
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
 #endif
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtEventWriter*, allocator<StHbtEventWriter*> >            StHbtEventWriterCollection;
-typedef list<StHbtEventWriter*, allocator<StHbtEventWriter*> >::iterator  StHbtEventWriterIterator;
+typedef list<StHbtEventWriter*, allocator<StHbtEventWriter*> > StHbtEventWriterCollection;
+typedef list<StHbtEventWriter*, allocator<StHbtEventWriter*> >::iterator StHbtEventWriterIterator;
 #else
-typedef list<StHbtEventWriter*>            StHbtEventWriterCollection;
-typedef list<StHbtEventWriter*>::iterator  StHbtEventWriterIterator;
+typedef list<StHbtEventWriter*> StHbtEventWriterCollection;
+typedef list<StHbtEventWriter*>::iterator StHbtEventWriterIterator;
 #endif
 
 #endif

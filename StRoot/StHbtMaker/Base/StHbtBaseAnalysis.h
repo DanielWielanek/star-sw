@@ -4,7 +4,7 @@
  *
  * Author: Robert Willson, Ohio State, willson@bnl.gov
  ***************************************************************************
- * 
+ *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *   base class for an HBT analysis.  Users should use one of the
  *   inherited analysis classes with this class.
@@ -34,23 +34,20 @@
 
 class StHbtEvent;
 
-class StHbtBaseAnalysis{
-
-public:
-
-  StHbtBaseAnalysis() { /* noop */ };
-  virtual ~StHbtBaseAnalysis() { /* noop */ };
+class StHbtBaseAnalysis {
+  public:
+   StHbtBaseAnalysis(){/* noop */};
+   virtual ~StHbtBaseAnalysis(){/* noop */};
 
 #ifdef __ROOT__
-  ClassDef(StHbtBaseAnalysis, 0)
-#endif 
-  
-  virtual StHbtString Report() = 0;       //! returns reports of all cuts applied and correlation functions being done
+   ClassDef(StHbtBaseAnalysis, 0)
+#endif
 
-  virtual void ProcessEvent(const StHbtEvent*) = 0;
+       virtual StHbtString Report() = 0;  //! returns reports of all cuts applied and correlation functions being done
 
-  virtual void Finish() = 0;
+   virtual void ProcessEvent(const StHbtEvent*) = 0;
 
+   virtual void Finish() = 0;
 };
 
 #endif

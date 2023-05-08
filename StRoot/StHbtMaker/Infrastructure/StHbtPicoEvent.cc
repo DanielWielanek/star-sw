@@ -11,7 +11,7 @@
  *  gone through Event and Track cuts, so only Pair cuts are left.
  *  PicoEvents are *internal* to the code, and are stored in the
  *  Event-mixing buffers.
- *           
+ *
  *
  ***************************************************************************
  *
@@ -41,43 +41,42 @@
 #include "StHbtMaker/Infrastructure/StHbtPicoEvent.hh"
 
 //________________
-StHbtPicoEvent::StHbtPicoEvent(){
-  mFirstParticleCollection = new StHbtParticleCollection;
-  mSecondParticleCollection = new StHbtParticleCollection;
-  mThirdParticleCollection = new StHbtParticleCollection;
+StHbtPicoEvent::StHbtPicoEvent() {
+   mFirstParticleCollection = new StHbtParticleCollection;
+   mSecondParticleCollection = new StHbtParticleCollection;
+   mThirdParticleCollection = new StHbtParticleCollection;
 }
 //_________________
-StHbtPicoEvent::~StHbtPicoEvent(){
-  StHbtParticleIterator iter;
+StHbtPicoEvent::~StHbtPicoEvent() {
+   StHbtParticleIterator iter;
 
-
-  if (mFirstParticleCollection){
-      for (iter=mFirstParticleCollection->begin();iter!=mFirstParticleCollection->end();iter++){
-	delete *iter;
+   if (mFirstParticleCollection) {
+      for (iter = mFirstParticleCollection->begin(); iter != mFirstParticleCollection->end(); iter++) {
+         delete *iter;
       }
       mFirstParticleCollection->clear();
       delete mFirstParticleCollection;
       mFirstParticleCollection = 0;
-  }
+   }
 
-  if (mSecondParticleCollection){
-    for (iter=mSecondParticleCollection->begin();iter!=mSecondParticleCollection->end();iter++){
-      delete *iter;
-    }
-    mSecondParticleCollection->clear();
-    delete mSecondParticleCollection;
-    mSecondParticleCollection = 0;
-  }
-
-  if (mThirdParticleCollection){
-    if (mThirdParticleCollection->size() != 0 ) {
-      for (iter=mThirdParticleCollection->begin();iter!=mThirdParticleCollection->end();iter++){
-	delete *iter;
+   if (mSecondParticleCollection) {
+      for (iter = mSecondParticleCollection->begin(); iter != mSecondParticleCollection->end(); iter++) {
+         delete *iter;
       }
-    }
-    mThirdParticleCollection->clear();
-    delete mThirdParticleCollection;
-    mThirdParticleCollection = 0;
-  }
+      mSecondParticleCollection->clear();
+      delete mSecondParticleCollection;
+      mSecondParticleCollection = 0;
+   }
+
+   if (mThirdParticleCollection) {
+      if (mThirdParticleCollection->size() != 0) {
+         for (iter = mThirdParticleCollection->begin(); iter != mThirdParticleCollection->end(); iter++) {
+            delete *iter;
+         }
+      }
+      mThirdParticleCollection->clear();
+      delete mThirdParticleCollection;
+      mThirdParticleCollection = 0;
+   }
 }
 //_________________

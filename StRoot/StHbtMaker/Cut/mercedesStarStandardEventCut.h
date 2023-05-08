@@ -7,14 +7,14 @@
  ***************************************************************************
  *
  * Description:part of STAR HBT Framework: StHbtMaker package
- * A event-wise cut taht cuts on multiplicity ("new" STAR standard multipliity 
+ * A event-wise cut taht cuts on multiplicity ("new" STAR standard multipliity
  * definition for charge hadrons, 2001 data) and:
  * primary tracks only
  * flag > 0
  * fit points >= 10
  * abs(eta) < 0.5
  * dca < 3 cm
- * 
+ *
  ***************************************************************************
  *
  * $Log: mercedesStarStandardEventCut.h,v $
@@ -29,7 +29,6 @@
  *
  **************************************************************************/
 
-
 #ifndef mercedesStarStandardEventCut_hh
 #define mercedesStarStandardEventCut_hh
 
@@ -41,51 +40,56 @@
 #endif
 
 class mercedesStarStandardEventCut : public StHbtEventCut {
+  public:
+   mercedesStarStandardEventCut();
+   mercedesStarStandardEventCut(mercedesStarStandardEventCut&);
+   //  ~mercedesStarStandardEventCut();
 
-public:
+   void SetEventMult(const int& lo, const int& hi);
+   void SetVertZPos(const float& lo, const float& hi);
+   int NEventsPassed();
+   int NEventsFailed();
 
-  mercedesStarStandardEventCut();
-  mercedesStarStandardEventCut(mercedesStarStandardEventCut&);
-  //  ~mercedesStarStandardEventCut();
+   virtual StHbtString Report();
+   virtual bool Pass(const StHbtEvent*);
 
-  void SetEventMult(const int& lo,const int& hi);
-  void SetVertZPos(const float& lo, const float& hi);
-  int NEventsPassed();
-  int NEventsFailed();
+   mercedesStarStandardEventCut* Clone();
 
-  virtual StHbtString Report();
-  virtual bool Pass(const StHbtEvent*);
+  private:              // here are the quantities I want to cut on...
+   int mEventMult[2];   // range of multiplicity
+   float mVertZPos[2];  // range of z-position of vertex
 
-  mercedesStarStandardEventCut* Clone();
+   long mNEventsPassed;
+   long mNEventsFailed;
 
-private:   // here are the quantities I want to cut on...
-
-  int mEventMult[2];      // range of multiplicity
-  float mVertZPos[2];     // range of z-position of vertex
-
-  long mNEventsPassed;
-  long mNEventsFailed;
-
-  ofstream* mOutFile;  //!
+   ofstream* mOutFile;  //!
 
 #ifdef __ROOT__
-  ClassDef(mercedesStarStandardEventCut, 0)
+   ClassDef(mercedesStarStandardEventCut, 0)
 #endif
-
 };
 
-inline void mercedesStarStandardEventCut::SetEventMult(const int& lo, const int& hi){mEventMult[0]=lo; mEventMult[1]=hi;}
-inline void mercedesStarStandardEventCut::SetVertZPos(const float& lo, const float& hi){mVertZPos[0]=lo; mVertZPos[1]=hi;}
-inline int  mercedesStarStandardEventCut::NEventsPassed() {return mNEventsPassed;}
-inline int  mercedesStarStandardEventCut::NEventsFailed() {return mNEventsFailed;}
-inline mercedesStarStandardEventCut* mercedesStarStandardEventCut::Clone() { mercedesStarStandardEventCut* c = new mercedesStarStandardEventCut(*this); return c;}
+inline void mercedesStarStandardEventCut::SetEventMult(const int& lo, const int& hi) {
+   mEventMult[0] = lo;
+   mEventMult[1] = hi;
+}
+inline void mercedesStarStandardEventCut::SetVertZPos(const float& lo, const float& hi) {
+   mVertZPos[0] = lo;
+   mVertZPos[1] = hi;
+}
+inline int mercedesStarStandardEventCut::NEventsPassed() { return mNEventsPassed; }
+inline int mercedesStarStandardEventCut::NEventsFailed() { return mNEventsFailed; }
+inline mercedesStarStandardEventCut* mercedesStarStandardEventCut::Clone() {
+   mercedesStarStandardEventCut* c = new mercedesStarStandardEventCut(*this);
+   return c;
+}
 inline mercedesStarStandardEventCut::mercedesStarStandardEventCut(mercedesStarStandardEventCut& c) : StHbtEventCut(c) {
-  mEventMult[0] = c.mEventMult[0];
-  mEventMult[1] = c.mEventMult[1];
-  mVertZPos[0] = c.mVertZPos[0];
-  mVertZPos[1] = c.mVertZPos[1];
-  mNEventsPassed = 0;
-  mNEventsFailed = 0;
+   mEventMult[0] = c.mEventMult[0];
+   mEventMult[1] = c.mEventMult[1];
+   mVertZPos[0] = c.mVertZPos[0];
+   mVertZPos[1] = c.mVertZPos[1];
+   mNEventsPassed = 0;
+   mNEventsFailed = 0;
 }
 
 #endif

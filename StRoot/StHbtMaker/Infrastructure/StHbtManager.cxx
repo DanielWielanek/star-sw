@@ -128,167 +128,168 @@
 ClassImp(StHbtManager)
 #endif
 
-
-
-//____________________________
-StHbtManager::StHbtManager(){
-  mAnalysisCollection = new StHbtAnalysisCollection;
-  mEventWriterCollection = new StHbtEventWriterCollection;
-  mEventReader = 0;
+    //____________________________
+    StHbtManager::StHbtManager() {
+   mAnalysisCollection = new StHbtAnalysisCollection;
+   mEventWriterCollection = new StHbtEventWriterCollection;
+   mEventReader = 0;
 }
 //____________________________
-StHbtManager::~StHbtManager(){
-  delete mEventReader;
-  // now delete each Analysis in the Collection, and then the Collection itself
-  StHbtAnalysisIterator AnalysisIter;
-  for (AnalysisIter=mAnalysisCollection->begin();AnalysisIter!=mAnalysisCollection->end();AnalysisIter++){
-    delete *AnalysisIter;
-    *AnalysisIter = 0;
-  }
-  delete mAnalysisCollection;
-  // now delete each EventWriter in the Collection, and then the Collection itself
-  StHbtEventWriterIterator EventWriterIter;
-  for (EventWriterIter=mEventWriterCollection->begin();EventWriterIter!=mEventWriterCollection->end();EventWriterIter++){
-    delete *EventWriterIter;
-    *EventWriterIter = 0;
-  }
-  delete mEventWriterCollection;
+StHbtManager::~StHbtManager() {
+   delete mEventReader;
+   // now delete each Analysis in the Collection, and then the Collection itself
+   StHbtAnalysisIterator AnalysisIter;
+   for (AnalysisIter = mAnalysisCollection->begin(); AnalysisIter != mAnalysisCollection->end(); AnalysisIter++) {
+      delete *AnalysisIter;
+      *AnalysisIter = 0;
+   }
+   delete mAnalysisCollection;
+   // now delete each EventWriter in the Collection, and then the Collection itself
+   StHbtEventWriterIterator EventWriterIter;
+   for (EventWriterIter = mEventWriterCollection->begin(); EventWriterIter != mEventWriterCollection->end();
+        EventWriterIter++) {
+      delete *EventWriterIter;
+      *EventWriterIter = 0;
+   }
+   delete mEventWriterCollection;
 }
 //____________________________
-int StHbtManager::Init(){
-  StHbtString readerMessage;
-  readerMessage += "*** *** *** *** *** *** *** *** *** *** *** *** \n";
-  // EventReader
-  if (mEventReader) {
-    if (mEventReader->Init("r",readerMessage)){
-      cout << " StHbtManager::Init() - Reader initialization failed " << endl;
-      return (1);
-    }
-    readerMessage += mEventReader->Report();
-  }
-  // EventWriters
-  StHbtEventWriterIterator EventWriterIter;
-  for (EventWriterIter=mEventWriterCollection->begin();EventWriterIter!=mEventWriterCollection->end();EventWriterIter++){
-    //cout << "*EventWriterIter " << *EventWriterIter << endl;
-    // The message (StHbtString) passed into Init will be at the file header.
-    // for that reason take the readerReport, add my own report and pass as message 
-    StHbtString writerMessage = readerMessage;
-    writerMessage += "*** *** *** *** *** *** *** *** *** *** *** *** \n";
-    writerMessage += (*EventWriterIter)->Report();
-    if (*EventWriterIter) {
-      if ( (*EventWriterIter)->Init("w",writerMessage)){ // yes, the message from the reader is passed into the writer
-	cout << " StHbtManager::Init() - Writer initialization failed " << endl;
-	return (1);
+int StHbtManager::Init() {
+   StHbtString readerMessage;
+   readerMessage += "*** *** *** *** *** *** *** *** *** *** *** *** \n";
+   // EventReader
+   if (mEventReader) {
+      if (mEventReader->Init("r", readerMessage)) {
+         cout << " StHbtManager::Init() - Reader initialization failed " << endl;
+         return (1);
       }
-    }
-  }
-  
-  
-  return (0);
-}
-//____________________________
-void StHbtManager::Finish(){
-  // EventReader
-  if (mEventReader) mEventReader->Finish();
-  // EventWriters
-  StHbtEventWriterIterator EventWriterIter;
-  StHbtEventWriter* currentEventWriter;
-  for (EventWriterIter=mEventWriterCollection->begin();EventWriterIter!=mEventWriterCollection->end();EventWriterIter++){
-    currentEventWriter = *EventWriterIter;
-    currentEventWriter->Finish();
-  }
-  // Analyses
-  StHbtAnalysisIterator AnalysisIter;
-  StHbtBaseAnalysis* currentAnalysis;
-  for (AnalysisIter=mAnalysisCollection->begin();AnalysisIter!=mAnalysisCollection->end();AnalysisIter++){
-    currentAnalysis = *AnalysisIter;
-    currentAnalysis->Finish();
-  }
-}
-//____________________________
-StHbtString StHbtManager::Report(){
-  string stemp;
-  char ctemp[100];
-  // EventReader
-  stemp = mEventReader->Report();
-  // EventWriters
-  sprintf(ctemp,"\nStHbtManager Reporting %u EventWriters\n",mEventWriterCollection->size());
-  stemp += ctemp;
-  StHbtEventWriterIterator EventWriterIter;
-  StHbtEventWriter* currentEventWriter;
-  for (EventWriterIter=mEventWriterCollection->begin();EventWriterIter!=mEventWriterCollection->end();EventWriterIter++){
-    cout << "StHbtManager - asking for EventWriter Report" << endl;
-    currentEventWriter = *EventWriterIter;
-    stemp+=currentEventWriter->Report();
-  }
-  // Analyses
-  sprintf(ctemp,"\nStHbtManager Reporting %u Analyses\n",mAnalysisCollection->size());
-  stemp += ctemp;
-  StHbtAnalysisIterator AnalysisIter;
-  StHbtBaseAnalysis* currentAnalysis;
-  for (AnalysisIter=mAnalysisCollection->begin();AnalysisIter!=mAnalysisCollection->end();AnalysisIter++){
-    cout << "StHbtManager - asking for Analysis Report" << endl;
-    currentAnalysis = *AnalysisIter;
-    stemp+=currentAnalysis->Report();
-  }
+      readerMessage += mEventReader->Report();
+   }
+   // EventWriters
+   StHbtEventWriterIterator EventWriterIter;
+   for (EventWriterIter = mEventWriterCollection->begin(); EventWriterIter != mEventWriterCollection->end();
+        EventWriterIter++) {
+      // cout << "*EventWriterIter " << *EventWriterIter << endl;
+      // The message (StHbtString) passed into Init will be at the file header.
+      // for that reason take the readerReport, add my own report and pass as message
+      StHbtString writerMessage = readerMessage;
+      writerMessage += "*** *** *** *** *** *** *** *** *** *** *** *** \n";
+      writerMessage += (*EventWriterIter)->Report();
+      if (*EventWriterIter) {
+         if ((*EventWriterIter)
+                 ->Init("w", writerMessage)) {  // yes, the message from the reader is passed into the writer
+            cout << " StHbtManager::Init() - Writer initialization failed " << endl;
+            return (1);
+         }
+      }
+   }
 
-  StHbtString returnThis = stemp;
-  return returnThis;
+   return (0);
 }
 //____________________________
-StHbtBaseAnalysis* StHbtManager::Analysis( int n ){  // return pointer to n-th analysis
-  if ( n<0 || n > (int) mAnalysisCollection->size() )
-    return NULL;
-  StHbtAnalysisIterator iter = mAnalysisCollection->begin();
-  for (int i=0; i<n ;i++){
-    iter++;
-  }
-  return *iter;
+void StHbtManager::Finish() {
+   // EventReader
+   if (mEventReader) mEventReader->Finish();
+   // EventWriters
+   StHbtEventWriterIterator EventWriterIter;
+   StHbtEventWriter* currentEventWriter;
+   for (EventWriterIter = mEventWriterCollection->begin(); EventWriterIter != mEventWriterCollection->end();
+        EventWriterIter++) {
+      currentEventWriter = *EventWriterIter;
+      currentEventWriter->Finish();
+   }
+   // Analyses
+   StHbtAnalysisIterator AnalysisIter;
+   StHbtBaseAnalysis* currentAnalysis;
+   for (AnalysisIter = mAnalysisCollection->begin(); AnalysisIter != mAnalysisCollection->end(); AnalysisIter++) {
+      currentAnalysis = *AnalysisIter;
+      currentAnalysis->Finish();
+   }
 }
 //____________________________
-StHbtEventWriter* StHbtManager::EventWriter( int n ){  // return pointer to n-th analysis
-  if ( n<0 || n > (int) mEventWriterCollection->size() )
-    return NULL;
-  StHbtEventWriterIterator iter = mEventWriterCollection->begin();
-  for (int i=0; i<n ;i++){
-    iter++;
-  }
-  return *iter;
+StHbtString StHbtManager::Report() {
+   string stemp;
+   char ctemp[100];
+   // EventReader
+   stemp = mEventReader->Report();
+   // EventWriters
+   sprintf(ctemp, "\nStHbtManager Reporting %u EventWriters\n", mEventWriterCollection->size());
+   stemp += ctemp;
+   StHbtEventWriterIterator EventWriterIter;
+   StHbtEventWriter* currentEventWriter;
+   for (EventWriterIter = mEventWriterCollection->begin(); EventWriterIter != mEventWriterCollection->end();
+        EventWriterIter++) {
+      cout << "StHbtManager - asking for EventWriter Report" << endl;
+      currentEventWriter = *EventWriterIter;
+      stemp += currentEventWriter->Report();
+   }
+   // Analyses
+   sprintf(ctemp, "\nStHbtManager Reporting %u Analyses\n", mAnalysisCollection->size());
+   stemp += ctemp;
+   StHbtAnalysisIterator AnalysisIter;
+   StHbtBaseAnalysis* currentAnalysis;
+   for (AnalysisIter = mAnalysisCollection->begin(); AnalysisIter != mAnalysisCollection->end(); AnalysisIter++) {
+      cout << "StHbtManager - asking for Analysis Report" << endl;
+      currentAnalysis = *AnalysisIter;
+      stemp += currentAnalysis->Report();
+   }
+
+   StHbtString returnThis = stemp;
+   return returnThis;
 }
- //____________________________
-int StHbtManager::ProcessEvent(){
-  cout << "StHbtManager::ProcessEvent" << endl;
-  // NOTE - this ReturnHbtEvent makes a *new* StHbtEvent - delete it when done!
-  StHbtEvent* currentHbtEvent = mEventReader->ReturnHbtEvent();
-  cout << "Event reader has returned control to manager" << endl;
-  
-  // if no HbtEvent is returned, then we abort processing.
-  // the question is now: do we try again next time (i.e. there may be an HbtEvent next time)
-  // or are we at EOF or something?  If Reader says Status=0, then that means try again later.
-  // so, we just return the Reader's Status.
-  if (!currentHbtEvent){
-    cout << "StHbtManager::ProcessEvent() - Reader::ReturnHbtEvent() has returned null pointer\n";
-    return mEventReader->Status();
-  }
-  
-  // loop over all the EventWriters
-  StHbtEventWriterIterator EventWriterIter;
-  for (EventWriterIter=mEventWriterCollection->begin();EventWriterIter!=mEventWriterCollection->end();EventWriterIter++){
+//____________________________
+StHbtBaseAnalysis* StHbtManager::Analysis(int n) {  // return pointer to n-th analysis
+   if (n < 0 || n > (int)mAnalysisCollection->size()) return NULL;
+   StHbtAnalysisIterator iter = mAnalysisCollection->begin();
+   for (int i = 0; i < n; i++) {
+      iter++;
+   }
+   return *iter;
+}
+//____________________________
+StHbtEventWriter* StHbtManager::EventWriter(int n) {  // return pointer to n-th analysis
+   if (n < 0 || n > (int)mEventWriterCollection->size()) return NULL;
+   StHbtEventWriterIterator iter = mEventWriterCollection->begin();
+   for (int i = 0; i < n; i++) {
+      iter++;
+   }
+   return *iter;
+}
+//____________________________
+int StHbtManager::ProcessEvent() {
+   cout << "StHbtManager::ProcessEvent" << endl;
+   // NOTE - this ReturnHbtEvent makes a *new* StHbtEvent - delete it when done!
+   StHbtEvent* currentHbtEvent = mEventReader->ReturnHbtEvent();
+   cout << "Event reader has returned control to manager" << endl;
+
+   // if no HbtEvent is returned, then we abort processing.
+   // the question is now: do we try again next time (i.e. there may be an HbtEvent next time)
+   // or are we at EOF or something?  If Reader says Status=0, then that means try again later.
+   // so, we just return the Reader's Status.
+   if (!currentHbtEvent) {
+      cout << "StHbtManager::ProcessEvent() - Reader::ReturnHbtEvent() has returned null pointer\n";
+      return mEventReader->Status();
+   }
+
+   // loop over all the EventWriters
+   StHbtEventWriterIterator EventWriterIter;
+   for (EventWriterIter = mEventWriterCollection->begin(); EventWriterIter != mEventWriterCollection->end();
+        EventWriterIter++) {
 #ifdef STHBRDEBUG
-    cout << " *EventWriterIter " <<  *EventWriterIter << endl;
+      cout << " *EventWriterIter " << *EventWriterIter << endl;
 #endif
-    (*EventWriterIter)->WriteHbtEvent(currentHbtEvent);
-  } 
+      (*EventWriterIter)->WriteHbtEvent(currentHbtEvent);
+   }
 
-  // loop over all the Analysis
-  StHbtAnalysisIterator AnalysisIter;
-  for (AnalysisIter=mAnalysisCollection->begin();AnalysisIter!=mAnalysisCollection->end();AnalysisIter++){
-    (*AnalysisIter)->ProcessEvent(currentHbtEvent);
-  } 
+   // loop over all the Analysis
+   StHbtAnalysisIterator AnalysisIter;
+   for (AnalysisIter = mAnalysisCollection->begin(); AnalysisIter != mAnalysisCollection->end(); AnalysisIter++) {
+      (*AnalysisIter)->ProcessEvent(currentHbtEvent);
+   }
 
-  if (currentHbtEvent) delete currentHbtEvent;
+   if (currentHbtEvent) delete currentHbtEvent;
 #ifdef STHBRDEBUG
-  cout << "StHbtManager::ProcessEvent() - return to caller ... " << endl;
+   cout << "StHbtManager::ProcessEvent() - return to caller ... " << endl;
 #endif
-  return 0;    // 0 = "good return"
-}       // ProcessEvent
+   return 0;  // 0 = "good return"
+}  // ProcessEvent

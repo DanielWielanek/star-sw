@@ -42,7 +42,8 @@
  * 1.) unnecessary includes of 'StMaker.h' deleted
  *
  * Revision 1.2  1999/12/03 22:24:34  lisa
- * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits mechanism
+ * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits
+ *mechanism
  *
  * Revision 1.1  1999/10/15 01:56:48  lisa
  * Important enhancement of StHbtMaker - implement Franks CutMonitors
@@ -77,42 +78,41 @@
 class StHbtBaseAnalysis;
 
 //#include "StHbtMaker/Base/StHbtBaseAnalysis.h"
-#include "StHbtMaker/Infrastructure/StParityTypes.hh"  // can not forward declare typedefs
-#include "StHbtMaker/Infrastructure/StHbtString.hh"
-#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
-#include "StHbtMaker/Infrastructure/StHbtPair.hh"
-#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
 #include "StHbtMaker/Infrastructure/StHbtCutMonitorHandler.h"
+#include "StHbtMaker/Infrastructure/StHbtEvent.hh"
+#include "StHbtMaker/Infrastructure/StHbtHisto.hh"
+#include "StHbtMaker/Infrastructure/StHbtPair.hh"
+#include "StHbtMaker/Infrastructure/StHbtString.hh"
+#include "StHbtMaker/Infrastructure/StParityTypes.hh"  // can not forward declare typedefs
 
 class StHbtPairCut : public StHbtCutMonitorHandler {
+  public:
+   StHbtPairCut(){/* no-op */};           // default constructor. - Users should write their own
+   StHbtPairCut(const StHbtPairCut& c);   // copy constructor
+   virtual ~StHbtPairCut(){/* no-op */};  // destructor
 
-public:
+   virtual void ParityPairCuts(ParityBuff*, ParityBuff*) { /* no-op */
+   }
+   virtual bool Pass(const StHbtPair* pair) = 0;  // true if passes, false if not
 
-  StHbtPairCut(){/* no-op */};   // default constructor. - Users should write their own
-  StHbtPairCut(const StHbtPairCut& c); // copy constructor
-  virtual ~StHbtPairCut(){/* no-op */};  // destructor
-
-  virtual void ParityPairCuts(ParityBuff*, ParityBuff*) { /* no-op */ }
-  virtual bool Pass(const StHbtPair* pair) =0;  // true if passes, false if not
-
-  virtual StHbtString Report() =0;    // user-written method to return string describing cuts
-  virtual void EventBegin(const StHbtEvent*) { /* no-op */ }
-  virtual void EventEnd(const StHbtEvent*) { /* no-op */ }
-  virtual StHbtPairCut* Clone() { return 0;}
+   virtual StHbtString Report() = 0;            // user-written method to return string describing cuts
+   virtual void EventBegin(const StHbtEvent*) { /* no-op */
+   }
+   virtual void EventEnd(const StHbtEvent*) { /* no-op */
+   }
+   virtual StHbtPairCut* Clone() { return 0; }
 
 #ifdef __ROOT__
-  ClassDef(StHbtPairCut, 0)
+   ClassDef(StHbtPairCut, 0)
 #endif
-  // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
-  friend class StHbtBaseAnalysis;
-  StHbtBaseAnalysis* HbtAnalysis(){return myAnalysis;};
-  void SetAnalysis(StHbtBaseAnalysis*);    // Set Back pointer to Analysis
+       // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
+       friend class StHbtBaseAnalysis;
+   StHbtBaseAnalysis* HbtAnalysis() { return myAnalysis; };
+   void SetAnalysis(StHbtBaseAnalysis*);  // Set Back pointer to Analysis
 
-protected:
-  StHbtBaseAnalysis* myAnalysis;
-
+  protected:
+   StHbtBaseAnalysis* myAnalysis;
 };
-
 
 inline StHbtPairCut::StHbtPairCut(const StHbtPairCut& c) : StHbtCutMonitorHandler() { myAnalysis = 0; }
 inline void StHbtPairCut::SetAnalysis(StHbtBaseAnalysis* analysis) { myAnalysis = analysis; }

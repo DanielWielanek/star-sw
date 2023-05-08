@@ -18,41 +18,41 @@
  *
  **************************************************************************/
 
-
 #ifndef AverageSepPairCut_hh
 #define AverageSepPairCut_hh
 
-
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
-class AverageSepPairCut : public StHbtPairCut{
-public:
-  AverageSepPairCut();
-  AverageSepPairCut(const AverageSepPairCut&);
-  //~AverageSepPairCut();
+class AverageSepPairCut : public StHbtPairCut {
+  public:
+   AverageSepPairCut();
+   AverageSepPairCut(const AverageSepPairCut&);
+   //~AverageSepPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  AverageSepPairCut* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   AverageSepPairCut* Clone();
 
-  void SetAveSepRange(const double& Lo, const double& Hi);
+   void SetAveSepRange(const double& Lo, const double& Hi);
 
-private:
-  long mNPairsPassed;
-  long mNPairsFailed;
-  double mAveSepLo;
-  double mAveSepHi;
+  private:
+   long mNPairsPassed;
+   long mNPairsFailed;
+   double mAveSepLo;
+   double mAveSepHi;
 
 #ifdef __ROOT__
-  ClassDef(AverageSepPairCut, 1)
+   ClassDef(AverageSepPairCut, 1)
 #endif
 };
 
 inline AverageSepPairCut::AverageSepPairCut(const AverageSepPairCut& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
 }
-inline AverageSepPairCut* AverageSepPairCut::Clone() { AverageSepPairCut* c = new AverageSepPairCut(*this); return c;}
+inline AverageSepPairCut* AverageSepPairCut::Clone() {
+   AverageSepPairCut* c = new AverageSepPairCut(*this);
+   return c;
+}
 
 #endif

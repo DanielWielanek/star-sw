@@ -18,44 +18,44 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/ExitSepPairCut.h"
-#include <string>
+
 #include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(ExitSepPairCut)
 #endif
 
-//__________________
-ExitSepPairCut::ExitSepPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
+    //__________________
+    ExitSepPairCut::ExitSepPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
 }
 //__________________
-//ExitSepPairCut::~ExitSepPairCut(){
+// ExitSepPairCut::~ExitSepPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool ExitSepPairCut::Pass(const StHbtPair* pair){
-  double sep = pair->NominalTpcExitSeparation();
-  bool temp = ( (sep>mEntSepLo) &&
-		(sep<mEntSepHi) );
+bool ExitSepPairCut::Pass(const StHbtPair* pair) {
+   double sep = pair->NominalTpcExitSeparation();
+   bool temp = ((sep > mEntSepLo) && (sep < mEntSepHi));
 
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return temp;
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return temp;
 }
 //__________________
-StHbtString ExitSepPairCut::Report(){
-  string Stemp = "Exit Separation Pair Cut\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Range of cut:\t%E ... \t%E\n",mEntSepLo,mEntSepHi);
-  Stemp += Ctemp;
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString ExitSepPairCut::Report() {
+   string Stemp = "Exit Separation Pair Cut\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Range of cut:\t%E ... \t%E\n", mEntSepLo, mEntSepHi);
+   Stemp += Ctemp;
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________
 void ExitSepPairCut::SetExitSepRange(const double& Lo, const double& Hi) {
-  mEntSepLo = Lo;
-  mEntSepHi = Hi;
+   mEntSepLo = Lo;
+   mEntSepHi = Hi;
 }
 //__________________

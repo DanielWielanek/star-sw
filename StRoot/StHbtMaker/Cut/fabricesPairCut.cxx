@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   a do-nothing pair cut that simply says "true" to every pair           
+ *   a do-nothing pair cut that simply says "true" to every pair
  *
  ***************************************************************************
  *
@@ -18,7 +18,9 @@
  * Add NDedxHits cut, slight modification for Y cuts and Fabrices probability
  *
  * Revision 1.1  2001/12/14 23:11:27  fretiere
- * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle the hit information and cope with my code
+ * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function
+ *which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle
+ *the hit information and cope with my code
  *
  * Revision 1.3  2000/01/25 17:35:02  laue
  * I. In order to run the stand alone version of the StHbtMaker the following
@@ -41,59 +43,57 @@
  **************************************************************************/
 
 #include "StHbtMaker/Cut/fabricesPairCut.h"
-#include <string>
-#include <cstdio>
+
 #include <Stsstream.h>
+
+#include <cstdio>
+#include <string>
 
 #ifdef __ROOT__
 ClassImp(fabricesPairCut)
 #endif
 
-//__________________
-fabricesPairCut::fabricesPairCut():HitMergingPairCut(){
-  mNPairsPassed = mNPairsFailed = 0;
-  mPiKPairMinProb=0.;
-  mPiPPairMinProb=0.;
-  mElPairMaxProb=1.;
-  mPiPiPairMaxProb=1.;
-  mKKPairMaxProb=1.;
+    //__________________
+    fabricesPairCut::fabricesPairCut()
+    : HitMergingPairCut() {
+   mNPairsPassed = mNPairsFailed = 0;
+   mPiKPairMinProb = 0.;
+   mPiPPairMinProb = 0.;
+   mElPairMaxProb = 1.;
+   mPiPiPairMaxProb = 1.;
+   mKKPairMaxProb = 1.;
 }
 //__________________
-//fabricesPairCut::~fabricesPairCut(){
+// fabricesPairCut::~fabricesPairCut(){
 //  /* no-op */
 //}
 //__________________
-bool fabricesPairCut::Pass(const StHbtPair* pair){
-  bool temp = ( pair->track1()->TrackId()!=pair->track2()->TrackId() &&
-  		pair->ElectronPairProbability() < mElPairMaxProb && 
-  		((pair->track1()->Track()->PidProbPion()) * 
-  		 (pair->track2()->Track()->PidProbPion()))<=mPiPiPairMaxProb &&
-  		((pair->track1()->Track()->PidProbKaon()) * 
-  		 (pair->track2()->Track()->PidProbKaon()))<=mKKPairMaxProb &&
-  		((pair->track1()->Track()->PidProbPion()) * 
-  		 (pair->track2()->Track()->PidProbKaon()))>=mPiKPairMinProb &&
-  		((pair->track1()->Track()->PidProbPion()) * 
-  		 (pair->track2()->Track()->PidProbProton()))>=mPiPPairMinProb &&
-  		pair->getFracOfMergedRow()<mMaxFracPair
-  		);
-  temp ? mNPairsPassed++ : mNPairsFailed++;
-  return temp;
+bool fabricesPairCut::Pass(const StHbtPair* pair) {
+   bool temp =
+       (pair->track1()->TrackId() != pair->track2()->TrackId() && pair->ElectronPairProbability() < mElPairMaxProb &&
+        ((pair->track1()->Track()->PidProbPion()) * (pair->track2()->Track()->PidProbPion())) <= mPiPiPairMaxProb &&
+        ((pair->track1()->Track()->PidProbKaon()) * (pair->track2()->Track()->PidProbKaon())) <= mKKPairMaxProb &&
+        ((pair->track1()->Track()->PidProbPion()) * (pair->track2()->Track()->PidProbKaon())) >= mPiKPairMinProb &&
+        ((pair->track1()->Track()->PidProbPion()) * (pair->track2()->Track()->PidProbProton())) >= mPiPPairMinProb &&
+        pair->getFracOfMergedRow() < mMaxFracPair);
+   temp ? mNPairsPassed++ : mNPairsFailed++;
+   return temp;
 }
 //__________________
-StHbtString fabricesPairCut::Report(){
-  string Stemp = "Fabrices Pair Cut - total dummy-- always returns true\n";
-  char Ctemp[100];
-  sprintf(Ctemp,"Number of pairs which passed:\t%ld  Number which failed:\t%ld\n",mNPairsPassed,mNPairsFailed);
-  Stemp += Ctemp;
-  StHbtString returnThis = Stemp;
-  return returnThis;
+StHbtString fabricesPairCut::Report() {
+   string Stemp = "Fabrices Pair Cut - total dummy-- always returns true\n";
+   char Ctemp[100];
+   sprintf(Ctemp, "Number of pairs which passed:\t%ld  Number which failed:\t%ld\n", mNPairsPassed, mNPairsFailed);
+   Stemp += Ctemp;
+   StHbtString returnThis = Stemp;
+   return returnThis;
 }
 //__________________
-std::ostringstream* fabricesPairCut::finalReport() const{
-  std::ostringstream* tFinalReport = new std::ostringstream;
-  (*tFinalReport) <<  "_____ Fabrices pair Cut _____ " << endl
-		  << " N pairs passed : " << mNPairsPassed << endl 
-		  << " N pairs failed : " << mNPairsFailed << endl 
-		  << ends;
-  return tFinalReport;
+std::ostringstream* fabricesPairCut::finalReport() const {
+   std::ostringstream* tFinalReport = new std::ostringstream;
+   (*tFinalReport) << "_____ Fabrices pair Cut _____ " << endl
+                   << " N pairs passed : " << mNPairsPassed << endl
+                   << " N pairs failed : " << mNPairsFailed << endl
+                   << ends;
+   return tFinalReport;
 }

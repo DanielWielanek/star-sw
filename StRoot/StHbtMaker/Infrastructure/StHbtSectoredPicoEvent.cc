@@ -25,87 +25,77 @@
 #include "StHbtMaker/Infrastructure/StHbtSectoredPicoEvent.hh"
 
 //________________
-StHbtSectoredPicoEvent::StHbtSectoredPicoEvent(int numbins){
+StHbtSectoredPicoEvent::StHbtSectoredPicoEvent(int numbins) {
+   int i;
 
-  int i;
+   mNumBins = numbins;
 
-  mNumBins = numbins;
+   StHbtParticleCollection **sectoredCollection1 = new StHbtParticleCollection *[mNumBins + 1];
+   mFirstSectoredCollection = sectoredCollection1;
 
-  StHbtParticleCollection **sectoredCollection1 = new StHbtParticleCollection*[mNumBins+1];
-  mFirstSectoredCollection = sectoredCollection1;
+   for (i = 0; i <= mNumBins; i++) mFirstSectoredCollection[i] = new StHbtParticleCollection;
 
-  for (i=0; i<=mNumBins; i++) 
-	mFirstSectoredCollection[i] = new StHbtParticleCollection;
+   StHbtParticleCollection **sectoredCollection2 = new StHbtParticleCollection *[mNumBins + 1];
+   mSecondSectoredCollection = sectoredCollection2;
 
-  StHbtParticleCollection **sectoredCollection2 = new StHbtParticleCollection*[mNumBins+1];
-  mSecondSectoredCollection = sectoredCollection2;
+   for (i = 0; i <= mNumBins; i++) mSecondSectoredCollection[i] = new StHbtParticleCollection;
 
-  for (i=0; i<=mNumBins; i++) 
-	mSecondSectoredCollection[i] = new StHbtParticleCollection;
+   StHbtParticleCollection **sectoredCollection3 = new StHbtParticleCollection *[mNumBins + 1];
+   mThirdSectoredCollection = sectoredCollection3;
 
-  StHbtParticleCollection **sectoredCollection3 = new StHbtParticleCollection*[mNumBins+1];
-  mThirdSectoredCollection = sectoredCollection3;
-
-  for (i=0; i<=mNumBins; i++) 
-	mThirdSectoredCollection[i] = new StHbtParticleCollection;
+   for (i = 0; i <= mNumBins; i++) mThirdSectoredCollection[i] = new StHbtParticleCollection;
 }
 
 //________________
-StHbtSectoredPicoEvent::StHbtSectoredPicoEvent(int numbinsx, int numbinsy, int numbinsz){
+StHbtSectoredPicoEvent::StHbtSectoredPicoEvent(int numbinsx, int numbinsy, int numbinsz) {
+   int i;
 
-  int i;
+   mNumBins = numbinsx * numbinsy * numbinsz;
 
-  mNumBins = numbinsx*numbinsy*numbinsz;
+   StHbtParticleCollection **sectoredCollection1 = new StHbtParticleCollection *[mNumBins + 1];
+   mFirstSectoredCollection = sectoredCollection1;
 
-  StHbtParticleCollection **sectoredCollection1 = new StHbtParticleCollection*[mNumBins+1];
-  mFirstSectoredCollection = sectoredCollection1;
+   for (i = 0; i <= mNumBins; i++) mFirstSectoredCollection[i] = new StHbtParticleCollection;
 
-  for (i=0; i<=mNumBins; i++) 
-	mFirstSectoredCollection[i] = new StHbtParticleCollection;
+   StHbtParticleCollection **sectoredCollection2 = new StHbtParticleCollection *[mNumBins + 1];
+   mSecondSectoredCollection = sectoredCollection2;
 
-  StHbtParticleCollection **sectoredCollection2 = new StHbtParticleCollection*[mNumBins+1];
-  mSecondSectoredCollection = sectoredCollection2;
+   for (i = 0; i <= mNumBins; i++) mSecondSectoredCollection[i] = new StHbtParticleCollection;
 
-  for (i=0; i<=mNumBins; i++) 
-	mSecondSectoredCollection[i] = new StHbtParticleCollection;
+   StHbtParticleCollection **sectoredCollection3 = new StHbtParticleCollection *[mNumBins + 1];
+   mThirdSectoredCollection = sectoredCollection3;
 
-  StHbtParticleCollection **sectoredCollection3 = new StHbtParticleCollection*[mNumBins+1];
-  mThirdSectoredCollection = sectoredCollection3;
-
-  for (i=0; i<=mNumBins; i++) 
-	mThirdSectoredCollection[i] = new StHbtParticleCollection;
+   for (i = 0; i <= mNumBins; i++) mThirdSectoredCollection[i] = new StHbtParticleCollection;
 }
 
 //_________________
-StHbtSectoredPicoEvent::~StHbtSectoredPicoEvent(){
-  
-  int i;
-  
-  StHbtParticleIterator iter;
-  
-  for (i=0; i<=mNumBins; i++) {
-    for (iter=mFirstSectoredCollection[i]->begin();iter!=mFirstSectoredCollection[i]->end();iter++){
-      delete *iter;
-    }	
-    delete mFirstSectoredCollection[i];
-  }
-  delete [] mFirstSectoredCollection;
+StHbtSectoredPicoEvent::~StHbtSectoredPicoEvent() {
+   int i;
 
-  for (i=0; i<=mNumBins; i++) {
-    for (iter=mSecondSectoredCollection[i]->begin();iter!=mSecondSectoredCollection[i]->end();iter++){
-      delete *iter;
-    }	
-    delete mSecondSectoredCollection[i];
-  }
-  delete [] mSecondSectoredCollection;
+   StHbtParticleIterator iter;
 
-  for (i=0; i<=mNumBins; i++) {
-    for (iter=mThirdSectoredCollection[i]->begin();iter!=mThirdSectoredCollection[i]->end();iter++){
-      delete *iter;
-    }	
-    delete mThirdSectoredCollection[i];
-  }
-  delete [] mThirdSectoredCollection;
+   for (i = 0; i <= mNumBins; i++) {
+      for (iter = mFirstSectoredCollection[i]->begin(); iter != mFirstSectoredCollection[i]->end(); iter++) {
+         delete *iter;
+      }
+      delete mFirstSectoredCollection[i];
+   }
+   delete[] mFirstSectoredCollection;
 
+   for (i = 0; i <= mNumBins; i++) {
+      for (iter = mSecondSectoredCollection[i]->begin(); iter != mSecondSectoredCollection[i]->end(); iter++) {
+         delete *iter;
+      }
+      delete mSecondSectoredCollection[i];
+   }
+   delete[] mSecondSectoredCollection;
+
+   for (i = 0; i <= mNumBins; i++) {
+      for (iter = mThirdSectoredCollection[i]->begin(); iter != mThirdSectoredCollection[i]->end(); iter++) {
+         delete *iter;
+      }
+      delete mThirdSectoredCollection[i];
+   }
+   delete[] mThirdSectoredCollection;
 }
 //_________________

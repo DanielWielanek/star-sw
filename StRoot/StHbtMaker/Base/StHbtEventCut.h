@@ -7,7 +7,7 @@
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
  *       base class for Eventwise cuts
- *      Users inherit from this class and must add their own quantities        
+ *      Users inherit from this class and must add their own quantities
  *
  ***************************************************************************
  *
@@ -38,7 +38,8 @@
  * 1.) unnecessary includes of 'StMaker.h' deleted
  *
  * Revision 1.2  1999/12/03 22:24:34  lisa
- * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits mechanism
+ * (1) make Cuts and CorrFctns point back to parent Analysis (as well as other way). (2) Accommodate new PidTraits
+ *mechanism
  *
  * Revision 1.1  1999/10/15 01:56:47  lisa
  * Important enhancement of StHbtMaker - implement Franks CutMonitors
@@ -75,31 +76,28 @@ class StHbtBaseAnalysis;
 #include "StHbtMaker/Infrastructure/StHbtString.hh"
 
 class StHbtEventCut : public StHbtCutMonitorHandler {
+  public:
+   StHbtEventCut(){/* no-op */};           // default constructor. - Users should write their own
+   StHbtEventCut(const StHbtEventCut& c);  // copy constructor
+   virtual ~StHbtEventCut(){/* no-op */};  // destructor
 
-public:
+   virtual bool Pass(const StHbtEvent* event) = 0;  // true if passes, false if not
 
-  StHbtEventCut(){/* no-op */};                // default constructor. - Users should write their own
-  StHbtEventCut(const StHbtEventCut& c); // copy constructor
-  virtual ~StHbtEventCut(){/* no-op */};       // destructor
-
-  virtual bool Pass(const StHbtEvent* event) =0;  // true if passes, false if not
-
-  virtual StHbtString Report() =0;    // user-written method to return string describing cuts
-  virtual StHbtEventCut* Clone() { return 0;}
+   virtual StHbtString Report() = 0;  // user-written method to return string describing cuts
+   virtual StHbtEventCut* Clone() { return 0; }
 
 #ifdef __ROOT__
-  ClassDef(StHbtEventCut, 0)
+   ClassDef(StHbtEventCut, 0)
 #endif
-  // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
-  friend class StHbtBaseAnalysis;
-  StHbtBaseAnalysis* HbtAnalysis(){return myAnalysis;};
-  void SetAnalysis(StHbtBaseAnalysis*);
+       // the following allows "back-pointing" from the CorrFctn to the "parent" Analysis
+       friend class StHbtBaseAnalysis;
+   StHbtBaseAnalysis* HbtAnalysis() { return myAnalysis; };
+   void SetAnalysis(StHbtBaseAnalysis*);
 
-protected:
-  StHbtBaseAnalysis* myAnalysis;
-
+  protected:
+   StHbtBaseAnalysis* myAnalysis;
 };
 
-inline StHbtEventCut::StHbtEventCut(const StHbtEventCut& c) : StHbtCutMonitorHandler() { myAnalysis=0;}
+inline StHbtEventCut::StHbtEventCut(const StHbtEventCut& c) : StHbtCutMonitorHandler() { myAnalysis = 0; }
 inline void StHbtEventCut::SetAnalysis(StHbtBaseAnalysis* analysis) { myAnalysis = analysis; }
 #endif

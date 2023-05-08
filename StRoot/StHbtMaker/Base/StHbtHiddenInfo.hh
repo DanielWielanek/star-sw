@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  
+ *
  *
  * Author: Laurent Conin, Fabrice Retiere, Subatech, France
  ***************************************************************************
@@ -11,7 +11,7 @@
  *
  ***************************************************************************
  *
- *  
+ *
  *
  ***************************************************************************/
 
@@ -20,21 +20,17 @@
 
 #include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
-class StHbtHiddenInfo{
+class StHbtHiddenInfo {
+  public:
+   StHbtHiddenInfo(){/* no-op */};
+   virtual ~StHbtHiddenInfo(){/* no-op */};
 
-public:
-  StHbtHiddenInfo(){/* no-op */};
-  virtual ~StHbtHiddenInfo(){/* no-op */};
-
-// !!! MANDATORY !!!
-// --- Copy the hidden info from StHbtTrack to StHbtParticle
-  virtual StHbtHiddenInfo* getParticleHiddenInfo() const =0;
-  virtual StHbtHiddenInfo* clone() const;
-
+   // !!! MANDATORY !!!
+   // --- Copy the hidden info from StHbtTrack to StHbtParticle
+   virtual StHbtHiddenInfo* getParticleHiddenInfo() const = 0;
+   virtual StHbtHiddenInfo* clone() const;
 };
 
-inline StHbtHiddenInfo* StHbtHiddenInfo::clone() const{
-  return getParticleHiddenInfo();
-}
+inline StHbtHiddenInfo* StHbtHiddenInfo::clone() const { return getParticleHiddenInfo(); }
 
 #endif

@@ -28,7 +28,7 @@
 #define StHbtHelix_hh
 
 #include "StHelix.hh"
-typedef StHelix StHbtHelix;//!
+typedef StHelix StHbtHelix;  //!
 #include "StPhysicalHelixD.hh"
-typedef StPhysicalHelixD StHbtPhysicalHelix;//!
+typedef StPhysicalHelixD StHbtPhysicalHelix;  //!
 #endif

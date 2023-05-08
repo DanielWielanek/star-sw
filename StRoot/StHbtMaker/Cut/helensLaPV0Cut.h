@@ -60,99 +60,119 @@
 //#endif
 
 #include "StHbtMaker/Base/StHbtV0Cut.h"
-#include "StHbtMaker/Infrastructure/StHbtV0.hh"	//9-17-99 seems like good idea
+#include "StHbtMaker/Infrastructure/StHbtV0.hh"  //9-17-99 seems like good idea
 
 class helensLaPV0Cut : public StHbtV0Cut {
+  public:
+   helensLaPV0Cut();
+   //~helensLaPV0Cut();
 
-public:
+   virtual bool Pass(const StHbtV0*);
 
-  helensLaPV0Cut();
-  //~helensLaPV0Cut();
+   virtual StHbtString Report();
 
-  virtual bool Pass(const StHbtV0*);
+   void SetV0Type(const char* type);
+   void SetV0MassRange(const float& lo, const float& hi);
+   void SetdcaV0daughters(const float& lo, const float& hi);
+   void SetdcaV0ToPrimVertex(const float& lo, const float& hi);
+   void SetdecayLengthV0(const float& lo, const float& hi);
+   void SettpcHitsPos(const int& lo, const int& hi);
+   void SettpcHitsNeg(const int& lo, const int& hi);
+   void SetdcaPosToPrimVertex(const float& lo, const float& hi);
+   void SetdcaNegToPrimVertex(const float& lo, const float& hi);
+   void SetptArmV0(const float& lo, const float& hi);
+   void SetalphaV0(const float& lo, const float& hi);
+   void SetPt(const float& lo, const float& hi);
+   void SetRapidity(const float& lo, const float& hi);
+   void SetdEdx(const float& charge, const float& m1, const float& c1, const float& m2, const float& c2);
 
-  virtual StHbtString Report();
+  private:                        // here are the quantities we want to cut on...
+   float mV0MassRange[2];         // Invariant mass limits
+   float mdcaV0daughters[2];      // DCA between 2 tracks
+   float mdcaV0ToPrimVertex[2];   // DCA between V0 and event vertex
+   float mdecayLengthV0[2];       // decay length from prim. vertex
+   int mtpcHitsPos[2];            // no. of tpc hits on pos track
+   int mtpcHitsNeg[2];            // no. of tpc hits on neg track
+   float mdcaPosToPrimVertex[2];  // min. value + track at intersect
+   float mdcaNegToPrimVertex[2];  // min. value - track at intersect
+   float mptArmV0[2];             // pt Armenteros
+   float malphaV0[2];             // alpha Armenteros
+   float mPt[2];                  // pt of V0
+   float mRapidity[2];            // rapidity of V0
+   float mdEdx[4];                // dEdx lines for daughter track
+   float mChargedEdx;             // Charge of track to use in dedx
 
-  void SetV0Type(const char* type);
-  void SetV0MassRange(const float& lo, const float& hi);
-  void SetdcaV0daughters(const float& lo, const float& hi);
-  void SetdcaV0ToPrimVertex(const float& lo, const float& hi);
-  void SetdecayLengthV0(const float& lo, const float& hi);
-  void SettpcHitsPos(const int& lo, const int& hi);
-  void SettpcHitsNeg(const int& lo, const int& hi);
-  void SetdcaPosToPrimVertex(const float& lo, const float& hi);
-  void SetdcaNegToPrimVertex(const float& lo, const float& hi);
-  void SetptArmV0(const float& lo, const float& hi);
-  void SetalphaV0(const float& lo, const float& hi);
-  void SetPt(const float& lo, const float& hi);
-  void SetRapidity(const float& lo, const float& hi);
-  void SetdEdx(const float& charge, const float& m1, const float& c1, const float& m2, const float& c2);
+   long mNV0sPassed;
+   long mNV0sFailed;
 
+   const char* V0Type;  // String selecting v0 (la,antil,k0)
 
-private:   // here are the quantities we want to cut on...
-
-  float             mV0MassRange[2];        //Invariant mass limits
-  float             mdcaV0daughters[2];     //DCA between 2 tracks
-  float             mdcaV0ToPrimVertex[2];  //DCA between V0 and event vertex
-  float             mdecayLengthV0[2];      //decay length from prim. vertex
-  int               mtpcHitsPos[2];         //no. of tpc hits on pos track
-  int               mtpcHitsNeg[2];         //no. of tpc hits on neg track
-  float             mdcaPosToPrimVertex[2];  //min. value + track at intersect
-  float             mdcaNegToPrimVertex[2];  //min. value - track at intersect
-  float             mptArmV0[2];             //pt Armenteros
-  float             malphaV0[2];             //alpha Armenteros
-  float             mPt[2];                 //pt of V0
-  float             mRapidity[2];           //rapidity of V0
-  float             mdEdx[4];        // dEdx lines for daughter track
-  float             mChargedEdx;            // Charge of track to use in dedx
-
-  long              mNV0sPassed;
-  long              mNV0sFailed;
-
-  const char*       V0Type;                // String selecting v0 (la,antil,k0)
-
-#ifdef __ROOT__ 
-  ClassDef(helensLaPV0Cut, 1)
+#ifdef __ROOT__
+   ClassDef(helensLaPV0Cut, 1)
 #endif
 };
 
-
 inline void helensLaPV0Cut::SetV0MassRange(const float& lo, const float& hi) {
-mV0MassRange[0] =lo; mV0MassRange[1]=hi;}
-inline void helensLaPV0Cut::SetdcaV0daughters(const float& lo, const float& hi)
-{mdcaV0daughters[0]=lo; mdcaV0daughters[1]=hi;}
-inline void helensLaPV0Cut::SetdcaV0ToPrimVertex(const float& lo, const float& hi)
-{mdcaV0ToPrimVertex[0]=lo; mdcaV0ToPrimVertex[1]=hi;}
-inline void helensLaPV0Cut::SetdecayLengthV0(const float& lo, const float& hi)
-{mdecayLengthV0[0]=lo; mdecayLengthV0[1]=hi;}
+   mV0MassRange[0] = lo;
+   mV0MassRange[1] = hi;
+}
+inline void helensLaPV0Cut::SetdcaV0daughters(const float& lo, const float& hi) {
+   mdcaV0daughters[0] = lo;
+   mdcaV0daughters[1] = hi;
+}
+inline void helensLaPV0Cut::SetdcaV0ToPrimVertex(const float& lo, const float& hi) {
+   mdcaV0ToPrimVertex[0] = lo;
+   mdcaV0ToPrimVertex[1] = hi;
+}
+inline void helensLaPV0Cut::SetdecayLengthV0(const float& lo, const float& hi) {
+   mdecayLengthV0[0] = lo;
+   mdecayLengthV0[1] = hi;
+}
 
-inline void helensLaPV0Cut::SettpcHitsPos(const int& lo, const int& hi)
-{mtpcHitsPos[0]=lo;mtpcHitsPos[1]=hi;}
-inline void helensLaPV0Cut::SettpcHitsNeg(const int& lo, const int& hi)
-{mtpcHitsNeg[0]=lo;mtpcHitsNeg[1]=hi;}
+inline void helensLaPV0Cut::SettpcHitsPos(const int& lo, const int& hi) {
+   mtpcHitsPos[0] = lo;
+   mtpcHitsPos[1] = hi;
+}
+inline void helensLaPV0Cut::SettpcHitsNeg(const int& lo, const int& hi) {
+   mtpcHitsNeg[0] = lo;
+   mtpcHitsNeg[1] = hi;
+}
 
-inline void helensLaPV0Cut::SetdcaPosToPrimVertex(const float& lo, const float& hi)
-{mdcaPosToPrimVertex[0]=lo; mdcaPosToPrimVertex[1]=hi;}
-inline void helensLaPV0Cut::SetdcaNegToPrimVertex(const float& lo, const float& hi)
-{mdcaNegToPrimVertex[0]=lo; mdcaNegToPrimVertex[1]=hi;}
-inline void helensLaPV0Cut::SetptArmV0(const float& lo, const float& hi)
-{mptArmV0[0]=lo; mptArmV0[1]=hi;}
-inline void helensLaPV0Cut::SetalphaV0(const float& lo, const float& hi)
-{malphaV0[0]=lo; malphaV0[1]=hi;}
+inline void helensLaPV0Cut::SetdcaPosToPrimVertex(const float& lo, const float& hi) {
+   mdcaPosToPrimVertex[0] = lo;
+   mdcaPosToPrimVertex[1] = hi;
+}
+inline void helensLaPV0Cut::SetdcaNegToPrimVertex(const float& lo, const float& hi) {
+   mdcaNegToPrimVertex[0] = lo;
+   mdcaNegToPrimVertex[1] = hi;
+}
+inline void helensLaPV0Cut::SetptArmV0(const float& lo, const float& hi) {
+   mptArmV0[0] = lo;
+   mptArmV0[1] = hi;
+}
+inline void helensLaPV0Cut::SetalphaV0(const float& lo, const float& hi) {
+   malphaV0[0] = lo;
+   malphaV0[1] = hi;
+}
 
-inline void helensLaPV0Cut::SetdEdx(const float& charge,const float& m1, const float& c1,
-				       const float& m2, const float& c2)
-{mChargedEdx=charge;mdEdx[0]=m1; mdEdx[1]=c1; mdEdx[2]=m2; mdEdx[3]=c2;}
+inline void helensLaPV0Cut::SetdEdx(const float& charge, const float& m1, const float& c1, const float& m2,
+                                    const float& c2) {
+   mChargedEdx = charge;
+   mdEdx[0] = m1;
+   mdEdx[1] = c1;
+   mdEdx[2] = m2;
+   mdEdx[3] = c2;
+}
 
-inline void helensLaPV0Cut::SetPt(const float& lo, const float& hi)
-{mPt[0]=lo; mPt[1]=hi;}
-inline void helensLaPV0Cut::SetRapidity(const float& lo,const float& hi)
-{mRapidity[0]=lo; mRapidity[1]=hi;}
+inline void helensLaPV0Cut::SetPt(const float& lo, const float& hi) {
+   mPt[0] = lo;
+   mPt[1] = hi;
+}
+inline void helensLaPV0Cut::SetRapidity(const float& lo, const float& hi) {
+   mRapidity[0] = lo;
+   mRapidity[1] = hi;
+}
 
-inline void helensLaPV0Cut::SetV0Type(const char* type)
-{V0Type = (char*)type;}
+inline void helensLaPV0Cut::SetV0Type(const char* type) { V0Type = (char*)type; }
 
 #endif
-
-
-

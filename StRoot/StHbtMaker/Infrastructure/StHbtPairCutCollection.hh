@@ -21,7 +21,6 @@
 #ifndef StHbtPairCutCollection_hh
 #define StHbtPairCutCollection_hh
 
-
 #include <list>
 #if !defined(ST_NO_NAMESPACES)
 using std::list;
@@ -29,11 +28,11 @@ using std::list;
 class StHbtPairCut;
 
 #ifdef ST_NO_TEMPLATE_DEF_ARGS
-typedef list<StHbtPairCut*, allocator<StHbtPairCut*> >            StHbtPairCutCollection;
-typedef list<StHbtPairCut*, allocator<StHbtPairCut*> >::iterator  StHbtPairCutIterator;
+typedef list<StHbtPairCut*, allocator<StHbtPairCut*> > StHbtPairCutCollection;
+typedef list<StHbtPairCut*, allocator<StHbtPairCut*> >::iterator StHbtPairCutIterator;
 #else
-typedef list<StHbtPairCut*>            StHbtPairCutCollection;
-typedef list<StHbtPairCut*>::iterator  StHbtPairCutIterator;
+typedef list<StHbtPairCut*> StHbtPairCutCollection;
+typedef list<StHbtPairCut*>::iterator StHbtPairCutIterator;
 #endif
 
 #endif

@@ -21,30 +21,31 @@
 
 class StuProbabilityPidAlgorithm;
 
+class StHbtAihongPid {
+  public:
+   static StHbtAihongPid* Instance(const char* fileName = "PIDTable.root");
+   void setPidTable(const char* fileName);
+   void updateEvent(int refMult);
+   void updateTrack(int charge, double p, double eta, int nHitsDedx, double dedx);
+   StuProbabilityPidAlgorithm* aihongPid(int refMult, int charge, double p, double eta, int nHitsDedx, double dedx);
+   StuProbabilityPidAlgorithm* aihongPid(int charge, double p, double eta, int nHitsDedx, double dedx);
+   StuProbabilityPidAlgorithm* aihongPid();
 
-class StHbtAihongPid  {
- public:
-  static StHbtAihongPid* Instance(const char* fileName="PIDTable.root");
-  void setPidTable(const char* fileName);
-  void updateEvent(int refMult);
-  void updateTrack(int charge, double p, double eta, int nHitsDedx, double dedx);
-  StuProbabilityPidAlgorithm* aihongPid(int refMult, int charge, double p, double eta, int nHitsDedx, double dedx);
-  StuProbabilityPidAlgorithm* aihongPid(int charge, double p, double eta, int nHitsDedx, double dedx);
-  StuProbabilityPidAlgorithm* aihongPid();
-  
-  friend class nobody;
- protected: 
-  StHbtAihongPid(const char* fileName);
-  virtual ~StHbtAihongPid() { /* no-op */ }
- private:
-  static StHbtAihongPid* _instance;
-  StuProbabilityPidAlgorithm* mAihongPid;
-  double mAihongCentrality;
+   friend class nobody;
+
+  protected:
+   StHbtAihongPid(const char* fileName);
+   virtual ~StHbtAihongPid() { /* no-op */
+   }
+
+  private:
+   static StHbtAihongPid* _instance;
+   StuProbabilityPidAlgorithm* mAihongPid;
+   double mAihongCentrality;
 
 #ifdef __ROOT__
-  ClassDef(StHbtAihongPid,0)
+   ClassDef(StHbtAihongPid, 0)
 #endif
 };
 
 #endif
- 

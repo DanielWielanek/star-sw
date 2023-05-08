@@ -20,13 +20,16 @@
  * gcc 3.2 updates + WarnOff
  *
  * Revision 1.22  2003/03/18 14:41:48  kisiel
- * Bugfix update for the theoretical part of the code. Reverts the changes to the Lednicky weight calculator, as the previuos one had problems with strong interaction
+ * Bugfix update for the theoretical part of the code. Reverts the changes to the Lednicky weight calculator, as the
+ *previuos one had problems with strong interaction
  *
  * Revision 1.21  2002/03/21 18:49:31  laue
  * updated for new MuDst reader
  *
  * Revision 1.20  2001/12/14 23:11:30  fretiere
- * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle the hit information and cope with my code
+ * Add class HitMergingCut. Add class fabricesPairCut = HitMerginCut + pair purity cuts. Add TpcLocalTransform function
+ *which convert to local tpc coord (not pretty). Modify StHbtTrack, StHbtParticle, StHbtHiddenInfo, StHbtPair to handle
+ *the hit information and cope with my code
  *
  * Revision 1.17  2001/06/21 19:15:48  laue
  * Modified fiels:
@@ -118,10 +121,9 @@
 #ifndef StHbtTrack_hh
 #define StHbtTrack_hh
 
-#include "Stiostream.h"
-
 #include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 #include "StPhysicalHelixD.hh"
+#include "Stiostream.h"
 /* Th stuff */
 #include "StHbtMaker/Base/StHbtHiddenInfo.hh"
 /***/
@@ -133,139 +135,137 @@ class StHbtTTreeEvent;
 class StMuDst;
 class StMuTrack;
 
-class StHbtTrack{
-public:
-  StHbtTrack();
-  StHbtTrack(const StHbtTrack&);// copy constructor
+class StHbtTrack {
+  public:
+   StHbtTrack();
+   StHbtTrack(const StHbtTrack&);  // copy constructor
 #ifdef __ROOT__
-  StHbtTrack(const StTrack*, StHbtThreeVector);   // c-tor from StTrack of STAR DSTs
-  StHbtTrack(const StHbtTTreeEvent* ev, const StHbtTTreeTrack* t);
-  StHbtTrack(const StMuDst* dst, const StMuTrack* t);
+   StHbtTrack(const StTrack*, StHbtThreeVector);  // c-tor from StTrack of STAR DSTs
+   StHbtTrack(const StHbtTTreeEvent* ev, const StHbtTTreeTrack* t);
+   StHbtTrack(const StMuDst* dst, const StMuTrack* t);
 #endif
-  StHbtTrack(const StEvent*, const StTrack*);
-  ~StHbtTrack();
-//    ~StHbtTrack(){/* no-op*/};
+   StHbtTrack(const StEvent*, const StTrack*);
+   ~StHbtTrack();
+   //    ~StHbtTrack(){/* no-op*/};
 
-  short TrackType() const;
-  short Charge() const;
-  short NHits() const;
-  short NHitsPossible() const;
-  short NHitsDedx() const;
-  const float* NSigma() const; // Fab private
-  float NSigmaElectron() const;
-  float NSigmaPion() const;
-  float NSigmaKaon() const;
-  float NSigmaProton() const;
-  float PidProbElectron() const;
-  float PidProbPion() const;
-  float PidProbKaon() const;
-  float PidProbProton() const;
-  float dEdx() const;
-  float DCAz() const;
-  float DCAxy() const;
-  float DCAzGlobal() const;
-  float DCAxyGlobal() const;
-  float ChiSquaredXY() const;
-  float ChiSquaredZ() const;
-  StHbtThreeVector P() const;
-  float Pt() const;
-  StHbtThreeVector PGlobal() const;
-  float PtGlobal() const;
-  const StPhysicalHelixD& Helix() const;
-  const StPhysicalHelixD& HelixGlobal() const;
-  unsigned int TopologyMap(const unsigned int word) const;
-  short TrackId() const;
+   short TrackType() const;
+   short Charge() const;
+   short NHits() const;
+   short NHitsPossible() const;
+   short NHitsDedx() const;
+   const float* NSigma() const;  // Fab private
+   float NSigmaElectron() const;
+   float NSigmaPion() const;
+   float NSigmaKaon() const;
+   float NSigmaProton() const;
+   float PidProbElectron() const;
+   float PidProbPion() const;
+   float PidProbKaon() const;
+   float PidProbProton() const;
+   float dEdx() const;
+   float DCAz() const;
+   float DCAxy() const;
+   float DCAzGlobal() const;
+   float DCAxyGlobal() const;
+   float ChiSquaredXY() const;
+   float ChiSquaredZ() const;
+   StHbtThreeVector P() const;
+   float Pt() const;
+   StHbtThreeVector PGlobal() const;
+   float PtGlobal() const;
+   const StPhysicalHelixD& Helix() const;
+   const StPhysicalHelixD& HelixGlobal() const;
+   unsigned int TopologyMap(const unsigned int word) const;
+   short TrackId() const;
 
-  void SetTrackType(const short&);
-  void SetCharge(const short&);
-  void SetNHits(const short&);
-  void SetNHitsPossible(const short&);
-  void SetNHitsDedx(const short&);
-  void SetNSigmaElectron(const float&);
-  void SetNSigmaPion(const float&);
-  void SetNSigmaKaon(const float&);
-  void SetNSigmaProton(const float&);
-  void SetPidProbElectron(const float&);
-  void SetPidProbPion(const float&);
-  void SetPidProbKaon(const float&);
-  void SetPidProbProton(const float&);
-  void SetdEdx(const float&);
-  void SetDCAxy(const float&);
-  void SetDCAz(const float&);
-  void SetDCAxyGlobal(const float&);
-  void SetDCAzGlobal(const float&);
-  void SetChiSquaredXY(const float&);
-  void SetChiSquaredZ(const float&);
-  void SetP(const StHbtThreeVector&);
-  void SetPt(const float&);
-  void SetPGlobal(const StHbtThreeVector&);
-  void SetPtGlobal(const float&);
-  void SetHelix(const StPhysicalHelixD&);
-  void SetHelixGlobal(const StPhysicalHelixD&);
-  void SetTopologyMap(const int word, const unsigned int map);
-  void SetTrackId(const short&);
+   void SetTrackType(const short&);
+   void SetCharge(const short&);
+   void SetNHits(const short&);
+   void SetNHitsPossible(const short&);
+   void SetNHitsDedx(const short&);
+   void SetNSigmaElectron(const float&);
+   void SetNSigmaPion(const float&);
+   void SetNSigmaKaon(const float&);
+   void SetNSigmaProton(const float&);
+   void SetPidProbElectron(const float&);
+   void SetPidProbPion(const float&);
+   void SetPidProbKaon(const float&);
+   void SetPidProbProton(const float&);
+   void SetdEdx(const float&);
+   void SetDCAxy(const float&);
+   void SetDCAz(const float&);
+   void SetDCAxyGlobal(const float&);
+   void SetDCAzGlobal(const float&);
+   void SetChiSquaredXY(const float&);
+   void SetChiSquaredZ(const float&);
+   void SetP(const StHbtThreeVector&);
+   void SetPt(const float&);
+   void SetPGlobal(const StHbtThreeVector&);
+   void SetPtGlobal(const float&);
+   void SetHelix(const StPhysicalHelixD&);
+   void SetHelixGlobal(const StPhysicalHelixD&);
+   void SetTopologyMap(const int word, const unsigned int map);
+   void SetTrackId(const short&);
 
-  /* Th stuff */
-  void SetHiddenInfo(StHbtHiddenInfo* aHiddenInfo);
-  bool ValidHiddenInfo() const;
-  // Fab private : (official : const StHbtHiddenInfo* HiddenInfo() const;
-  StHbtHiddenInfo* getHiddenInfo() const;
-  /***/
+   /* Th stuff */
+   void SetHiddenInfo(StHbtHiddenInfo* aHiddenInfo);
+   bool ValidHiddenInfo() const;
+   // Fab private : (official : const StHbtHiddenInfo* HiddenInfo() const;
+   StHbtHiddenInfo* getHiddenInfo() const;
+   /***/
 
-  // For I/O of this object -- functions defined in StHbtIO.cc
-  friend ostream& operator<<(ostream& out, StHbtTrack& trk);
-  friend istream& operator>>(istream& in,  StHbtTrack& trk);
+   // For I/O of this object -- functions defined in StHbtIO.cc
+   friend ostream& operator<<(ostream& out, StHbtTrack& trk);
+   friend istream& operator>>(istream& in, StHbtTrack& trk);
 
-private:
-  short mTrackType;
-  char mCharge;
-  unsigned short mNHits;
-  unsigned short mNHitsPoss; 
-  unsigned short mNHitsDedx;
-  float mNSigmaElectron;
-  float mNSigmaPion;
-  float mNSigmaKaon;
-  float mNSigmaProton;
-  float mPidProbElectron; // new
-  float mPidProbPion; // new
-  float mPidProbKaon; // new
-  float mPidProbProton; // new
-  float mdEdx;
-  float mDCAxy;
-  float mDCAz; 
-  float mDCAxyGlobal;
-  float mDCAzGlobal; 
-  float mChiSqXY;
-  float mChiSqZ;
-  unsigned int mMap[2];
-  unsigned int mTrackId;
+  private:
+   short mTrackType;
+   char mCharge;
+   unsigned short mNHits;
+   unsigned short mNHitsPoss;
+   unsigned short mNHitsDedx;
+   float mNSigmaElectron;
+   float mNSigmaPion;
+   float mNSigmaKaon;
+   float mNSigmaProton;
+   float mPidProbElectron;  // new
+   float mPidProbPion;      // new
+   float mPidProbKaon;      // new
+   float mPidProbProton;    // new
+   float mdEdx;
+   float mDCAxy;
+   float mDCAz;
+   float mDCAxyGlobal;
+   float mDCAzGlobal;
+   float mChiSqXY;
+   float mChiSqZ;
+   unsigned int mMap[2];
+   unsigned int mTrackId;
 
+   StHbtThreeVector mP;
+   float mPt;
+   StHbtThreeVector mPGlobal;
+   float mPtGlobal;
+   StPhysicalHelixD mHelix;
+   StPhysicalHelixD mHelixGlobal;
 
-  StHbtThreeVector mP;
-  float mPt;
-  StHbtThreeVector mPGlobal;
-  float mPtGlobal;
-  StPhysicalHelixD mHelix;
-  StPhysicalHelixD mHelixGlobal;
+   /* Th stuff */
+   // Fab private : add mutable
+   //  mutable
+   StHbtHiddenInfo* mHiddenInfo;  //!
+   /***/
 
-  /* Th stuff */
-  // Fab private : add mutable
-  //  mutable 
-  StHbtHiddenInfo* mHiddenInfo; //!
-  /***/
-
-  friend class StHbtIOBinary;
-  friend class StHbtTTreeEvent;
-  friend class StHbtTTreeTrack;
+   friend class StHbtIOBinary;
+   friend class StHbtTTreeEvent;
+   friend class StHbtTTreeTrack;
 };
 
-inline const float* StHbtTrack::NSigma() const 
-{return &mNSigmaElectron;} // Fab private 
-inline float StHbtTrack::PidProbElectron() const {return mPidProbElectron;}
-inline float StHbtTrack::PidProbPion() const {return mPidProbPion;}
-inline float StHbtTrack::PidProbKaon() const {return mPidProbKaon;}
-inline float StHbtTrack::PidProbProton() const {return mPidProbProton;}
-inline StHbtThreeVector StHbtTrack::PGlobal() const {return mPGlobal;}
-inline float StHbtTrack::PtGlobal() const {return mPtGlobal;}   
+inline const float* StHbtTrack::NSigma() const { return &mNSigmaElectron; }  // Fab private
+inline float StHbtTrack::PidProbElectron() const { return mPidProbElectron; }
+inline float StHbtTrack::PidProbPion() const { return mPidProbPion; }
+inline float StHbtTrack::PidProbKaon() const { return mPidProbKaon; }
+inline float StHbtTrack::PidProbProton() const { return mPidProbProton; }
+inline StHbtThreeVector StHbtTrack::PGlobal() const { return mPGlobal; }
+inline float StHbtTrack::PtGlobal() const { return mPtGlobal; }
 
 #endif

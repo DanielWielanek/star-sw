@@ -43,56 +43,55 @@
 #ifndef MinvCorrFctn_hh
 #define MinvCorrFctn_hh
 
-#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
 #include "StHbtMaker/Base/StHbtCorrFctn.hh"
 #include "StHbtMaker/Cut/mikesEventCut.h"
+#include "StHbtMaker/Infrastructure/StHbtAnalysis.h"
 
 #ifdef __ROOT__
 #include "StHbtMaker/Infrastructure/StHbtTagWriter.hh"
 #endif
 
 class MinvCorrFctn : public StHbtCorrFctn {
-public:
-  MinvCorrFctn(const MinvCorrFctn& ); // copy constructor
-  MinvCorrFctn(char* title, const int& nbins, const float& MinvLo, const float& MinvHi);
-  virtual ~MinvCorrFctn();
+  public:
+   MinvCorrFctn(const MinvCorrFctn&);  // copy constructor
+   MinvCorrFctn(char* title, const int& nbins, const float& MinvLo, const float& MinvHi);
+   virtual ~MinvCorrFctn();
 
-  virtual StHbtString Report();
-  virtual void AddRealPair(const StHbtPair*);
-  virtual void AddMixedPair(const StHbtPair*);
-  virtual void Finish();
-  MinvCorrFctn* Clone();
+   virtual StHbtString Report();
+   virtual void AddRealPair(const StHbtPair*);
+   virtual void AddMixedPair(const StHbtPair*);
+   virtual void Finish();
+   MinvCorrFctn* Clone();
 
-  StHbt1DHisto* Numerator();
-  StHbt1DHisto* Denominator();
-  StHbt1DHisto* Difference();
+   StHbt1DHisto* Numerator();
+   StHbt1DHisto* Denominator();
+   StHbt1DHisto* Difference();
 
-private:
-  StHbt1DHisto* mNumerator;
-  StHbt1DHisto* mDenominator;
-  StHbt1DHisto* mDifference;
-
+  private:
+   StHbt1DHisto* mNumerator;
+   StHbt1DHisto* mDenominator;
+   StHbt1DHisto* mDifference;
 
 #ifdef __ROOT__
-  StHbtTagWriter* mTagWriter;  //! <-- this is a singleton
-  ClassDef(MinvCorrFctn, 1)   
-#endif 
+   StHbtTagWriter* mTagWriter;  //! <-- this is a singleton
+   ClassDef(MinvCorrFctn, 1)
+#endif
 };
 
-
-inline  StHbt1DHisto* MinvCorrFctn::Numerator(){return mNumerator;}
-inline  StHbt1DHisto* MinvCorrFctn::Denominator(){return mDenominator;}
-inline  StHbt1DHisto* MinvCorrFctn::Difference(){return mDifference;}
-inline MinvCorrFctn* MinvCorrFctn::Clone() { MinvCorrFctn* c = new MinvCorrFctn(*this); return c;}
-inline MinvCorrFctn::MinvCorrFctn(const MinvCorrFctn& fctn) :StHbtCorrFctn() {
+inline StHbt1DHisto* MinvCorrFctn::Numerator() { return mNumerator; }
+inline StHbt1DHisto* MinvCorrFctn::Denominator() { return mDenominator; }
+inline StHbt1DHisto* MinvCorrFctn::Difference() { return mDifference; }
+inline MinvCorrFctn* MinvCorrFctn::Clone() {
+   MinvCorrFctn* c = new MinvCorrFctn(*this);
+   return c;
+}
+inline MinvCorrFctn::MinvCorrFctn(const MinvCorrFctn& fctn) : StHbtCorrFctn() {
 #ifdef __ROOT__
-    mTagWriter = StHbtTagWriter::Instance();  
+   mTagWriter = StHbtTagWriter::Instance();
 #endif
-    mNumerator = new StHbt1DHisto(*(fctn.mNumerator));
-    mDenominator= new StHbt1DHisto(*(fctn.mDenominator));
-    mDifference = new StHbt1DHisto(*(fctn.mDifference));
+   mNumerator = new StHbt1DHisto(*(fctn.mNumerator));
+   mDenominator = new StHbt1DHisto(*(fctn.mDenominator));
+   mDifference = new StHbt1DHisto(*(fctn.mDifference));
 }
 
-
 #endif
-

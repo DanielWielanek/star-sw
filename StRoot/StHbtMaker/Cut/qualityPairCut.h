@@ -6,7 +6,7 @@
  ***************************************************************************
  *
  * Description: part of STAR HBT Framework: StHbtMaker package
- *   A pair which cuts on a topology quality           
+ *   A pair which cuts on a topology quality
  *
  ***************************************************************************
  *
@@ -54,7 +54,6 @@
  *
  **************************************************************************/
 
-
 #ifndef qualityPairCut_hh
 #define qualityPairCut_hh
 
@@ -65,34 +64,36 @@
 
 #include "StHbtMaker/Base/StHbtPairCut.h"
 
-class qualityPairCut : public StHbtPairCut{
-public:
-  qualityPairCut();
-  qualityPairCut(const qualityPairCut&);
-  //~qualityPairCut();
+class qualityPairCut : public StHbtPairCut {
+  public:
+   qualityPairCut();
+   qualityPairCut(const qualityPairCut&);
+   //~qualityPairCut();
 
-  virtual bool Pass(const StHbtPair*);
-  virtual StHbtString Report();
-  qualityPairCut* Clone();
+   virtual bool Pass(const StHbtPair*);
+   virtual StHbtString Report();
+   qualityPairCut* Clone();
 
-  void SetQualityCut(const double& QualCutLo, const double& QualCutHi);
+   void SetQualityCut(const double& QualCutLo, const double& QualCutHi);
 
-private:
-  long mNPairsPassed;
-  long mNPairsFailed;
-  double mQualCutLo;
-  double mQualCutHi;
+  private:
+   long mNPairsPassed;
+   long mNPairsFailed;
+   double mQualCutLo;
+   double mQualCutHi;
 
 #ifdef __ROOT__
-  ClassDef(qualityPairCut, 1)
+   ClassDef(qualityPairCut, 1)
 #endif
 };
 
 inline qualityPairCut::qualityPairCut(const qualityPairCut& c) : StHbtPairCut(c) {
-  mNPairsPassed = 0;
-  mNPairsFailed = 0;
-
+   mNPairsPassed = 0;
+   mNPairsFailed = 0;
 }
-inline qualityPairCut* qualityPairCut::Clone() { qualityPairCut* c = new qualityPairCut(*this); return c;}
+inline qualityPairCut* qualityPairCut::Clone() {
+   qualityPairCut* c = new qualityPairCut(*this);
+   return c;
+}
 
 #endif

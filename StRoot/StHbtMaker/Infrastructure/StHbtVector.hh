@@ -27,7 +27,7 @@
 #ifndef StHbtVector_hh
 #define StHbtVector_hh
 #include "StThreeVectorD.hh"
-typedef StThreeVectorD StHbtThreeVector;//!
+typedef StThreeVectorD StHbtThreeVector;  //!
 #include "StLorentzVectorD.hh"
-typedef StLorentzVectorD StHbtLorentzVector;//!
+typedef StLorentzVectorD StHbtLorentzVector;  //!
 #endif
