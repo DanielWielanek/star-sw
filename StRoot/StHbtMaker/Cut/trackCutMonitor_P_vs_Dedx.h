@@ -21,6 +21,7 @@ class trackCutMonitor_P_vs_Dedx : public StHbtCutMonitor {
 
    virtual void Fill(const StHbtTrack* track);
    StHbt2DHisto* Histo() { return mHisto; }
+   void AppendOutput(TList* output) const { output->Add(mHisto); }
 
    // These dummy Fill() functions were introduced to remove a compiler
    //   warning related to overloaded base-class Fill() functions being

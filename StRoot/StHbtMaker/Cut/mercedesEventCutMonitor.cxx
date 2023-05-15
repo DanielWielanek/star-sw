@@ -38,30 +38,72 @@
 ClassImp(mercedesEventCutMonitor)
 #endif
 
-    mercedesEventCutMonitor::mercedesEventCutMonitor() {
-   mEventMultHisto = new StHbt1DHisto("EventMultHisto", "Event Multiplicity", 1000, 0., 1000.);
+    mercedesEventCutMonitor::mercedesEventCutMonitor()
+    : mercedesEventCutMonitor(nullptr) {
+}
+
+mercedesEventCutMonitor::mercedesEventCutMonitor(TString *name) {
+   TString prefix = "EventMultHisto";
+   if (name == nullptr) name = new TString("mercedesEv");
+   mEventMultHisto = new StHbt1DHisto((prefix + (*name)).Data(), "Event Multiplicity", 1000, 0., 1000.);
    mEventMultHisto->SetDirectory(0);
-   mZVertexPosHisto = new StHbt1DHisto("ZVertexPos", "zVertex Position", 1000, -50.0, 50.0);
+   prefix = "ZVertexPos";
+   mZVertexPosHisto = new StHbt1DHisto((prefix + (*name)).Data(), "zVertex Position", 1000, -300.0, 300.0);
    mZVertexPosHisto->SetDirectory(0);
-   mEventMultvsTracks =
-       new StHbt2DHisto("EventMultvsTracks ", "Event Multiplicity vs Total Tracks", 1000, 0., 1000., 1000, 0., 10000.0);
+   prefix = "EventMultvsTracks";
+   mEventMultvsTracks = new StHbt2DHisto((prefix + (*name)).Data(), "Event Multiplicity vs Total Tracks", 1000, 0.,
+                                         1000., 1000, 0., 10000.0);
    mEventMultvsTracks->SetDirectory(0);
+   prefix = "EtaAsymvsZVertex";
+   mEtaAsymvsZVertex =
+       new StHbt2DHisto((prefix + (*name)).Data(), "EtaAsym vs Z Vertex", 200, -100, 100., 200, -10., 10);
+   mEtaAsymvsZVertex->SetDirectory(0);
+   prefix = "RefMultvsTofMult";
+   mRefMultvsTofMult =
+       new StHbt2DHisto((prefix + (*name)).Data(), "RefMult vs TfMult", 1000, 0., 1000., 5000, 0., 5000.0);
+   mRefMultvsTofMult->SetDirectory(0);
+   prefix = "RefMultvsTofMatch";
+   mRefMultvsTofMatch =
+       new StHbt2DHisto((prefix + (*name)).Data(), "RefMult vs TofMatch", 1000, 0., 1000., 1000, 0., 1000.0);
+   mRefMultvsTofMatch->SetDirectory(0);
+   prefix = "VzminusVzVpd";
+   mVzminusVzVpd = new StHbt1DHisto((prefix + (*name)).Data(), "zVertex Position zVertexVpd diff,", 1000, -70.0, 70.0);
+   mVzminusVzVpd->SetDirectory(0);
 }
 //------------------------------
 mercedesEventCutMonitor::~mercedesEventCutMonitor() {
    delete mEventMultHisto;
    delete mZVertexPosHisto;
    delete mEventMultvsTracks;
+   delete mEtaAsymvsZVertex;
+   delete mRefMultvsTofMult;
+   delete mRefMultvsTofMatch;
+   delete mVzminusVzVpd;
 }
 
 //------------------------------
-void mercedesEventCutMonitor::Fill(const StHbtEvent* event) {
+void mercedesEventCutMonitor::Fill(const StHbtEvent *event) {
    double VertexZPos = event->PrimVertPos().z();
    int mult = event->UncorrectedNumberOfPrimaries();
-
+   int tofMult = event->TofMultiplicity();
+   double etaAsym = event->EtaAsymmetry();
+   double VertexZPosVpd = event->PrimVertPosVpd();
    mEventMultHisto->Fill(mult, 1.);
    mZVertexPosHisto->Fill(VertexZPos, 1.);
    mEventMultvsTracks->Fill(mult, event->NumberOfTracks(), 1.);
+   mEtaAsymvsZVertex->Fill(VertexZPos, etaAsym);
+   mRefMultvsTofMult->Fill(mult, tofMult);
+   mVzminusVzVpd->Fill(VertexZPos - VertexZPosVpd);
+
+   StHbtTrackCollection *tracks = event->TrackCollection();
+   int tofMatch = 0;
+   for (StHbtTrackIterator it = tracks->begin(); it != tracks->end(); it++) {
+      StHbtTrack *track = *it;
+      if (fabs(track->P().pseudoRapidity()) < 0.5 && track->ToF_matchFlag() > 0) {
+         ++tofMatch;
+      }
+   }
+   mRefMultvsTofMatch->Fill(mult, tofMatch);
 }
 
 //------------------------------
@@ -78,4 +120,14 @@ StHbtString mercedesEventCutMonitor::Report() {
    Stemp = Ctemp;
    StHbtString returnThis = Stemp;
    return returnThis;
+}
+
+void mercedesEventCutMonitor::AppendOutput(TList *output) const {
+   output->Add(mEventMultHisto);
+   output->Add(mZVertexPosHisto);
+   output->Add(mEventMultvsTracks);
+   output->Add(mEtaAsymvsZVertex);
+   output->Add(mVzminusVzVpd);
+   output->Add(mRefMultvsTofMult);
+   output->Add(mRefMultvsTofMatch);
 }

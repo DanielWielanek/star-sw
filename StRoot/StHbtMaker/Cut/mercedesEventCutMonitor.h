@@ -31,19 +31,27 @@
 #include "StHbtMaker/Infrastructure/StHbtEvent.hh"
 #include "StHbtMaker/Infrastructure/StHbtTypes.hh"
 
+class TString;
+class TList;
 class mercedesEventCutMonitor : public StHbtCutMonitor {
   private:
    StHbt1DHisto* mEventMultHisto;
    StHbt1DHisto* mZVertexPosHisto;
    StHbt2DHisto* mEventMultvsTracks;
+   StHbt2DHisto* mEtaAsymvsZVertex;
+   StHbt2DHisto* mRefMultvsTofMult;
+   StHbt2DHisto* mRefMultvsTofMatch;
+   StHbt1DHisto* mVzminusVzVpd;
 
   public:
+   mercedesEventCutMonitor(TString*);
    mercedesEventCutMonitor();
    virtual ~mercedesEventCutMonitor();
 
    virtual StHbtString Report();
    virtual void Fill(const StHbtEvent* event);
    virtual void Finish();
+   void AppendOutput(TList*) const;
 
    // These dummy Fill() functions were introduced to remove a compiler
    //   warning related to overloaded base-class Fill() functions being
@@ -58,7 +66,10 @@ class mercedesEventCutMonitor : public StHbtCutMonitor {
    StHbt1DHisto* EventMultHisto() { return mEventMultHisto; }
    StHbt1DHisto* ZVertexPosHisto() { return mZVertexPosHisto; }
    StHbt2DHisto* EventMultvsTracks() { return mEventMultvsTracks; }
-
+   StHbt2DHisto* EtaAsymvsZVertex() { return mEtaAsymvsZVertex; }
+   StHbt2DHisto* RefMultvsTofMult() { return mRefMultvsTofMult; }
+   StHbt2DHisto* RefMultvsTofMatch() { return mRefMultvsTofMatch; }
+   StHbt1DHisto* VzminusVzVpd() { return mVzminusVzVpd; }
 #ifdef __ROOT__
    ClassDef(mercedesEventCutMonitor, 1)
 #endif

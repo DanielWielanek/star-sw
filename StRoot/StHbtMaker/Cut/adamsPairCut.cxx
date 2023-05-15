@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: adamsPairCut.cxx,v 1.2 2003/09/02 17:58:21 perev Exp $
+ * $Id: fabricesPairCut.cxx,v 1.1 2001/12/14 23:11:27 fretiere Exp $
  *
  * Author: Adam Kisiel, Warsaw University of Technology, kisiel@if.pw.edu.pl
  ***************************************************************************
@@ -32,10 +32,18 @@ ClassImp(adamsPairCut)
    mElSigma = 0.0;
    mPiSigma = 0.0;
    mKSigma = 0.0;
+   mPSigma = 0.0;
    mElPIDMax = 1.0;
    mPiPIDMax = 1.0;
    mKPIDMax = 1.0;
+   mPPIDMax = 1.0;
    mPIDPThreshold = 0.0;
+   mDipMin = 0.0;
+   mDipElPIDMax = 1.0;
+   for (int iter = 0; iter < 10; iter++) {
+      mPIDLower[iter] = 0.0;
+      mPIDUpper[iter] = 1.0;
+   }
 }
 //__________________
 // adamsPairCut::~adamsPairCut(){
@@ -43,38 +51,62 @@ ClassImp(adamsPairCut)
 //}
 //________`__________
 bool adamsPairCut::Pass(const StHbtPair* pair) {
-   bool isElPair, isPiPair, isKPair;
+   bool isElPair, isPiPair, isKPair, isPPair;
+   double tDeltaTheta = TMath::Abs(pair->track1()->FourMomentum().theta() - pair->track2()->FourMomentum().theta());
+   double tDipElPID = pair->track1()->Track()->PidProbElectron() * pair->track2()->Track()->PidProbElectron();
+   double tPidValues[10];
+   bool isAll = 1;
 
    if (pair->track1()->Track()->P().mag() < mPIDPThreshold) {
       bool is1El = (TMath::Abs(pair->track1()->Track()->NSigmaElectron()) < mElSigma);
       bool is1Pi = (TMath::Abs(pair->track1()->Track()->NSigmaPion()) < mPiSigma);
       bool is1K = (TMath::Abs(pair->track1()->Track()->NSigmaKaon()) < mKSigma);
+      bool is1P = (TMath::Abs(pair->track1()->Track()->NSigmaProton()) < mPSigma);
       if (pair->track2()->Track()->P().mag() < mPIDPThreshold) {
          isElPair = is1El && (TMath::Abs(pair->track2()->Track()->NSigmaElectron()) < mElSigma);
          isPiPair = is1Pi && (TMath::Abs(pair->track2()->Track()->NSigmaPion()) < mPiSigma);
          isKPair = is1K && (TMath::Abs(pair->track2()->Track()->NSigmaKaon()) < mKSigma);
+         isPPair = is1P && (TMath::Abs(pair->track2()->Track()->NSigmaProton()) < mPSigma);
       } else {
          isElPair = is1El && (pair->track2()->Track()->PidProbElectron() <= mElPIDMax);
          isPiPair = is1Pi && (pair->track2()->Track()->PidProbPion() <= mPiPIDMax);
          isKPair = is1K && (pair->track2()->Track()->PidProbKaon() <= mKPIDMax);
+         isPPair = is1P && (pair->track2()->Track()->PidProbProton() <= mPPIDMax);
       }
    } else {
       if (pair->track2()->Track()->P().mag() < mPIDPThreshold) {
          bool is2El = (TMath::Abs(pair->track2()->Track()->NSigmaElectron()) < mElSigma);
          bool is2Pi = (TMath::Abs(pair->track2()->Track()->NSigmaPion()) < mPiSigma);
          bool is2K = (TMath::Abs(pair->track2()->Track()->NSigmaKaon()) < mKSigma);
+         bool is2P = (TMath::Abs(pair->track2()->Track()->NSigmaProton()) < mPSigma);
          isElPair = is2El && (pair->track1()->Track()->PidProbElectron() <= mElPIDMax);
          isPiPair = is2Pi && (pair->track1()->Track()->PidProbPion() <= mPiPIDMax);
          isKPair = is2K && (pair->track1()->Track()->PidProbKaon() <= mKPIDMax);
+         isPPair = is2P && (pair->track1()->Track()->PidProbProton() <= mPPIDMax);
       } else {
-         isElPair =
-             (pair->track1()->Track()->PidProbElectron() * pair->track2()->Track()->PidProbElectron()) < mElPIDMax;
-         isPiPair = (pair->track1()->Track()->PidProbPion() * pair->track2()->Track()->PidProbPion()) < mPiPIDMax;
-         isKPair = (pair->track1()->Track()->PidProbKaon() * pair->track2()->Track()->PidProbKaon()) < mKPIDMax;
+         tPidValues[0] = pair->track1()->Track()->PidProbElectron() * pair->track2()->Track()->PidProbElectron();
+         tPidValues[1] = pair->track1()->Track()->PidProbElectron() * pair->track2()->Track()->PidProbPion();
+         tPidValues[2] = pair->track1()->Track()->PidProbPion() * pair->track2()->Track()->PidProbPion();
+         tPidValues[3] = pair->track1()->Track()->PidProbElectron() * pair->track2()->Track()->PidProbKaon();
+         tPidValues[4] = pair->track1()->Track()->PidProbPion() * pair->track2()->Track()->PidProbKaon();
+         tPidValues[5] = pair->track1()->Track()->PidProbKaon() * pair->track2()->Track()->PidProbKaon();
+         tPidValues[6] = pair->track1()->Track()->PidProbElectron() * pair->track2()->Track()->PidProbProton();
+         tPidValues[7] = pair->track1()->Track()->PidProbPion() * pair->track2()->Track()->PidProbProton();
+         tPidValues[8] = pair->track1()->Track()->PidProbKaon() * pair->track2()->Track()->PidProbProton();
+         tPidValues[9] = pair->track1()->Track()->PidProbProton() * pair->track2()->Track()->PidProbProton();
+
+         isElPair = (tPidValues[0]) > mElPIDMax;
+         isPiPair = (tPidValues[2]) > mPiPIDMax;
+         isKPair = (tPidValues[5]) > mKPIDMax;
+         isPPair = (tPidValues[9]) > mPPIDMax;
+
+         for (int iter = 0; iter < 10; iter++)
+            if ((tPidValues[iter] < mPIDLower[iter]) || (tPidValues[iter] > mPIDUpper[iter])) isAll = 0;
       }
    }
    bool temp = (pair->track1()->TrackId() != pair->track2()->TrackId() && (!isElPair) && (!isPiPair) && (!isKPair) &&
-                pair->getFracOfMergedRow() < mMaxFracPair);
+                (!isPPair) && (isAll) && (pair->getFracOfMergedRow() < mMaxFracPair) &&
+                ((tDeltaTheta > mDipMin) || (tDipElPID < mDipElPIDMax)));
    temp ? mNPairsPassed++ : mNPairsFailed++;
    return temp;
 }
@@ -95,4 +127,12 @@ std::ostringstream* adamsPairCut::finalReport() const {
                    << " N pairs failed : " << mNPairsFailed << endl
                    << ends;
    return tFinalReport;
+}
+//__________________
+void adamsPairCut::setLowerPidValues(double* aPidLower) {
+   for (int iter = 0; iter < 10; iter++) mPIDLower[iter] = aPidLower[iter];
+}
+//__________________
+void adamsPairCut::setUpperPidValues(double* aPidUpper) {
+   for (int iter = 0; iter < 10; iter++) mPIDUpper[iter] = aPidUpper[iter];
 }

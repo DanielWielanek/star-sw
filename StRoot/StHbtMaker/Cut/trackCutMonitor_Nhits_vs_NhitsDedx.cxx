@@ -25,6 +25,13 @@ trackCutMonitor_Nhits_vs_NhitsDedx::trackCutMonitor_Nhits_vs_NhitsDedx(
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 trackCutMonitor_Nhits_vs_NhitsDedx::~trackCutMonitor_Nhits_vs_NhitsDedx() { delete mHisto; }
+
+trackCutMonitor_Nhits_vs_NhitsDedx::trackCutMonitor_Nhits_vs_NhitsDedx(const char* name, const char* title, int nhits,
+                                                                       float nhmin, float nhmax, int dedx, float nhmin2,
+                                                                       float hnax2) {
+   mHisto = new StHbt2IHisto(name, title, nhits, nhmin, nhmax, dedx, nhmin2, hnax2);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void trackCutMonitor_Nhits_vs_NhitsDedx::Fill(const StHbtTrack* track) {
    mHisto->Fill(track->NHits(), track->NHitsDedx(), 1.);

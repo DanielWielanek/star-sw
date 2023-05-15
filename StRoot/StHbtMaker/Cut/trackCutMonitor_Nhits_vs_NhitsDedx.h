@@ -14,6 +14,8 @@ class trackCutMonitor_Nhits_vs_NhitsDedx : public StHbtCutMonitor {
    trackCutMonitor_Nhits_vs_NhitsDedx();                                           // default constructor
    trackCutMonitor_Nhits_vs_NhitsDedx(const trackCutMonitor_Nhits_vs_NhitsDedx&);  // copy constructor
    trackCutMonitor_Nhits_vs_NhitsDedx(const char* TitCutMoni, const char* title);
+   trackCutMonitor_Nhits_vs_NhitsDedx(const char* name, const char* title, int nhits, float nhmin, float nhmax,
+                                      int dedx, float nhmin2, float hnax2);
    virtual ~trackCutMonitor_Nhits_vs_NhitsDedx();
 
    virtual void Fill(const StHbtTrack* track);
