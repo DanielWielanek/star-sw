@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *
+ * $Id:
  *
  * Author: Frank Laue, Ohio State, laue@mps.ohio-state.edu
  ***************************************************************************
@@ -47,7 +47,7 @@ StHbtString StHbtMultiTrackCut::Report() {
    return temp;
 }
 // *************************************************************************
-bool StHbtMultiTrackCut::Pass(const StHbtTrack* track) {
+bool StHbtMultiTrackCut::Pass(StHbtTrack* track) {
    bool temp = 0;
    StHbtTrackCutIterator iter;
    for (iter = mCutCollection->begin(); iter != mCutCollection->end(); iter++) {

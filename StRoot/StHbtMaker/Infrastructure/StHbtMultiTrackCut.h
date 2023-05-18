@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *
+ * $Id:
  *
  * Author: Frank Laue, Ohio State, laue@mps.ohio-state.edu
  ***************************************************************************
@@ -30,8 +30,8 @@ class StHbtMultiTrackCut : public StHbtTrackCut {
    StHbtMultiTrackCut(const StHbtMultiTrackCut&);  // copy constructor
    virtual ~StHbtMultiTrackCut();
 
-   virtual StHbtString Report();                // user-written method to return string describing cuts
-   virtual bool Pass(const StHbtTrack* track);  // true if passes, false if not
+   virtual StHbtString Report();          // user-written method to return string describing cuts
+   virtual bool Pass(StHbtTrack* track);  // true if passes, false if not
 
    virtual void AddTrackCut(StHbtTrackCut*);
    virtual void EventBegin(const StHbtEvent*);
