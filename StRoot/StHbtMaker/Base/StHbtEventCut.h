@@ -77,7 +77,7 @@ class StHbtBaseAnalysis;
 
 class StHbtEventCut : public StHbtCutMonitorHandler {
   public:
-   StHbtEventCut(){/* no-op */};           // default constructor. - Users should write their own
+   StHbtEventCut() { mVerbose = false; };  // default constructor. - Users should write their own
    StHbtEventCut(const StHbtEventCut& c);  // copy constructor
    virtual ~StHbtEventCut(){/* no-op */};  // destructor
 
@@ -93,11 +93,16 @@ class StHbtEventCut : public StHbtCutMonitorHandler {
        friend class StHbtBaseAnalysis;
    StHbtBaseAnalysis* HbtAnalysis() { return myAnalysis; };
    void SetAnalysis(StHbtBaseAnalysis*);
+   void SetVerbose(bool verbose) { mVerbose = verbose; };
 
   protected:
    StHbtBaseAnalysis* myAnalysis;
+   bool mVerbose;
 };
 
-inline StHbtEventCut::StHbtEventCut(const StHbtEventCut& c) : StHbtCutMonitorHandler() { myAnalysis = 0; }
+inline StHbtEventCut::StHbtEventCut(const StHbtEventCut& c) : StHbtCutMonitorHandler() {
+   myAnalysis = 0;
+   mVerbose = c.mVerbose;
+}
 inline void StHbtEventCut::SetAnalysis(StHbtBaseAnalysis* analysis) { myAnalysis = analysis; }
 #endif

@@ -23,6 +23,7 @@ class StHbtCutMonitor {
    }
    virtual void EventEnd(const StHbtEvent*) { /* no-op */
    }
+   virtual void FillBackground(const StHbtPair*){};  // wielanek 8/8/2016
    virtual void Fill(const StHbtEvent*) {
 #ifdef STHBTDEBUG
       cout << " *** no user defined Fill(const StHbtEvent*), take from base class" << endl;
@@ -73,6 +74,14 @@ class StHbtCutMonitor {
       cout << " *** no user defined Init(), take from base class" << endl;
 #endif
    }
+   //---- MZ 21/09/2008 ----
+   virtual const TH1* Histo() {
+#ifdef STHBTDEBUG
+      cout << " *** no user defined Histo(), take from base class" << endl;
+#endif
+      return NULL;
+   }
+   virtual void AppendOutput(TList*) const {};
 };
 
 #endif
