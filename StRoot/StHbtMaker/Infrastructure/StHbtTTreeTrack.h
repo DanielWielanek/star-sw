@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *
  * $Id: StHbtTTreeTrack.h,v 1.1 2001/06/21 19:15:47 laue Exp $
@@ -49,17 +50,17 @@ class StHbtTTreeTrack : public TObject {
    StHbtTTreeTrack(const StHbtEvent*, const StHbtTrack*);  //!
                                                            //  virtual ~StHbtTTreeTrack(){/* no-op*/};//!
   private:
-   Short_t mTrackType;
-   Short_t mNHits;
-   Short_t mNHitsPoss;
-   Short_t mNHitsDedx;
+   Short_t mTrackType;  //!
+   Short_t mNHits;      //!
+   Short_t mNHitsPoss;  //!
+   Short_t mNHitsDedx;  //!
    Short_t mPidProbElectron;
    Short_t mPidProbPion;
    Short_t mPidProbKaon;
    Short_t mPidProbProton;
    Short_t mHelixH;
    Short_t mHelixGlobalH;
-   Short_t mTrackId;
+   Short_t mTrackId;  //!
    Float_t mNSigmaElectron;
    Float_t mNSigmaPion;
    Float_t mNSigmaKaon;
@@ -80,6 +81,13 @@ class StHbtTTreeTrack : public TObject {
    Float_t mHelixGlobalX;
    Float_t mHelixGlobalY;
    Float_t mHelixGlobalZ;
+
+   // Time Of Flight variables
+   UChar_t mToF_matchFlag;
+   Float_t mToF_timeOfFlight;  //!
+   Float_t mToF_pathLength;    //!
+   Float_t mToF_beta;
+   Float_t mToF_yLocal;  // poniatowska
 
    friend class StHbtTTreeReader;  //!
    friend class StHbtEvent;        //!

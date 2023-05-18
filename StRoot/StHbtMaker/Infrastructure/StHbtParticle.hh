@@ -208,7 +208,7 @@ class StHbtParticle {
 };
 
 inline StHbtTrack* StHbtParticle::Track() const { return mTrack; }
-inline unsigned long StHbtParticle::TrackId() const { return mTrack->TrackId(); };
+inline unsigned long StHbtParticle::TrackId() const { return mTrack->TrackId(); }
 inline const StHbtLorentzVector& StHbtParticle::FourMomentum() const { return mFourMomentum; }
 inline StPhysicalHelixD& StHbtParticle::Helix() { return mHelix; }
 inline unsigned long StHbtParticle::TopologyMap(const int word) const { return mMap[word]; }

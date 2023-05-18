@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: StHbtParticle.cc,v 1.23 2015/11/02 20:12:58 perev Exp $
+ * $Id: StHbtParticle.cc,v 1.22 2003/09/02 17:58:32 perev Exp $
  *
  * Author: Mike Lisa, Ohio State, lisa@mps.ohio-state.edu
  ***************************************************************************
@@ -14,9 +14,6 @@
  ***************************************************************************
  *
  * $Log: StHbtParticle.cc,v $
- * Revision 1.23  2015/11/02 20:12:58  perev
- * isnan for new compiler
- *
  * Revision 1.22  2003/09/02 17:58:32  perev
  * gcc 3.2 updates + WarnOff
  *
@@ -344,15 +341,15 @@ const StHbtThreeVector& StHbtParticle::NominalTpcEntrancePoint() const {
 //   mNominalTpcEntrancePoint = hel.at(sideLength);
 
 //   // This is the secure way !
-// //   if (::isnan(mNominalTpcEntrancePoint.x()) ||
-// //       ::isnan(mNominalTpcEntrancePoint.x()) ||
-// //       ::isnan(mNominalTpcEntrancePoint.x()) ) mNominalTpcEntrancePoint = StHbtThreeVector(-9999.,-9999.,-9999);
-// //   if (::isnan(mNominalTpcExitPoint.x()) ||
-// //       ::isnan(mNominalTpcExitPoint.x()) ||
-// //       ::isnan(mNominalTpcExitPoint.x()) ) mNominalTpcExitPoint = StHbtThreeVector(-9999.,-9999.,-9999);
+// //   if (std::isnan(mNominalTpcEntrancePoint.x()) ||
+// //       std::isnan(mNominalTpcEntrancePoint.x()) ||
+// //       std::isnan(mNominalTpcEntrancePoint.x()) ) mNominalTpcEntrancePoint = StHbtThreeVector(-9999.,-9999.,-9999);
+// //   if (std::isnan(mNominalTpcExitPoint.x()) ||
+// //       std::isnan(mNominalTpcExitPoint.x()) ||
+// //       std::isnan(mNominalTpcExitPoint.x()) ) mNominalTpcExitPoint = StHbtThreeVector(-9999.,-9999.,-9999);
 
 //   // This is faster
-//   if (::isnan(mNominalTpcExitPoint.x())) mNominalTpcExitPoint = StHbtThreeVector(-9999.,-9999.,-9999);
+//   if (std::isnan(mNominalTpcExitPoint.x())) mNominalTpcExitPoint = StHbtThreeVector(-9999.,-9999.,-9999);
 
 //   // 03Oct00 - mal.  OK, let's try something a little more along the lines of NA49 and E895 strategy.
 //   //    calculate the "nominal" position at N radii (say N=11) within the TPC, and for a pair cut
@@ -519,7 +516,8 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
    //  cout << "sideLength 2 ="<<sideLength << endl;
    *tmpTpcEntrancePoint = hel.at(sideLength);
    // This is the secure way !
-   if (::isnan(tmpTpcEntrancePoint->x()) || ::isnan(tmpTpcEntrancePoint->y()) || ::isnan(tmpTpcEntrancePoint->z())) {
+   if (std::isnan(tmpTpcEntrancePoint->x()) || std::isnan(tmpTpcEntrancePoint->y()) ||
+       std::isnan(tmpTpcEntrancePoint->z())) {
       cout << "tmpTpcEntrancePoint NAN" << endl;
       cout << "tmpNominalTpcEntrancePoint = " << tmpTpcEntrancePoint << endl;
       tmpTpcEntrancePoint->setX(-9999.);
@@ -527,7 +525,7 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
       tmpTpcEntrancePoint->setZ(-9999.);
    }
 
-   if (::isnan(tmpTpcExitPoint->x()) || ::isnan(tmpTpcExitPoint->y()) || ::isnan(tmpTpcExitPoint->z())) {
+   if (std::isnan(tmpTpcExitPoint->x()) || std::isnan(tmpTpcExitPoint->y()) || std::isnan(tmpTpcExitPoint->z())) {
       //     cout << "tmpTpcExitPoint NAN set at (-9999,-9999,-9999)"<< endl;
       //     cout << "tmpTpcExitPoint X= " <<tmpTpcExitPoint->x()<< endl;
       //     cout << "tmpTpcExitPoint Y= " <<tmpTpcExitPoint->y()<< endl;
@@ -537,8 +535,8 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
       tmpTpcExitPoint->setZ(-9999.);
    }
 
-   //   if (::isnan(tmpTpcExitPoint->x())) *tmpTpcExitPoint = StHbtThreeVector(-9999.,-9999.,-9999);
-   //   if (::isnan(tmpTpcEntrancetPoint->x())) *tmpTpcEntrancePoint = StHbtThreeVector(-9999.,-9999.,-9999);
+   //   if (std::isnan(tmpTpcExitPoint->x())) *tmpTpcExitPoint = StHbtThreeVector(-9999.,-9999.,-9999);
+   //   if (std::isnan((tmpTpcEntrancetPoint->x())) *tmpTpcEntrancePoint = StHbtThreeVector(-9999.,-9999.,-9999);
    //  cout << "tmpTpcEntrancePoint"<<*tmpTpcEntrancePoint << endl;
 
    // 03Oct00 - mal.  OK, let's try something a little more
@@ -549,12 +547,13 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
    int irad = 0;
    candidates = hel.pathLength(50.0);
    sideLength = (candidates.first > 0) ? candidates.first : candidates.second;
-   while (irad < 11 && !::isnan(sideLength)) {
+   while (irad < 11 && !std::isnan(sideLength)) {
       float radius = 50.0 + irad * 15.0;
       candidates = hel.pathLength(radius);
       sideLength = (candidates.first > 0) ? candidates.first : candidates.second;
       tmpPosSample[irad] = hel.at(sideLength);
-      if (::isnan(tmpPosSample[irad].x()) || ::isnan(tmpPosSample[irad].y()) || ::isnan(tmpPosSample[irad].z())) {
+      if (std::isnan(tmpPosSample[irad].x()) || std::isnan(tmpPosSample[irad].y()) ||
+          std::isnan(tmpPosSample[irad].z())) {
          cout << "tmpPosSample for radius=" << radius << " NAN" << endl;
          cout << "tmpPosSample=(" << tmpPosSample[irad] << ")" << endl;
          tmpPosSample[irad] = StHbtThreeVector(-9999., -9999., -9999);
@@ -585,17 +584,17 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
    // test to enter the loop
    candidates = hel.pathLength(tRowRadius[ti]);
    tLength = (candidates.first > 0) ? candidates.first : candidates.second;
-   if (::isnan(tLength)) {
+   if (std::isnan(tLength)) {
       cout << "tLength Init tmp NAN" << endl;
       cout << "padrow number= " << ti << "not reached" << endl;
       cout << "*** DO NOT ENTER THE LOOP***" << endl;
       tmpSect[ti] = -1;  // sector
    }
    // end test
-   while (ti < 45 && !::isnan(tLength)) {
+   while (ti < 45 && !std::isnan(tLength)) {
       candidates = hel.pathLength(tRowRadius[ti]);
       tLength = (candidates.first > 0) ? candidates.first : candidates.second;
-      if (::isnan(tLength)) {
+      if (std::isnan(tLength)) {
          cout << "tLength loop 1st NAN" << endl;
          cout << "padrow number=  " << ti << " not reached" << endl;
          cout << "*** THIS IS AN ERROR SHOULDN'T  LOOP ***" << endl;
@@ -604,16 +603,16 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
       tPoint = hel.at(tLength);
       // Find which sector it is on
       TpcLocalTransform(tPoint, tmpSect[ti], tRow, tU, tPhi);
-      if (::isnan(tmpSect[ti])) {
+      if (std::isnan(tmpSect[ti])) {
          cout << "***ERROR tmpSect" << endl;
       }
-      if (::isnan(tRow)) {
+      if (std::isnan(tRow)) {
          cout << "***ERROR tRow" << endl;
       }
-      if (::isnan(tU)) {
+      if (std::isnan(tU)) {
          cout << "***ERROR tU" << endl;
       }
-      if (::isnan(tPhi)) {
+      if (std::isnan(tPhi)) {
          cout << "***ERROR tPhi" << endl;
       }
       // calculate crossing plane
@@ -623,7 +622,7 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
       tr.setY(tRowRadius[ti] * sin(tPhi));
       // find crossing point
       tLength = hel.pathLength(tr, tn);
-      if (::isnan(tLength)) {
+      if (std::isnan(tLength)) {
          cout << "tLength loop 2nd  NAN" << endl;
          cout << "padrow number=  " << ti << " not reached" << endl;
          tmpSect[ti] = -2;  // sector
@@ -631,16 +630,16 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
       tPoint = hel.at(tLength);
       tmpZ[ti] = tPoint.z();
       tOutOfBound = TpcLocalTransform(tPoint, tSect, tRow, tmpU[ti], tPhi);
-      if (::isnan(tSect)) {
+      if (std::isnan(tSect)) {
          cout << "***ERROR tSect 2" << endl;
       }
-      if (::isnan(tRow)) {
+      if (std::isnan(tRow)) {
          cout << "***ERROR tRow 2" << endl;
       }
-      if (::isnan(tmpU[ti])) {
+      if (std::isnan(tmpU[ti])) {
          cout << "***ERROR tmpU[ti] 2" << endl;
       }
-      if (::isnan(tPhi)) {
+      if (std::isnan(tPhi)) {
          cout << "***ERROR tPhi 2 " << endl;
       }
       if (tOutOfBound || (tmpSect[ti] == tSect && tRow != (ti + 1))) {
@@ -656,7 +655,7 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
             // find crossing point
             tLength = hel.pathLength(tr, tn);
             tPoint = hel.at(tLength);
-            if (::isnan(tLength)) {
+            if (std::isnan(tLength)) {
                cout << "tLength loop 3rd NAN" << endl;
                cout << "padrow number=  " << ti << " not reached" << endl;
                tmpSect[ti] = -1;  // sector
@@ -664,16 +663,16 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
             tmpZ[ti] = tPoint.z();
             tmpSect[ti] = tSect;
             tOutOfBound = TpcLocalTransform(tPoint, tSect, tRow, tmpU[ti], tPhi);
-            if (::isnan(tSect)) {
+            if (std::isnan(tSect)) {
                cout << "***ERROR tSect 3" << endl;
             }
-            if (::isnan(tRow)) {
+            if (std::isnan(tRow)) {
                cout << "***ERROR tRow 3" << endl;
             }
-            if (::isnan(tmpU[ti])) {
+            if (std::isnan(tmpU[ti])) {
                cout << "***ERROR tmpU[ti] 3" << endl;
             }
-            if (::isnan(tPhi)) {
+            if (std::isnan(tPhi)) {
                cout << "***ERROR tPhi 3 " << endl;
             }
             if (tOutOfBound || tSect != tmpSect[ti] || tRow != (ti + 1)) {
@@ -681,17 +680,17 @@ void StHbtParticle::CalculateTpcExitAndEntrancePoints(StPhysicalHelixD* tHelix, 
             }
          }
       }
-      if (::isnan(tmpSect[ti])) {
+      if (std::isnan(tmpSect[ti])) {
          cout << "*******************ERROR***************************" << endl;
          cout << "StHbtParticle--Fctn tmpSect=" << tmpSect[ti] << endl;
          cout << "*******************ERROR***************************" << endl;
       }
-      if (::isnan(tmpU[ti])) {
+      if (std::isnan(tmpU[ti])) {
          cout << "*******************ERROR***************************" << endl;
          cout << "StHbtParticle--Fctn tmpU=" << tmpU[ti] << endl;
          cout << "*******************ERROR***************************" << endl;
       }
-      if (::isnan(tmpZ[ti])) {
+      if (std::isnan(tmpZ[ti])) {
          cout << "*******************ERROR***************************" << endl;
          cout << "StHbtParticle--Fctn tmpZ=" << tmpZ[ti] << endl;
          cout << "*******************ERROR***************************" << endl;

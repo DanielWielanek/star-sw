@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *  StHbtV0.hh,v 1.0 1999/09/07
+ * $Id: StHbtV0.hh,v 1.0 1999/09/07
  *
  * Authors: Helen Caines, Tom Humanic 07-Sep-1999
  *
@@ -77,14 +77,16 @@
 #endif
 /* Th stuff */
 #include "StHbtMaker/Base/StHbtHiddenInfo.hh"
+#include "StHbtMaker/Infrastructure/StHbtV0Daughter.h"
+#include "StHbtMaker/StHbtMakerIfdefs.h"
 /***/
+
 class StHbtTTreeEvent;
 class StHbtTTreeV0;
-
+class StHbtParticle;
 class StHbtV0 {
   public:
-   StHbtV0() { /* no-op */
-   }
+   StHbtV0() { mHiddenInfo = NULL; /* no-op */ }
    StHbtV0(const StHbtV0&);  // copy constructor
 #ifdef __ROOT__
    StHbtV0(StV0MuDst&);  // from strangeness V0 micro dst structure
@@ -93,7 +95,18 @@ class StHbtV0 {
    ~StHbtV0() {
       if (mHiddenInfo) delete mHiddenInfo;
    }
-
+#ifdef EXTENDED_V0S
+   void setDaughters(StHbtV0Daughter pos, StHbtV0Daughter neg) {
+      mPosDau = pos;
+      mNegDau = neg;
+   }
+#endif
+   float getMPos() const { return mM1; };
+   float getMNeg() const { return mM2; };
+#ifdef EXTENDED_V0S
+   StHbtV0Daughter* getPosParticle() const { return const_cast<StHbtV0Daughter*>(&mPosDau); };
+   StHbtV0Daughter* getNegParticle() const { return const_cast<StHbtV0Daughter*>(&mNegDau); };
+#endif
    float decayLengthV0() const;             // 3-d decay distance
    StHbtThreeVector decayVertexV0() const;  // Coordinates of decay vertex
    StHbtThreeVector primaryVertex() const;  // Coordinates of primary vertex
@@ -247,9 +260,29 @@ class StHbtV0 {
    friend ostream& operator<<(ostream& out, StHbtV0& v0);
    friend istream& operator>>(istream& in, StHbtV0& v0);
 
+   void setMPos(float m) { mM1 = m; };
+   void setMneg(float m) { mM2 = m; };
+   float GetChi2Pos() const { return mChi2Pos; }
+
+   void SetChi2Pos(float chi2Pos) { mChi2Pos = chi2Pos; }
+
+   float GetChi2V0() const { return mChi2V0; }
+
+   void SetChi2V0(float chi2V0) { mChi2V0 = chi2V0; }
+
+   unsigned short GetNumDedxNeg() const { return mNumDedxNeg; }
+
+   void SetNumDedxNeg(unsigned short numDedxNeg) { mNumDedxNeg = numDedxNeg; }
+
+   unsigned short GetNumDedxPos() const { return mNumDedxPos; }
+
+   void SetNumDedxPos(unsigned short numDedxPos) { mNumDedxPos = numDedxPos; }
+
    friend class StHbtIOBinary;
    friend class StHbtTTreeV0;
    friend class StHbtTTreeXi;
+   // the following variables are not in the persistent version and can be calculated via UpdateV0();
+   StHbtThreeVector mMomV0;
 
   protected:
    float mDecayLengthV0;
@@ -274,6 +307,7 @@ class StHbtV0 {
    float mClPos;
    float mChi2Neg;
    float mClNeg;
+   float mM1, mM2;
 
    float mDedxPos;
    float mErrDedxPos;
@@ -290,7 +324,7 @@ class StHbtV0 {
    StPhysicalHelixD mHelixNeg;  // Gael 12 Sept 02
 
    // the following variables are not in the persistent version and can be calculated via UpdateV0();
-   StHbtThreeVector mMomV0;
+
    float mAlphaV0;
    float mPtArmV0;
    float mELambda;
@@ -312,13 +346,19 @@ class StHbtV0 {
    float mPtotPos;
    float mPtNeg;
    float mPtotNeg;
+   float mNHitsPos;
+   float mNHitsNeg;
 
    unsigned short mKeyNeg;
    unsigned short mKeyPos;
    /* Th stuff */
    // Fab private : add mutable
    mutable StHbtHiddenInfo* mHiddenInfo;  //!
-                                          /***/
+#ifdef EXTENDED_V0S
+   StHbtV0Daughter mPosDau, mNegDau;
+#endif
+
+   /***/
 };
 
 inline float StHbtV0::decayLengthV0() const { return mDecayLengthV0; }
@@ -443,7 +483,9 @@ inline void StHbtV0::SetdedxNeg(float x) { mDedxNeg = x; }
 inline void StHbtV0::SeterrdedxNeg(float x) { mErrDedxNeg = x; }  // Gael 04Fev2002
 inline void StHbtV0::SetlendedxNeg(float x) { mLenDedxNeg = x; }  // Gael 04Fev2002
 inline void StHbtV0::SetdedxPos(float x) { mDedxPos = x; }
-inline void StHbtV0::SeterrdedxPos(float x) { mErrDedxPos = x; }                         // Gael 04Fev2002
-inline void StHbtV0::SetlendedxPos(float x) { mLenDedxPos = x; }                         // Gael 04Fev2002
+inline void StHbtV0::SeterrdedxPos(float x) { mErrDedxPos = x; }  // Gael 04Fev2002
+inline void StHbtV0::SetlendedxPos(float x) { mLenDedxPos = x; }  // Gael 04Fev2002
+
 inline void StHbtV0::SetprimaryVertex(const StHbtThreeVector v) { mPrimaryVertex = v; }  // Gael 24 Sept 02
+
 #endif

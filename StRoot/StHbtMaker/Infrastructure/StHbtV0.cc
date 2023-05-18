@@ -45,6 +45,10 @@ StHbtV0::StHbtV0(const StHbtV0& v) {  // copy constructor
    mHelixPos = v.mHelixPos;                                   // Gael 12 Sept
    mHelixNeg = v.mHelixNeg;                                   // Gael 12 Sept
    mHiddenInfo = v.mHiddenInfo ? v.mHiddenInfo->clone() : 0;  // GR 11 DEC 02
+#ifdef EXTENDED_V0S
+   mNegDau = v.mNegDau;
+   mPosDau = v.mPosDau;
+#endif
    UpdateV0();
 }
 // -----------------------------------------------------------------------
@@ -157,14 +161,18 @@ StHbtV0::StHbtV0(StV0MuDst& v) {  // from strangess micro dst structure
    mPtNeg = v.ptNeg();
    mPtotNeg = v.ptotNeg();
    mDedxNeg = v.dedxNeg();
+   // mPosDau = v.mPosDau();
+   // mNegDau = v.mNegDau();
+   // m1 = v.m1;
+   //  m2 = v.m2;
 }
 
 StHbtV0::StHbtV0(const StHbtTTreeEvent* ev, const StHbtTTreeV0* v) {
    mDecayVertexV0 = StHbtThreeVector(v->mDecayVertexV0X, v->mDecayVertexV0Y, v->mDecayVertexV0Z);
 
-   mPrimaryVertex.setX(ev->mVertexX);
-   mPrimaryVertex.setY(ev->mVertexY);
-   mPrimaryVertex.setZ(ev->mVertexZ);
+   mPrimaryVertex.setX(ev->mPrimVertPosX);
+   mPrimaryVertex.setY(ev->mPrimVertPosY);
+   mPrimaryVertex.setZ(ev->mPrimVertPosZ);
 
    mDecayLengthV0 = v->mDecayLengthV0;
    mDcaV0Daughters = v->mDcaV0Daughters;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  StHbtPair.hh,v 1.17
+ * $Id: StHbtPair.hh,v 1.17
  *
  * Author: Brian Laziuk, Yale University
  *         slightly modified by Mike Lisa
@@ -235,6 +235,14 @@ class StHbtPair {
    double getFracOfMergedRowV0PosV0Pos() const;
    double getFracOfMergedRowV0NegV0Neg() const;
 
+   void getGammaEESol() const;
+   int getGammaEESol_getNSols() const;
+   double getGammaEESol_getR() const;
+   double getGammaEESol_getDXY() const;
+   double getGammaEESol_getDZ() const;
+   double getGammaEESol_getZ() const;
+   double getGammaEESol_getMinvEE() const;
+
   private:
    StHbtParticle* mTrack1;
    StHbtParticle* mTrack2;
@@ -290,6 +298,14 @@ class StHbtPair {
    static double mMaxDzOuter;
    void calcMergingPar() const;
 
+   mutable short mGetGammaEESol_NotCalculated;
+   mutable int mGetGammaEESol_NSols;
+   mutable double mGetGammaEESol_R;
+   mutable double mGetGammaEESol_DXY;
+   mutable double mGetGammaEESol_DZ;
+   mutable double mGetGammaEESol_z;
+   mutable double mGetGammaEESol_Minv;
+
    void CalcMergingParFctn(short* tmpMergingParNotCalculatedFctn, float* tmpZ1, float* tmpU1, float* tmpZ2,
                            float* tmpU2, int* tmpSect1, int* tmpSect2, double* tmpFracOfMergedRow,
                            double* tmpClosestRowAtDCA) const;
@@ -307,6 +323,7 @@ inline void StHbtPair::resetParCalculated() {
    mMergingParNotCalculatedV0NegV0Pos = 1;
    mMergingParNotCalculatedV0PosV0Neg = 1;
    mMergingParNotCalculatedV0NegV0Neg = 1;
+   mGetGammaEESol_NotCalculated = 1;
 }
 
 inline void StHbtPair::SetTrack1(const StHbtParticle* trkPtr) {
@@ -467,4 +484,33 @@ inline double StHbtPair::getFracOfMergedRowV0NegV0Neg() const {
    return mFracOfMergedRowV0NegV0Neg;
 }
 
+inline int StHbtPair::getGammaEESol_getNSols() const {
+   if (mGetGammaEESol_NotCalculated) getGammaEESol();
+   return mGetGammaEESol_NSols;
+}
+
+inline double StHbtPair::getGammaEESol_getR() const {
+   if (mGetGammaEESol_NotCalculated) getGammaEESol();
+   return mGetGammaEESol_R;
+}
+
+inline double StHbtPair::getGammaEESol_getDXY() const {
+   if (mGetGammaEESol_NotCalculated) getGammaEESol();
+   return mGetGammaEESol_DXY;
+}
+
+inline double StHbtPair::getGammaEESol_getDZ() const {
+   if (mGetGammaEESol_NotCalculated) getGammaEESol();
+   return mGetGammaEESol_DZ;
+}
+
+inline double StHbtPair::getGammaEESol_getZ() const {
+   if (mGetGammaEESol_NotCalculated) getGammaEESol();
+   return mGetGammaEESol_z;
+}
+
+inline double StHbtPair::getGammaEESol_getMinvEE() const {
+   if (mGetGammaEESol_NotCalculated) getGammaEESol();
+   return mGetGammaEESol_Minv;
+}
 #endif

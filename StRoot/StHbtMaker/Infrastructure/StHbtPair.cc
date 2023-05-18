@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *  StHbtPair.cc,v 1.23
+ * $Id: StHbtPair.cc,v 1.23
  *
  * Author: Brian Laziuk, Yale University
  *         slightly modified by Mike Lisa
@@ -19,12 +19,6 @@
  * corrected calculation of opening angle
  **
  * $Log: StHbtPair.cc,v $
- * Revision 1.29  2009/09/23 04:43:41  fine
- * Fix StLorentxVector ctor
- *
- * Revision 1.28  2009/09/23 00:51:21  jeromel
- * Fix for StThreevector
- *
  * Revision 1.27  2003/09/02 17:58:32  perev
  * gcc 3.2 updates + WarnOff
  *
@@ -208,7 +202,7 @@ void StHbtPair::qYKPCMS(double& qP, double& qT, double& q0) const {
       l = l1 - l2;
    } else {
       l = l2 - l1;
-   };
+   }
    // fill momentum differences into return variables
    qP = l.z();
    qT = l.vect().perp();
@@ -233,14 +227,10 @@ void StHbtPair::qYKPLCMS(double& qP, double& qT, double& q0) const {
    if (beta > 0.0) {
       dummyPz = -dummyPz;
    };
-
    // create dummy particle
-   StHbtLorentzVector l(0.0, 0.0, dummyPz, 0);
+   StHbtLorentzVector l(0.0, 0.0, dummyPz, 0.0);
    double dummyMass = 1.0;
-
-   l.setZ(dummyPz);
    l.setE(l.vect().massHypothesis(dummyMass));
-
    // boost particles along the beam into a frame with velocity beta
    StHbtLorentzVector l1boosted = l1.boost(l);
    StHbtLorentzVector l2boosted = l2.boost(l);
@@ -249,7 +239,7 @@ void StHbtPair::qYKPLCMS(double& qP, double& qT, double& q0) const {
       l = l1boosted - l2boosted;
    } else {
       l = l2boosted - l1boosted;
-   };
+   }
    // fill momentum differences into return variables
    qP = l.z();
    qT = l.vect().perp();
@@ -275,7 +265,7 @@ void StHbtPair::qYKPPF(double& qP, double& qT, double& q0) const {
       l = l1boosted - l2boosted;
    } else {
       l = l2boosted - l1boosted;
-   };
+   }
    // fill momentum differences into return variables
    qP = l.z();
    qT = l.vect().perp();
@@ -295,7 +285,7 @@ double StHbtPair::qOutCMS() const {
    double k1 = (::sqrt(xt * xt + yt * yt));
    double k2 = (dx * xt + dy * yt);
    double tmp = k2 / k1;
-   return (tmp);
+   return tmp;
 }
 //_________________
 double StHbtPair::qSideCMS() const {
@@ -312,7 +302,7 @@ double StHbtPair::qSideCMS() const {
    double k1 = ::sqrt(xt * xt + yt * yt);
 
    double tmp = 2.0 * (x2 * y1 - x1 * y2) / k1;
-   return (tmp);
+   return tmp;
 }
 
 //_________________________
@@ -330,7 +320,7 @@ double StHbtPair::qLongCMS() const {
    double gamma = 1.0 / ::sqrt(1.0 - beta * beta);
 
    double temp = gamma * (dz - beta * dt);
-   return (temp);
+   return temp;
 }
 
 //________________________________
@@ -349,22 +339,22 @@ double StHbtPair::qOutPf() const {
    double gOut = 1.0 / ::sqrt(1.0 - bOut * bOut);
 
    double temp = gOut * (this->qOutCMS() - bOut * dt);
-   return (temp);
+   return temp;
 }
 
 //___________________________________
-double StHbtPair::qSidePf() const { return (this->qSideCMS()); }
+double StHbtPair::qSidePf() const { return this->qSideCMS(); }
 
 //___________________________________
 
-double StHbtPair::qLongPf() const { return (this->qLongCMS()); }
+double StHbtPair::qLongPf() const { return this->qLongCMS(); }
 
 //___________________________________
-double StHbtPair::qOutBf(double beta) const { return (this->qOutCMS()); }
+double StHbtPair::qOutBf(double beta) const { return this->qOutCMS(); }
 
 //___________________________________
 
-double StHbtPair::qSideBf(double beta) const { return (this->qSideCMS()); }
+double StHbtPair::qSideBf(double beta) const { return this->qSideCMS(); }
 
 //___________________________________
 double StHbtPair::qLongBf(double beta) const {
@@ -377,7 +367,7 @@ double StHbtPair::qLongBf(double beta) const {
    double gamma = 1.0 / ::sqrt(1.0 - beta * beta);
 
    double temp = gamma * (dz - beta * dt);
-   return (temp);
+   return temp;
 }
 
 double StHbtPair::quality() const {
@@ -419,7 +409,7 @@ double StHbtPair::quality() const {
       }
    }
    normQual = (double)Quality / ((double)MaxQuality);
-   return (normQual);
+   return normQual;
 }
 
 double StHbtPair::quality2() const {
@@ -493,7 +483,7 @@ double StHbtPair::NominalTpcAverageSeparation() const {
          AveSep += diff.mag();
       }
       AveSep = AveSep / (ipt + 1.);
-      return (AveSep);
+      return AveSep;
    } else
       return -1;
 }
@@ -569,7 +559,7 @@ double StHbtPair::qInvFlippedXY() const {
    tP1.setX(-1. * tP1.x());
    tP1.setY(-1. * tP1.y());
    StHbtLorentzVector tDiff = (tP1 - mTrack2->FourMomentum());
-   return (-1. * tDiff.m());
+   return -1. * tDiff.m();
 }
 
 void StHbtPair::calcNonIdPar() const {  // fortran like function! faster?
@@ -1001,3 +991,118 @@ void StHbtPair::CalcMergingParFctn(short* tmpMergingParNotCalculatedFctn, float*
       // mWeightedAvSep = -1.;
    }
 }
+
+// int StHbtPair::getGammaEESol_getNSols() const {
+//	if (mGetGammaEESol_NotCalculated) getGammaEESol();
+//	return mGetGammaEESol_NSols;
+//}
+//
+//
+// double StHbtPair::getGammaEESol_getR() const {
+//	if (mGetGammaEESol_NotCalculated) getGammaEESol();
+//	return mGetGammaEESol_R;
+//}
+//
+// double StHbtPair::getGammaEESol_getDXY()  const {
+//	if (mGetGammaEESol_NotCalculated) getGammaEESol();
+//	return mGetGammaEESol_DXY;
+//}
+//
+// double StHbtPair::getGammaEESol_getDZ()  const {
+//	if (mGetGammaEESol_NotCalculated) getGammaEESol();
+//	return mGetGammaEESol_DZ;
+//}
+//
+// double StHbtPair::getGammaEESol_getZ() const {
+//	if (mGetGammaEESol_NotCalculated) getGammaEESol();
+//	return mGetGammaEESol_z;
+//}
+//
+// double StHbtPair::getGammaEESol_getMinvEE() const {
+//	if (mGetGammaEESol_NotCalculated) getGammaEESol();
+//	return mGetGammaEESol_Minv;
+//}
+
+void StHbtPair::getGammaEESol() const {
+   if (!mGetGammaEESol_NotCalculated) return;
+
+   StPhysicalHelixD aTrk1;
+   StPhysicalHelixD aTrk2;
+
+   aTrk1 = track1()->Track()->HelixGlobal();
+   aTrk2 = track2()->Track()->HelixGlobal();
+
+   double x1 = aTrk1.xcenter();
+   double x2 = aTrk2.xcenter();
+   double y1 = aTrk1.ycenter();
+   double y2 = aTrk2.ycenter();
+
+   double R1 = 1.0 / aTrk1.curvature();
+   double R2 = 1.0 / aTrk2.curvature();
+
+   double Theta1 = aTrk1.dipAngle();
+   double Theta2 = aTrk2.dipAngle();
+
+   double z1 = 0;  // aTrk1.origin().z();
+   double z2 = 0;  // aTrk2.origin().z();
+
+   // --- calculate entrance vector with respect to projection
+   double EntX1 = track1()->NominalTpcEntrancePoint().x();
+   double EntY1 = track1()->NominalTpcEntrancePoint().y();
+   double EntX2 = track2()->NominalTpcEntrancePoint().x();
+   double EntY2 = track2()->NominalTpcEntrancePoint().y();
+
+   // Helix 1 center (x1,y1), radius R1, dip angle Theta1,  Origin z1.
+   // Helix 2 center (x2, y2), radius R2, dip angle Theta2,  Origin z2.
+   // Entrance separatation 1 (EntX1, EntY1)
+   // Entrance separatation 2 (EntX2, EntY2)
+
+   double DistBetCircleX = (x2 - x1);
+   double DistBetCircleY = (y2 - y1);
+   double DistBetCircle = hypot(DistBetCircleX, DistBetCircleY);
+
+   mGetGammaEESol_R = -10;
+   mGetGammaEESol_DXY = -10;
+   mGetGammaEESol_DZ = -10;
+   mGetGammaEESol_Minv = -10;
+   mGetGammaEESol_z = -10;
+   int NSols = 0;  // 0 - no physical solution, 1 - non XY projection of helices, 2 - overlaping
+
+   double LocX = (R1 - R2 + DistBetCircle) / 2.;
+   double X = LocX * DistBetCircleX / DistBetCircle + x1;
+   double Y = LocX * DistBetCircleY / DistBetCircle + y1;
+
+   if ((EntX1 * X + EntY1 * Y) > 0. && (EntX2 * X + EntY2 * Y) > 0.) {  // right side
+      if (DistBetCircle > (R1 + R2))
+         NSols = 1;
+      else
+         NSols = 2;
+      double Xa, Ya, Xb, Yb, Ra, Rb;
+      Xa = R1 * DistBetCircleX / DistBetCircle + x1;
+      Ya = R1 * DistBetCircleY / DistBetCircle + y1;
+      Ra = hypot(Xa, Ya);
+      Xb = (-R2 * DistBetCircleX / DistBetCircle) + x2;
+      Yb = (-R2 * DistBetCircleY / DistBetCircle) + y2;
+      Rb = hypot(Xb, Yb);
+
+      mGetGammaEESol_R = hypot(X, Y);
+      // mGetGammaEESol_DCA =  hypot(fabs((z2+tan(Theta2)*Rb)-(z1+tan(Theta1)*Ra)),(DistBetCircle-(R1+R2))); //not only
+      // in z dimension
+      mGetGammaEESol_DZ = fabs((z2 + tan(Theta2) * Rb) - (z1 + tan(Theta1) * Ra));
+      mGetGammaEESol_DXY = fabs((DistBetCircle - (R1 + R2)));
+      mGetGammaEESol_z = ((z2 + tan(Theta2) * Rb) + (z1 + tan(Theta1) * Ra)) / 2.;
+      double me = 0.000511;
+      double p1 = track1()->FourMomentum().vect().mag();
+      double p2 = track2()->FourMomentum().vect().mag();
+      double cosdOpen, D;
+      if (NSols == 1)
+         cosdOpen = 1.;
+      else
+         cosdOpen = -((R1 * R1 + R2 * R2 - DistBetCircle * DistBetCircle) / (2 * R1 * R2));  // Sign!
+      mGetGammaEESol_Minv = sqrt(2 * me * me + 2 * sqrt(p1 * p1 + me * me) * sqrt(p2 * p2 + me * me) -
+                                 2 * p1 * p2 * cos(Theta1 - Theta2) * cosdOpen);
+   }
+
+   mGetGammaEESol_NSols = NSols;
+   mGetGammaEESol_NotCalculated = 0;
+}  // getGammaEESol

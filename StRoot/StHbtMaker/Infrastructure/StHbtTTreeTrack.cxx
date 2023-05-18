@@ -13,6 +13,7 @@
 // #include "StEvent/StEventTypes.h"
 // #include "StEvent/StTpcDedxPidAlgorithm.h"
 
+#include "StMuDSTMaker/COMMON/StMuBTofPidTraits.h"
 #include "StarClassLibrary/StElectron.hh"
 #include "StarClassLibrary/StKaonPlus.hh"
 #include "StarClassLibrary/StPionPlus.hh"
@@ -56,7 +57,7 @@ StHbtTTreeTrack::StHbtTTreeTrack(const StHbtEvent* event, const StHbtTrack* trac
    mNHitsPoss = track->mNHitsPoss;
    mNHitsDedx = track->mNHitsDedx;
    mChiSqXY = track->mChiSqXY;
-   mChiSqZ = track->mChiSqXY;
+   mChiSqZ = track->mChiSqZ;
    mdEdx = track->mdEdx;
    mNSigmaElectron = track->mNSigmaElectron;
    mNSigmaPion = track->mNSigmaPion;
@@ -69,6 +70,12 @@ StHbtTTreeTrack::StHbtTTreeTrack(const StHbtEvent* event, const StHbtTrack* trac
 
    mTrackId = track->mTrackId;
    mTrackType = track->mTrackType;
+
+   mToF_matchFlag = track->mToF_matchFlag;
+   mToF_timeOfFlight = track->mToF_timeOfFlight;
+   mToF_pathLength = track->mToF_pathLength;
+   mToF_beta = track->mToF_beta;
+   mToF_yLocal = track->mToF_yLocal;  // poniatowska
 };
 
 ClassImp(StHbtTTreeTrack)
