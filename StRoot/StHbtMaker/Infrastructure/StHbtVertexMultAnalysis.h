@@ -36,6 +36,7 @@ class StHbtVertexMultAnalysis : public StHbtAnalysis {
    StHbtVertexMultAnalysis(unsigned int = 10, double = -100., double = +100., unsigned int b = 10, double = -1.e9,
                            double = +1.e9);
    StHbtVertexMultAnalysis(const StHbtVertexMultAnalysis&);  // copy constructor
+   void UseCentBin() { mUseCentBin = true; };                      // use centrality bin instead of multiplicity
    virtual void ProcessEvent(const StHbtEvent*);
    virtual ~StHbtVertexMultAnalysis();
    virtual StHbtString Report();  //! returns reports of all cuts applied and correlation functions being done
@@ -53,6 +54,7 @@ class StHbtVertexMultAnalysis : public StHbtAnalysis {
    unsigned int mMultBins;
    unsigned int mOverFlowMult;
    unsigned int mUnderFlowMult;
+   bool mUseCentBin;
 
 #ifdef __ROOT__
    ClassDef(StHbtVertexMultAnalysis, 0)

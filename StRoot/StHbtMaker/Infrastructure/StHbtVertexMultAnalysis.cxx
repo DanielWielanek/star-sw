@@ -65,6 +65,7 @@ StHbtVertexMultAnalysis::StHbtVertexMultAnalysis(unsigned int binsVertex, double
    mMult[1] = maxMult;
    mUnderFlowMult = 0;
    mOverFlowMult = 0;
+   mUseCentBin = false;
    if (mMixingBuffer) delete mMixingBuffer;
    mPicoEventCollectionVectorHideAway = new StHbtPicoEventCollectionVectorHideAway(
        mVertexZBins, mVertexZ[0], mVertexZ[1], mMultBins, mMult[0], mMult[1]);
@@ -89,6 +90,7 @@ StHbtVertexMultAnalysis::StHbtVertexMultAnalysis(const StHbtVertexMultAnalysis& 
    mMult[1] = a.mMult[1];
    mUnderFlowMult = 0;
    mOverFlowMult = 0;
+   mUseCentBin = a.mUseCentBin;
    if (mMixingBuffer) delete mMixingBuffer;
    mPicoEventCollectionVectorHideAway = new StHbtPicoEventCollectionVectorHideAway(
        mVertexZBins, mVertexZ[0], mVertexZ[1], mMultBins, mMult[0], mMult[1]);
@@ -179,11 +181,13 @@ StHbtString StHbtVertexMultAnalysis::Report() {
 }
 //_________________________
 void StHbtVertexMultAnalysis::ProcessEvent(const StHbtEvent* hbtEvent) {
-   cout << " StHbtVertexMultAnalysis::ProcessEvent(const StHbtEvent* hbtEvent) " << endl;
+   std::cout << "=======>  StHbtVertexMultAnalysis::ProcessEvent(const StHbtEvent* hbtEvent) " << std::endl;
    // get right mixing buffer
    double vertexZ = hbtEvent->PrimVertPos().z();
    double mult = hbtEvent->UncorrectedNumberOfPrimaries();
+   if (mUseCentBin) mult = hbtEvent->GetCentrality();
    mMixingBuffer = mPicoEventCollectionVectorHideAway->PicoEventCollection(vertexZ, mult);
+
    if (!mMixingBuffer) {
       if (vertexZ < mVertexZ[0]) mUnderFlowVertexZ++;
       if (vertexZ > mVertexZ[1]) mOverFlowVertexZ++;
