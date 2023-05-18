@@ -62,6 +62,11 @@ class MinvCorrFctn : public StHbtCorrFctn {
    virtual void AddMixedPair(const StHbtPair*);
    virtual void Finish();
    MinvCorrFctn* Clone();
+   virtual void AppendOutput(TList* output) {
+      output->Add(Numerator());
+      output->Add(Denominator());
+      output->Add(Difference());
+   }
 
    StHbt1DHisto* Numerator();
    StHbt1DHisto* Denominator();

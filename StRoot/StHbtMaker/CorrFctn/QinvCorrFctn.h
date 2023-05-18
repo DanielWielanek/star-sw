@@ -47,6 +47,7 @@ class QinvCorrFctn : public StHbtCorrFctn {
    virtual void AddMixedPair(const StHbtPair*);
 
    virtual void Finish();
+   virtual void AppendOutput(TList*);
 
    StHbt1DHisto* Numerator();
    StHbt1DHisto* Denominator();
@@ -65,5 +66,10 @@ class QinvCorrFctn : public StHbtCorrFctn {
 inline StHbt1DHisto* QinvCorrFctn::Numerator() { return mNumerator; }
 inline StHbt1DHisto* QinvCorrFctn::Denominator() { return mDenominator; }
 inline StHbt1DHisto* QinvCorrFctn::Ratio() { return mRatio; }
+inline void QinvCorrFctn::AppendOutput(TList* output) {
+   output->Add(Numerator());
+   output->Add(Denominator());
+   output->Add(Ratio());
+}
 
 #endif

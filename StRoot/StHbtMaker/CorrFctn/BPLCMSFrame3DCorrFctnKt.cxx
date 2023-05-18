@@ -72,28 +72,28 @@ ClassImp(BPLCMSFrame3DCorrFctnKt)
    strcat(TitQinv, title);
 
    for (int i = 0; i < mNumberCFs; i++) {
-      sprintf(TitNum, "NumBPLCMSFrameCFKtBin%d", i);
+      sprintf(TitNum, "NumBPLCMSFrameCFKtBin%d%s", i, title);
       mNumerator[i].SetName(TitNum);
       mNumerator[i].SetTitle(title);
       mNumerator[i].SetBins(nbins, QLo, QHi, nbins, QLo, QHi, nbins, QLo, QHi);
       mNumerator[i].SetDirectory(0);
       mNumerator[i].Sumw2();
 
-      sprintf(TitDen, "DenBPLCMSFrameCFKtBin%d", i);
+      sprintf(TitDen, "DenBPLCMSFrameCFKtBin%d%s", i, title);
       mDenominator[i].SetName(TitDen);
       mDenominator[i].SetTitle(title);
       mDenominator[i].SetBins(nbins, QLo, QHi, nbins, QLo, QHi, nbins, QLo, QHi);
       mDenominator[i].SetDirectory(0);
       mDenominator[i].Sumw2();
 
-      sprintf(TitRat, "RatBPLCMSFrameCFKtBin%d", i);
+      sprintf(TitRat, "RatBPLCMSFrameCFKtBin%d%s", i, title);
       mRatio[i].SetName(TitRat);
       mRatio[i].SetTitle(title);
       mRatio[i].SetBins(nbins, QLo, QHi, nbins, QLo, QHi, nbins, QLo, QHi);
       mRatio[i].SetDirectory(0);
       mRatio[i].Sumw2();
 
-      sprintf(TitQinv, "QInvHistoKtBin%d", i);
+      sprintf(TitQinv, "QInvHistoKtBin%d%s", i, title);
       mQinvHisto[i].SetName(TitRat);
       mQinvHisto[i].SetTitle(title);
       mQinvHisto[i].SetBins(nbins, QLo, QHi, nbins, QLo, QHi, nbins, QLo, QHi);

@@ -64,6 +64,20 @@ class NonId3DCorrFctn : public StHbtCorrFctn {
 
    virtual void Finish();
    virtual void Write();
+   virtual void AppendOutput(TList*);
+
+   StHbt1DHisto* NumOutP();
+   StHbt1DHisto* DenOutP();
+   StHbt1DHisto* NumOutN();
+   StHbt1DHisto* DenOutN();
+   StHbt1DHisto* NumSideP();
+   StHbt1DHisto* DenSideP();
+   StHbt1DHisto* NumSideN();
+   StHbt1DHisto* DenSideN();
+   StHbt1DHisto* NumLongP();
+   StHbt1DHisto* DenLongP();
+   StHbt1DHisto* NumLongN();
+   StHbt1DHisto* DenLongN();
 
   private:
    StHbt1DHisto* mNumOutP;
@@ -100,27 +114,6 @@ class NonId3DCorrFctn : public StHbtCorrFctn {
    StHbt2DHisto* mHLongKSame;
    StHbt2DHisto* mHLongKDiff;
 
-   /*   StHbt2DHisto* mHQSideExitNum; */
-   /*   StHbt2DHisto* mHKStarExitNumSideP; */
-   /*   StHbt2DHisto* mHKStarExitNumSideN; */
-
-   /*   StHbt2DHisto* mHQSideExitDen; */
-   /*   StHbt2DHisto* mHKStarExitDenSideP; */
-   /*   StHbt2DHisto* mHKStarExitDenSideN; */
-
-   /*   StHbt2DHisto* mHQOutExitNum; */
-   /*   StHbt2DHisto* mHKStarExitNumOutP; */
-   /*   StHbt2DHisto* mHKStarExitNumOutN; */
-
-   /*   StHbt2DHisto* mHQOutExitDen; */
-   /*   StHbt2DHisto* mHKStarExitDenOutP; */
-   /*   StHbt2DHisto* mHKStarExitDenOutN; */
-
-   //  StHbt2DHisto* mHPt1KStarOutNum;
-   //  StHbt2DHisto* mHPt1KStarOutDen;
-   //  StHbt2DHisto* mHPt2KStarOutNum;
-   //  StHbt2DHisto* mHPt2KStarOutDen;
-
    int mqSideSel;
    float mKCompCut;
 
@@ -128,5 +121,37 @@ class NonId3DCorrFctn : public StHbtCorrFctn {
    ClassDef(NonId3DCorrFctn, 1)
 #endif
 };
+
+inline StHbt1DHisto* NonId3DCorrFctn::NumOutP() { return mNumOutP; }
+inline StHbt1DHisto* NonId3DCorrFctn::NumOutN() { return mNumOutN; }
+inline StHbt1DHisto* NonId3DCorrFctn::DenOutP() { return mDenOutP; }
+inline StHbt1DHisto* NonId3DCorrFctn::DenOutN() { return mDenOutN; }
+
+inline StHbt1DHisto* NonId3DCorrFctn::NumSideP() { return mNumSideP; }
+inline StHbt1DHisto* NonId3DCorrFctn::NumSideN() { return mNumSideN; }
+inline StHbt1DHisto* NonId3DCorrFctn::DenSideP() { return mDenSideP; }
+inline StHbt1DHisto* NonId3DCorrFctn::DenSideN() { return mDenSideN; }
+
+inline StHbt1DHisto* NonId3DCorrFctn::NumLongP() { return mNumLongP; }
+inline StHbt1DHisto* NonId3DCorrFctn::NumLongN() { return mNumLongN; }
+inline StHbt1DHisto* NonId3DCorrFctn::DenLongP() { return mDenLongP; }
+inline StHbt1DHisto* NonId3DCorrFctn::DenLongN() { return mDenLongN; }
+
+inline void NonId3DCorrFctn::AppendOutput(TList* output) {
+   output->Add(NumOutP());
+   output->Add(DenOutP());
+   output->Add(NumOutN());
+   output->Add(DenOutN());
+
+   output->Add(NumSideP());
+   output->Add(DenSideP());
+   output->Add(NumSideN());
+   output->Add(DenSideN());
+
+   output->Add(NumLongP());
+   output->Add(DenLongP());
+   output->Add(NumLongN());
+   output->Add(DenLongN());
+}
 
 #endif

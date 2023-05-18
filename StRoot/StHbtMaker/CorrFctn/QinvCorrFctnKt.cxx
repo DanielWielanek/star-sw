@@ -57,21 +57,21 @@ ClassImp(QinvCorrFctnKt)
    strcat(TitRat, title);
 
    for (int i = 0; i < mNumberCFs; i++) {
-      sprintf(TitNum, "NumQInvCFKtBin%d", i);
+      sprintf(TitNum, "NumQInvCFKtBin%d%s", i, title);
       mNumerator[i].SetName(TitNum);
       mNumerator[i].SetTitle(title);
       mNumerator[i].SetBins(nbins, QinvLo, QinvHi);
       mNumerator[i].SetDirectory(0);
       mNumerator[i].Sumw2();
 
-      sprintf(TitDen, "DenQInvCFKtBin%d", i);
+      sprintf(TitDen, "DenQInvCFKtBin%d%s", i, title);
       mDenominator[i].SetName(TitDen);
       mDenominator[i].SetTitle(title);
       mDenominator[i].SetBins(nbins, QinvLo, QinvHi);
       mDenominator[i].SetDirectory(0);
       mDenominator[i].Sumw2();
 
-      sprintf(TitRat, "RatQInvCFKtBin%d", i);
+      sprintf(TitRat, "RatQInvCFKtBin%d%s", i, title);
       mRatio[i].SetName(TitRat);
       mRatio[i].SetTitle(title);
       mRatio[i].SetBins(nbins, QinvLo, QinvHi);

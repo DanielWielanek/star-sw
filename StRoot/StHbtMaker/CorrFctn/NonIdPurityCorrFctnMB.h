@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * $Id: NonIdPurityCorrFctn.h,v 1.1 2002/12/12 17:02:49 kisiel Exp $
+ * $Id: NonIdPurityCorrFctnMB.h,v 1.2 2000/01/25 17:34:45 laue Exp $
  *
  * Author: Mike Lisa, Ohio State, lisa@mps.ohio-state.edu
  ***************************************************************************
@@ -10,10 +10,7 @@
  *
  ***************************************************************************
  *
- * $Log: NonIdPurityCorrFctn.h,v $
- * Revision 1.1  2002/12/12 17:02:49  kisiel
- * Use KStar instead of 2*KStar for non-identical particles
- *
+ * $Log: NonIdPurityCorrFctnMB.h,v $
  * Revision 1.2  2000/01/25 17:34:45  laue
  * I. In order to run the stand alone version of the StHbtMaker the following
  * changes have been done:
@@ -37,25 +34,27 @@
  *
  **************************************************************************/
 
-#ifndef NonIdPurityCorrFctn_hh
-#define NonIdPurityCorrFctn_hh
+#ifndef NonIdPurityCorrFctnMB_hh
+#define NonIdPurityCorrFctnMB_hh
 
 #include <TProfile.h>
 
 #include "StHbtMaker/Base/StHbtCorrFctn.hh"
 
-class NonIdPurityCorrFctn : public StHbtCorrFctn {
+class NonIdPurityCorrFctnMB : public StHbtCorrFctn {
   public:
-   NonIdPurityCorrFctn(char* title, const int& nbins, const float& QinvLo, const float& QinvHi, int p1Type, int p2Type);
-   virtual ~NonIdPurityCorrFctn();
+   NonIdPurityCorrFctnMB(char* title, const int& nbins, const float& QinvLo, const float& QinvHi, int p1Type,
+                         int p2Type);
+   virtual ~NonIdPurityCorrFctnMB();
 
    virtual StHbtString Report();
    virtual void AddRealPair(const StHbtPair*);
    virtual void AddMixedPair(const StHbtPair*);
+   void AddRealPairMB(const StHbtPair*, int ibin);
+   void AddMixedPairMB(const StHbtPair*, int ibin);
 
    virtual void Finish();
    virtual void Write();
-   virtual void AppendOutput(TList*);
 
    StHbt1DHisto* NumP();
    StHbt1DHisto* DenP();
@@ -101,30 +100,19 @@ class NonIdPurityCorrFctn : public StHbtCorrFctn {
    TProfile* mPairPurityLong;
 
 #ifdef __ROOT__
-   ClassDef(NonIdPurityCorrFctn, 1)
+   ClassDef(NonIdPurityCorrFctnMB, 1)
 #endif
 };
 
-inline StHbt1DHisto* NonIdPurityCorrFctn::NumP() { return mNumP; }
-inline StHbt1DHisto* NonIdPurityCorrFctn::DenP() { return mDenP; }
-inline StHbt1DHisto* NonIdPurityCorrFctn::RatP() { return mRatP; }
-inline StHbt1DHisto* NonIdPurityCorrFctn::NumN() { return mNumN; }
-inline StHbt1DHisto* NonIdPurityCorrFctn::DenN() { return mDenN; }
-inline StHbt1DHisto* NonIdPurityCorrFctn::RatN() { return mRatN; }
-inline StHbt1DHisto* NonIdPurityCorrFctn::Rat() { return mRat; }
-inline TProfile* NonIdPurityCorrFctn::PairPurityOut() { return mPairPurityOut; }
-inline TProfile* NonIdPurityCorrFctn::PairPuritySide() { return mPairPuritySide; }
-inline TProfile* NonIdPurityCorrFctn::PairPurityLong() { return mPairPurityLong; }
-inline void NonIdPurityCorrFctn::AppendOutput(TList* output) {
-   output->Add(NumP());
-   output->Add(DenP());
-   output->Add(RatP());
-   output->Add(NumN());
-   output->Add(DenN());
-   output->Add(RatN());
-   output->Add(Rat());
-   output->Add(PairPurityOut());
-   output->Add(PairPuritySide());
-   output->Add(PairPurityLong());
-}
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::NumP() { return mNumP; }
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::DenP() { return mDenP; }
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::RatP() { return mRatP; }
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::NumN() { return mNumN; }
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::DenN() { return mDenN; }
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::RatN() { return mRatN; }
+inline StHbt1DHisto* NonIdPurityCorrFctnMB::Rat() { return mRat; }
+inline TProfile* NonIdPurityCorrFctnMB::PairPurityOut() { return mPairPurityOut; }
+inline TProfile* NonIdPurityCorrFctnMB::PairPuritySide() { return mPairPuritySide; }
+inline TProfile* NonIdPurityCorrFctnMB::PairPurityLong() { return mPairPurityLong; }
+
 #endif

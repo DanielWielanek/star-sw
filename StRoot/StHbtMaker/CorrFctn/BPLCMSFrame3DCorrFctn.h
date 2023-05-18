@@ -50,6 +50,7 @@ class BPLCMSFrame3DCorrFctn : public StHbtCorrFctn {
    virtual void AddMixedPair(const StHbtPair*);
 
    virtual void Finish();
+   virtual void AppendOutput(TList*);
 
    StHbt3DHisto* Numerator();
    StHbt3DHisto* Denominator();
@@ -138,4 +139,10 @@ inline void BPLCMSFrame3DCorrFctn::SetRside(double r) { mRside2 = r * r; }
 inline void BPLCMSFrame3DCorrFctn::SetRlong(double r) { mRlong2 = r * r; }
 inline void BPLCMSFrame3DCorrFctn::SetLambda(double l) { mLambda = l; }
 
+inline void BPLCMSFrame3DCorrFctn::AppendOutput(TList* output) {
+   output->Add(Numerator());
+   output->Add(Denominator());
+   output->Add(Ratio());
+   output->Add(QinvHisto());
+}
 #endif
