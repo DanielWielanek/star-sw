@@ -103,6 +103,24 @@ void StHbtCutMonitorHandler::FillCutMonitor(const StHbtPair* pair, bool pass) {
       }
    }
 }
+
+void StHbtCutMonitorHandler::FillCutMonitorBackground(const StHbtPair* pair, bool pass) {
+   if (mCollectionsEmpty) return;
+   StHbtCutMonitorIterator iter;
+   StHbtCutMonitor* CM;
+   if (pass) {
+      for (iter = mPassColl->begin(); iter != mPassColl->end(); iter++) {
+         CM = *iter;
+         CM->FillBackground(pair);
+      }
+   } else {
+      for (iter = mFailColl->begin(); iter != mFailColl->end(); iter++) {
+         CM = *iter;
+         CM->FillBackground(pair);
+      }
+   }
+}
+
 // ---------------------------------Gael/19/06/02-----------------------------
 void StHbtCutMonitorHandler::FillCutMonitor(const StHbtParticleCollection* partColl) {
    if (mCollectionsEmpty) return;

@@ -29,6 +29,7 @@ class StHbtCutMonitorHandler {
    void FillCutMonitor(const StHbtV0* v0, bool pass);
    void FillCutMonitor(const StHbtKink* kink, bool pass);
    void FillCutMonitor(const StHbtPair* pair, bool pass);                                  // Gael 11/04/02
+   void FillCutMonitorBackground(const StHbtPair* pair, bool pass);                        // Wielanek 8/8/2017
    void FillCutMonitor(const StHbtParticleCollection* partColl);                           // Gael 19/06/02
    void FillCutMonitor(const StHbtEvent* event, const StHbtParticleCollection* partColl);  // Gael 19/06/02
    void Finish();
